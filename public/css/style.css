@@ -1,0 +1,18 @@
+.navbar-style{
+    margin:10px;
+    
+}
+.navbar-sfondo{
+    background-color: rgb(16, 23, 41);
+}
+.riga-titolo{
+    text-align: center;
+    background-image: url('/images/sfondo.webp');
+    background-repeat: no-repeat;
+    height: 350px;
+    background-size: cover;
+}
+.titolo{
+    margin-top: 150px !important;
+}
+
