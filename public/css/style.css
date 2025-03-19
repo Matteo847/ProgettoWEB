@@ -1,9 +1,12 @@
 .navbar-style{
     margin:10px;
-    
+    color: beige !important;
 }
 .navbar-sfondo{
     background-color: rgb(16, 23, 41);
+}
+.colore-sfondo{
+    background-color:rgb(2 0 136 / 78%);
 }
 .riga-titolo{
     text-align: center;
@@ -15,4 +18,14 @@
 .titolo{
     margin-top: 150px !important;
 }
-
+.testo-paragrafo{
+    background-size: cover;
+    text-align: center;
+    margin: 100px;
+    text-transform: uppercase;
+    color: beige;
+    font-size: 20px;
+}
+.artefatti-style{
+    color: beige;
+}
