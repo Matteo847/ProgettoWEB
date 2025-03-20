@@ -37,12 +37,11 @@ body{
     text-align: center;
     margin-top: 200px;
 }
-.immagine-personaggio{
+.immagine-personaggio {
     width: 300px;
     height: 200px;
     object-fit: cover;
-    display: block;
-    margin: 0 auto;
+    transition: transform 0.3s ease;
     margin-top: 50px;
 }
 .artefatti{
@@ -55,3 +54,24 @@ table {
     border-collapse: collapse;
     margin-left: 50px; 
 }
+th, td {
+    border: 1px solid #000 !important;
+    padding: 8px;
+    text-align: left;
+  }
+.bottone-personaggi {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    background-color: transparent !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    cursor: pointer;
+  }
+  
+  .immagine-personaggio:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid #007BFF;
+    cursor: pointer;
+  }
