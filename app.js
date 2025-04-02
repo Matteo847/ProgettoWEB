@@ -36,6 +36,13 @@ app.get('/', (req, res) => {
 app.listen(port, '127.0.0.1', () => {
     console.log(`http://localhost:${port}`);
 });
+
 app.get('/personaggi', (req, res) => {
-    res.render('personaggi');
+    let sql = 'SELECT * FROM personaggi';
+    db.all(sql, [], (err, rows) => { //rows sono i dati restituiti dalla query
+        if (err) {
+            throw err;
+        }
+        res.render('personaggi', { personaggi: rows });
+    });
 });
