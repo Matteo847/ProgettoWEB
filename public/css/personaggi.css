@@ -1,0 +1,65 @@
+/* Filtro elementi */
+
+
+.btn-elemento {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-elemento:hover {
+    transform: scale(1.1);
+    border-color: white;
+}
+
+.btn-elemento.active {
+    border-color: gold;
+    box-shadow: 0 0 15px gold;
+}
+
+.btn-pyro {
+    background: url('/images/pyro.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+
+.btn-hydro {
+    background: url('/images/hydro.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+.btn-electro {
+    background: url('/images/electro.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+.btn-dendro {
+    background: url('/images/dendro.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+.btn-cryo {
+    background: url('/images/cryo.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+.btn-geo {
+    background: url('/images/geo.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+.btn-anemo {
+    background: url('/images/anemo.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+@media (max-width: 768px) {
+    .element-btn {
+        width: 60px;
+        height: 60px;
+        margin: 0 5px;
+    }
+}
