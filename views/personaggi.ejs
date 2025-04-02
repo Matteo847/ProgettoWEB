@@ -13,11 +13,21 @@
 
 <body class="colore-sfondo">
     <nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
-        <a class="navbar-brand navbar-genshin" href="">BUILD GENSHIN</a>
+        <a class="navbar-brand navbar-genshin" href="/">BUILD GENSHIN</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <form class="d-flex me-auto mx-3">
+                <div class="input-group cerca">
+                    <input class="form-control" type="search" placeholder="Cerca personaggio..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search">cerca</i>
+                    </button>
+                </div>
+            </form>
+
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item active">
                     <a class="nav-link fs-5 navbar-destra" href="#">registrati</a>
@@ -44,10 +54,43 @@
         </div>
     </div>
     
-    <!-- Contenuto principale -->
+
     <div class="container">
-        <div class="row" id="character-grid">
-            <!-- I personaggi appariranno qui -->
+        <div class="row">
+            <div>
+                <p class="scritta-pers">PERSONAGGI</p>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        <img class="im-personaggio img-fluid" src="/images/xingqiu.png">
+                        <a class="text-center mb-2 character-name">xingqiu</a>
+                    </div>
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        
+                        <img class="im-personaggio img-fluid" src="/images/raiden-shogun.png">
+                        <a class="text-center mb-2 character-name">raiden shogun</a>
+                    </div>
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        <img class="im-personaggio img-fluid" src="/images/ayaka.png">
+                        <a class="text-center mb-2 character-name">ayaka</a>
+                    </div>
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        <img class="im-personaggio img-fluid" src="/images/kazuha.png">
+                        <a class="text-center mb-2 character-name">kazuha</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        <img class="im-personaggio img-fluid" src="/images/lynette.png">
+                        <a class="text-center mb-2 character-name">lynette</a>
+                    </div>
+                    <div class="col-md-3 d-flex flex-column align-items-center">
+                        <img class="im-personaggio img-fluid" src="/images/baizhu.png">
+                        <a class="text-center mb-2 character-name">baizhu</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
