@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
     console.log(`http://localhost:${port}`);
 });
 
