@@ -63,17 +63,57 @@
             <div class="col-md-12">
                 <div class="row">
                     <% personaggi.forEach((personaggio) => { %>
-                    <div class="col-md-3 d-flex flex-column align-items-center">
-                        <img class="im-personaggio img-fluid" src="<%= personaggio.immagine %>">
-                        <a class="text-center mb-2 character-name"><%= personaggio.nome %></a>
+                        <div class="col-md-3 mb-4">
+                            <div class="character-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= personaggio.id %>">
+                                <img class="im-personaggio" src="<%= personaggio.immagine %>">
+                                <div class="barra-info-pers">
+                                    <h5 class="character-name"><%= personaggio.nome %></h5>
+                                    <span class="character-element element-<%= personaggio.elemento %>">
+                                        <%= personaggio.elemento %>
+                                    </span>
+                                    <span class="ms-2 rarity-<%= personaggio.rarità %>">
+                                        <%= "★".repeat(personaggio.rarità) %>
+                                    </span>
+                                </div>
+                            </div>
+
+                        <div class="modal" id="characterModal<%= personaggio.id %>">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-<%= personaggio.elemento %>"> <!-- colore del titolo in base all'elemento -->
+                                        <h5 class="modal-title text-white" id="characterModalLabel<%= personaggio.id %>"><%= personaggio.nome %></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center">
+                                                <img class="img-fluid mb-2" src="<%= personaggio.immagine %>" alt="<%= personaggio.nome %>">
+                                                <div>
+                                                    <span class="badge bg-<%= personaggio.elemento %>">
+                                                        <%= personaggio.elemento %>
+                                                    </span>
+                                                    <span class="ms-2 stelle">
+                                                        <%= "★".repeat(personaggio.rarità) %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p><%= personaggio.descrizione %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <% }); %>
                 </div>
-
             </div>
         </div>
     </div>
-
     <footer class="footer navbar-sfondo">
 		<div class="container">
 			<div class="row">
