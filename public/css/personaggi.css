@@ -136,20 +136,20 @@
     font-weight: bold;
 }
 
-.element-pyro { color: #f85d5d; }
-.element-hydro { color: #4cc2f1; }
-.element-electro { color: #bf8ee6; }
-.element-dendro { color: #a5c83b; }
-.element-anemo { color: #80ffe6; }
-.element-cryo { color: #9fdeff; }
-.element-geo { color: #f3b565; }
-.bg-pyro { background-color: #f85d5d; }
-.bg-hydro { background-color: #4cc2f1; }
-.bg-electro { background-color: #bf8ee6; }
-.bg-dendro { background-color: #a5c83b; }
-.bg-anemo { background-color: #80ffe6; }
-.bg-cryo { background-color: #9fdeff; }
-.bg-geo { background-color: #f3b565; }
+.element-Pyro { color: #f85d5d; }
+.element-Hydro { color: #4cc2f1; }
+.element-Electro { color: #bf8ee6; }
+.element-Dendro { color: #a5c83b; }
+.element-Anemo { color: #80ffe6; }
+.element-Cryo { color: #9fdeff; }
+.element-Geo { color: #f3b565; }
+.bg-Pyro { background-color: #f85d5d; }
+.bg-Hydro { background-color: #4cc2f1; }
+.bg-Electro { background-color: #bf8ee6; }
+.bg-Dendro { background-color: #a5c83b; }
+.bg-Anemo { background-color: #80ffe6; }
+.bg-Cryo { background-color: #9fdeff; }
+.bg-Geo { background-color: #f3b565; }
 
 .modal-content {
     border: none;
@@ -164,9 +164,12 @@
 .modal-footer {
     border-top: none;
 }
+.modal-desc{
 
+    color: black;
+}
 .stelle{
-    color: yellow
+    color: yellow;
 }
 
 @media (max-width: 768px) {
