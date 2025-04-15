@@ -38,40 +38,33 @@ app.get('/registrati', (req, res) => {
     res.render('registrati');
 });
 
+app.get('/artefatti', (req, res) => {
+    let sql = 'SELECT * FROM artefatti';
+    db.all(sql, [], (err, rows) => { //rows sono i dati restituiti dalla query
+        if (err) {
+            throw err;
+        }
+        res.render('artefatti', { artefatti: rows });
+    });
+});
 app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
     console.log(`http://localhost:${port}`);
 });
 
 app.get('/personaggi', (req, res) => {
     let sql = 'SELECT * FROM personaggi';
-    db.all(sql, [], (err, rows) => { //rows sono i dati restituiti dalla query
+    let elemento = [];
+    
+    if (req.query.elemento) { //controllo se l'utente ha selezionato un elemento
+        sql += ' WHERE elemento = ?';
+        elemento.push(req.query.elemento); //aggiungo il filtro per elemento alla query
+    }
+    
+    db.all(sql, elemento, (err, rows) => {
         if (err) {
-            throw err;
+            console.error(err);
+            return res.status(500).send('Errore del server');
         }
         res.render('personaggi', { personaggi: rows });
     });
 });
-
-//da rivedere
-function filterCharacters(element) {
-    const characterCards = document.querySelectorAll('.character-card');
-    
-    characterCards.forEach(card => {
-        if (element === 'all' || card.dataset.element === element) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-    
-    // Aggiungi classe active al bottone selezionato
-    document.querySelectorAll('.btn-elemento').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    if (element !== 'all') {
-        const activeBtn = document.querySelector(`.btn-elemento[title="${element}"]`);
-        if (activeBtn) activeBtn.classList.add('active');
-    }
-}
-//fino qui

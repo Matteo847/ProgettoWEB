@@ -40,19 +40,20 @@
     </nav>
 
 
-    <!--da vedere-->
     <div class="text-center">
         <div class="container">
-            <div class="d-flex flex-wrap justify-content-center pt-4">
-                <button class="btn-elemento btn-pyro" title="Pyro" onclick="filterCharacters('Pyro')"></button>
-                <button class="btn-elemento btn-hydro" title="Hydro" onclick="filterCharacters('Hydro')"></button>
-                <button class="btn-elemento btn-electro" title="Electro" onclick="filterCharacters('Electro')"></button>
-                <button class="btn-elemento btn-dendro" title="Dendro" onclick="filterCharacters('Dendro')"></button>
-                <button class="btn-elemento btn-cryo" title="Cryo" onclick="filterCharacters('Cryo')"></button>
-                <button class="btn-elemento btn-geo" title="Geo" onclick="filterCharacters('Geo')"></button>
-                <button class="btn-elemento btn-anemo" title="Anemo" onclick="filterCharacters('Anemo')"></button>
-                <button class="btn btn-outline-light ms-3" onclick="filterCharacters('all')">Mostra tutti</button>
-            </div>
+            <form id="filtro-elemento" method="get" action="/personaggi">
+                <div class="d-flex flex-wrap justify-content-center pt-4">
+                    <button type="submit" name="elemento" class="btn-elemento btn-pyro" value="Pyro"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-hydro" value="Hydro"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-electro" value="Electro"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-dendro" value="Dendro"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-cryo" value="Cryo"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-geo" value="Geo"></button>
+                    <button type="submit" name="elemento" class="btn-elemento btn-anemo" value="Anemo"></button>
+                    <button type="submit" name="elemento" class="btn btn-outline-light ms-3" value="">Mostra tutti</button>
+                </div>
+            </form>
         </div>
     </div>
     

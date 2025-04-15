@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Build Genshin</title>
+    <link rel="icon" href="images/icona.webp"/>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/personaggi.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body class="colore-sfondo">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
+        <a class="navbar-brand navbar-genshin" href="/">BUILD GENSHIN</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <form class="d-flex me-auto mx-3">
+                <div class="input-group cerca">
+                    <input class="form-control" type="search" placeholder="Cerca personaggio..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search">cerca</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div>
+                <p class="scritta-pers">ARTEFATTI</p>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <% artefatti.forEach((artefatto) => { %>
+                        <div class="col-md-2 mb-4">
+                            <div class="character-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= artefatto.id %>">
+                                <img class="im-personaggio" src="<%= artefatto.immagine %>">
+                                <div class="barra-info-pers">
+                                    <h5 class="character-name"><%= artefatto.nome %></h5>
+                                </div>
+                            </div>
+
+                        <div class="modal" id="characterModal<%= artefatto.id %>">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="characterModalLabel<%= artefatto.id %>"><%= artefatto.nome %></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center">
+                                                <img class="img-fluid mb-2" src="<%= artefatto.immagine %>" alt="<%= artefatto.nome %>">
+                                            </div>
+                                            <div class="col-md-8 modal-desc modal-header">
+                                                <p><%= artefatto.descrizione %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-header">
+                                        <button type="button" class="btn btn-secondary modal-footer " data-bs-dismiss="modal">Personaggi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
