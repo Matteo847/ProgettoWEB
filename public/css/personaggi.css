@@ -162,7 +162,8 @@
 }
 
 .modal-footer {
-    border-top: none;
+    margin-left: 400px;
+    background-color: grey !important;
 }
 .modal-desc{
 

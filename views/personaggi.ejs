@@ -38,21 +38,24 @@
             </ul>
         </div>
     </nav>
-    
-    <!-- Filtro elementi personaggi -->
+
+
+    <!--da vedere-->
     <div class="text-center">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-center pt-4">
-                <button class="btn-elemento btn-pyro" title="Pyro"></button>
-                <button class="btn-elemento btn-hydro" title="Hydro"></button>
-                <button class="btn-elemento btn-electro" title="Electro"></button>
-                <button class="btn-elemento btn-dendro" title="Dendro"></button>
-                <button class="btn-elemento btn-cryo" title="Cryo"></button>
-                <button class="btn-elemento btn-geo" title="Geo"></button>
-                <button class="btn-elemento btn-anemo" title="Anemo"></button>
+                <button class="btn-elemento btn-pyro" title="Pyro" onclick="filterCharacters('Pyro')"></button>
+                <button class="btn-elemento btn-hydro" title="Hydro" onclick="filterCharacters('Hydro')"></button>
+                <button class="btn-elemento btn-electro" title="Electro" onclick="filterCharacters('Electro')"></button>
+                <button class="btn-elemento btn-dendro" title="Dendro" onclick="filterCharacters('Dendro')"></button>
+                <button class="btn-elemento btn-cryo" title="Cryo" onclick="filterCharacters('Cryo')"></button>
+                <button class="btn-elemento btn-geo" title="Geo" onclick="filterCharacters('Geo')"></button>
+                <button class="btn-elemento btn-anemo" title="Anemo" onclick="filterCharacters('Anemo')"></button>
+                <button class="btn btn-outline-light ms-3" onclick="filterCharacters('all')">Mostra tutti</button>
             </div>
         </div>
     </div>
+    
     
 
     <div class="container">
@@ -97,13 +100,13 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8 modal-desc">
+                                            <div class="col-md-8 modal-desc modal-header bg-<%= personaggio.elemento %>">
                                                 <p><%= personaggio.descrizione %></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    <div class="modal-header bg-<%= personaggio.elemento %>">
+                                        <button type="button" class="btn btn-secondary modal-footer " data-bs-dismiss="modal">Build</button>
                                     </div>
                                 </div>
                             </div>
@@ -114,6 +117,7 @@
             </div>
         </div>
     </div>
+
     <footer class="footer navbar-sfondo">
 		<div class="container">
 			<div class="row">
