@@ -39,8 +39,21 @@ app.get('/registrati', (req, res) => {
 });
 
 app.get('/artefatti', (req, res) => {
+
     let sql = 'SELECT * FROM artefatti';
-    db.all(sql, [], (err, rows) => { //rows sono i dati restituiti dalla query
+    let filtro = [];
+
+    if (req.query.classe) { //controllo se l'utente ha selezionato un elemento
+        sql += ' WHERE categoria = ?';
+        filtro.push(req.query.classe); //aggiungo il filtro per elemento alla query
+    }
+
+    if (req.query.nome) { //controllo se l'utente ha selezionato un elemento
+        sql += ' WHERE nome like ?'; //aggiungo l'ordinamento per nome
+        filtro.push(req.query.nome+'%'); //aggiungo l'elemento alla lista dei nomi;
+    }
+
+    db.all(sql, filtro, (err, rows) => { //rows sono i dati restituiti dalla query
         if (err) {
             throw err;
         }
@@ -52,19 +65,27 @@ app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
 });
 
 app.get('/personaggi', (req, res) => {
+
     let sql = 'SELECT * FROM personaggi';
-    let elemento = [];
+    let filtro = [];
     
     if (req.query.elemento) { //controllo se l'utente ha selezionato un elemento
         sql += ' WHERE elemento = ?';
-        elemento.push(req.query.elemento); //aggiungo il filtro per elemento alla query
+        filtro.push(req.query.elemento); //aggiungo il filtro per elemento alla query
     }
-    
-    db.all(sql, elemento, (err, rows) => {
+
+    if (req.query.nome) { //controllo se l'utente ha selezionato un elemento
+        sql += ' WHERE nome like ?'; //aggiungo l'ordinamento per nome
+        filtro.push(req.query.nome+'%'); //aggiungo l'elemento alla lista dei nomi
+    }
+
+    db.all(sql, filtro, (err, rows) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
         res.render('personaggi', { personaggi: rows });
     });
+
 });
+

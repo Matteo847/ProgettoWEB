@@ -120,233 +120,288 @@ db.serialize(() => {
         (83, 'zhongli', '/images/character/character-zhongli-card.png', 'Geo', 5, 'Ex Archon Geo ora consulente della Wangsheng Funeral Parlor. Usa la sua lancia e potere Geo per creare scudi impenetrabili e pilastri che risuonano con altre costruzioni Geo, petrificando i nemici con il suo potente burst meteorite.'),
         (84, 'chiori', '/images/character/character-chiori-card.png', 'Geo', 5, 'Stilista e guerriera di Inazuma, allieva della Yashiro Commission. La sua abilità unica di manipolare il potere Geo insieme alla sua maestria con ago e spada le permette di creare abiti da battaglia che aumentano le sue capacità offensive e difensive.'),
         (86, 'clorinde', '/images/character/character-clorinde-card.png', 'Electro', 5, 'Cavaliere dell''Ordine di Fontaine dall''eleganza letale. Il suo stile di combattimento combina precisione e potenza con la spada, incanalando il potere Electro per movimenti rapidi e fendenti che possono paralizzare più nemici contemporaneamente.'),
-        (87, 'sigewinne', '/images/character/character-sigewinne-card.png', 'Anemo', 5, 'Falconiera di Fontaine, sempre accompagnata dal suo fedele rapace. Usa il potere Anemo in sinergia con il suo uccello per eseguire attacchi coordinati dall''alto, creando vortici di vento che amplificano i danni e forniscono mobilità aerea al team.'),
+        (87, 'sigewinne', '/images/character/character-sigewinne-card.png', 'Hydro', 5, 'Falconiera di Fontaine, sempre accompagnata dal suo fedele rapace. Usa il potere Anemo in sinergia con il suo uccello per eseguire attacchi coordinati dall''alto, creando vortici di vento che amplificano i danni e forniscono mobilità aerea al team.'),
         (89, 'sethos', '/images/character/character-sethos-card.png', 'Electro', 5, 'Misterioso avventuriero proveniente dalle profondità del deserto di Sumeru. Combina antiche conoscenze con il potere Electro, evocando tempeste di sabbia elettrificate e utilizzando tecniche di combattimento segrete tramandate da una civiltà perduta.');
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella personaggi:", err.message);
     });
     db.run(`
-      INSERT INTO artefatti (nome, immagine, categoria) VALUES
-        ('Adventurer Flower', '/images/artifact/adventurer-flower.png', 'Flower of Life'),
-        ('Adventurer Plume', '/images/artifact/adventurer-plume.png', 'Plume of Death'),
-        ('Adventurer Pocket Watch', '/images/artifact/adventurer-pocket-watch.png', 'Sands of Eon'),
-        ('Adventurer Goblet', '/images/artifact/adventurer-goblet.png', 'Goblet of Eonothem'),
-        ('Adventurer Bandana', '/images/artifact/adventurer-bandana.png', 'Circlet of Logos'),
-        ('Berserker''s Rose', '/images/artifact/berserker-rose.png', 'Flower of Life'),
-        ('Berserker''s Indigo Feather', '/images/artifact/berserker-indigo-feather.png', 'Plume of Death'),
-        ('Berserker''s Timepiece', '/images/artifact/berserker-timepiece.png', 'Sands of Eon'),
-        ('Berserker''s Bone Goblet', '/images/artifact/berserker-bone-goblet.png', 'Goblet of Eonothem'),
-        ('Berserker''s Battle Mask', '/images/artifact/berserker-battle-mask.png', 'Circlet of Logos'),
+        INSERT INTO artefatti (nome, immagine, categoria) VALUES
+        -- Adventurer Set
+        ('Adventurer''s Flower', '/images/artifact/adventurer-flower.png', 'Flower of Life'),
+        ('Adventurer''s Plume', '/images/artifact/adventurer-plume.png', 'Plume of Death'),
+        ('Adventurer''s Sands', '/images/artifact/adventurer-sands.png', 'Sands of Eon'),
+        ('Adventurer''s Goblet', '/images/artifact/adventurer-goblet.png', 'Goblet of Eonothem'),
+        ('Adventurer''s Circlet', '/images/artifact/adventurer-circlet.png', 'Circlet of Logos'),
+        
+        -- Archaic Petra Set
+        ('Archaic Petra Flower', '/images/artifact/archaic-petra-flower.png', 'Flower of Life'),
+        ('Archaic Petra Plume', '/images/artifact/archaic-petra-plume.png', 'Plume of Death'),
+        ('Archaic Petra Sands', '/images/artifact/archaic-petra-sands.png', 'Sands of Eon'),
+        ('Archaic Petra Goblet', '/images/artifact/archaic-petra-goblet.png', 'Goblet of Eonothem'),
+        ('Archaic Petra Circlet', '/images/artifact/archaic-petra-circlet.png', 'Circlet of Logos'),
+        
+        -- Berserker Set
+        ('Berserker''s Flower', '/images/artifact/berserker-flower.png', 'Flower of Life'),
+        ('Berserker''s Plume', '/images/artifact/berserker-plume.png', 'Plume of Death'),
+        ('Berserker''s Sands', '/images/artifact/berserker-sands.png', 'Sands of Eon'),
+        ('Berserker''s Goblet', '/images/artifact/berserker-goblet.png', 'Goblet of Eonothem'),
+        ('Berserker''s Circlet', '/images/artifact/berserker-circlet.png', 'Circlet of Logos'),
+        
+        -- Blizzard Strayer Set
         ('Blizzard Strayer Flower', '/images/artifact/blizzard-strayer-flower.png', 'Flower of Life'),
         ('Blizzard Strayer Plume', '/images/artifact/blizzard-strayer-plume.png', 'Plume of Death'),
         ('Blizzard Strayer Sands', '/images/artifact/blizzard-strayer-sands.png', 'Sands of Eon'),
         ('Blizzard Strayer Goblet', '/images/artifact/blizzard-strayer-goblet.png', 'Goblet of Eonothem'),
         ('Blizzard Strayer Circlet', '/images/artifact/blizzard-strayer-circlet.png', 'Circlet of Logos'),
-        ('Bloodstained Flower of Iron', '/images/artifact/bloodstained-flower-of-iron.png', 'Flower of Life'),
-        ('Bloodstained Black Plume', '/images/artifact/bloodstained-black-plume.png', 'Plume of Death'),
-        ('Bloodstained Final Hour', '/images/artifact/bloodstained-final-hour.png', 'Sands of Eon'),
-        ('Bloodstained Chevalier''s Goblet', '/images/artifact/bloodstained-chevaliers-goblet.png', 'Goblet of Eonothem'),
-        ('Bloodstained Iron Mask', '/images/artifact/bloodstained-iron-mask.png', 'Circlet of Logos'),
-        ('Brave Heart''s Flower', '/images/artifact/brave-hearts-flower.png', 'Flower of Life'),
-        ('Brave Heart''s Feather', '/images/artifact/brave-hearts-feather.png', 'Plume of Death'),
-        ('Brave Heart''s Hourglass', '/images/artifact/brave-hearts-hourglass.png', 'Sands of Eon'),
-        ('Brave Heart''s Goblet', '/images/artifact/brave-hearts-goblet.png', 'Goblet of Eonothem'),
-        ('Brave Heart''s Crown', '/images/artifact/brave-hearts-crown.png', 'Circlet of Logos'),
+        
+        -- Bloodstained Chivalry Set
+        ('Bloodstained Chivalry Flower', '/images/artifact/bloodstained-chivalry-flower.png', 'Flower of Life'),
+        ('Bloodstained Chivalry Plume', '/images/artifact/bloodstained-chivalry-plume.png', 'Plume of Death'),
+        ('Bloodstained Chivalry Sands', '/images/artifact/bloodstained-chivalry-sands.png', 'Sands of Eon'),
+        ('Bloodstained Chivalry Goblet', '/images/artifact/bloodstained-chivalry-goblet.png', 'Goblet of Eonothem'),
+        ('Bloodstained Chivalry Circlet', '/images/artifact/bloodstained-chivalry-circlet.png', 'Circlet of Logos'),
+        
+        -- Brave Heart Set
+        ('Brave Heart Flower', '/images/artifact/brave-heart-flower.png', 'Flower of Life'),
+        ('Brave Heart Plume', '/images/artifact/brave-heart-plume.png', 'Plume of Death'),
+        ('Brave Heart Sands', '/images/artifact/brave-heart-sands.png', 'Sands of Eon'),
+        ('Brave Heart Goblet', '/images/artifact/brave-heart-goblet.png', 'Goblet of Eonothem'),
+        ('Brave Heart Circlet', '/images/artifact/brave-heart-circlet.png', 'Circlet of Logos'),
+        
+        -- Crimson Witch of Flames Set
         ('Crimson Witch of Flames Flower', '/images/artifact/crimson-witch-of-flames-flower.png', 'Flower of Life'),
-        ('Crimson Witch of Flames Feather', '/images/artifact/crimson-witch-of-flames-feather.png', 'Plume of Death'),
+        ('Crimson Witch of Flames Plume', '/images/artifact/crimson-witch-of-flames-plume.png', 'Plume of Death'),
         ('Crimson Witch of Flames Sands', '/images/artifact/crimson-witch-of-flames-sands.png', 'Sands of Eon'),
         ('Crimson Witch of Flames Goblet', '/images/artifact/crimson-witch-of-flames-goblet.png', 'Goblet of Eonothem'),
         ('Crimson Witch of Flames Circlet', '/images/artifact/crimson-witch-of-flames-circlet.png', 'Circlet of Logos'),
-        ('Defender''s Will Flower', '/images/artifact/defenders-will-flower.png', 'Flower of Life'),
-        ('Defender''s Will Feather', '/images/artifact/defenders-will-feather.png', 'Plume of Death'),
-        ('Defender''s Will Timepiece', '/images/artifact/defenders-will-timepiece.png', 'Sands of Eon'),
-        ('Defender''s Will Goblet', '/images/artifact/defenders-will-goblet.png', 'Goblet of Eonothem'),
-        ('Defender''s Will Helmet', '/images/artifact/defenders-will-helmet.png', 'Circlet of Logos'),
+        
+        -- Deepwood Memories Set
         ('Deepwood Memories Flower', '/images/artifact/deepwood-memories-flower.png', 'Flower of Life'),
-        ('Deepwood Memories Feather', '/images/artifact/deepwood-memories-feather.png', 'Plume of Death'),
+        ('Deepwood Memories Plume', '/images/artifact/deepwood-memories-plume.png', 'Plume of Death'),
         ('Deepwood Memories Sands', '/images/artifact/deepwood-memories-sands.png', 'Sands of Eon'),
         ('Deepwood Memories Goblet', '/images/artifact/deepwood-memories-goblet.png', 'Goblet of Eonothem'),
         ('Deepwood Memories Circlet', '/images/artifact/deepwood-memories-circlet.png', 'Circlet of Logos'),
+        
+        -- Desert Pavilion Chronicle Set
         ('Desert Pavilion Chronicle Flower', '/images/artifact/desert-pavilion-chronicle-flower.png', 'Flower of Life'),
-        ('Desert Pavilion Chronicle Feather', '/images/artifact/desert-pavilion-chronicle-feather.png', 'Plume of Death'),
+        ('Desert Pavilion Chronicle Plume', '/images/artifact/desert-pavilion-chronicle-plume.png', 'Plume of Death'),
         ('Desert Pavilion Chronicle Sands', '/images/artifact/desert-pavilion-chronicle-sands.png', 'Sands of Eon'),
         ('Desert Pavilion Chronicle Goblet', '/images/artifact/desert-pavilion-chronicle-goblet.png', 'Goblet of Eonothem'),
         ('Desert Pavilion Chronicle Circlet', '/images/artifact/desert-pavilion-chronicle-circlet.png', 'Circlet of Logos'),
+        
+        -- Echoes of an Offering Set
         ('Echoes of an Offering Flower', '/images/artifact/echoes-of-an-offering-flower.png', 'Flower of Life'),
-        ('Echoes of an Offering Feather', '/images/artifact/echoes-of-an-offering-feather.png', 'Plume of Death'),
+        ('Echoes of an Offering Plume', '/images/artifact/echoes-of-an-offering-plume.png', 'Plume of Death'),
         ('Echoes of an Offering Sands', '/images/artifact/echoes-of-an-offering-sands.png', 'Sands of Eon'),
         ('Echoes of an Offering Goblet', '/images/artifact/echoes-of-an-offering-goblet.png', 'Goblet of Eonothem'),
         ('Echoes of an Offering Circlet', '/images/artifact/echoes-of-an-offering-circlet.png', 'Circlet of Logos'),
+        
+        -- Emblem of Severed Fate Set
         ('Emblem of Severed Fate Flower', '/images/artifact/emblem-of-severed-fate-flower.png', 'Flower of Life'),
-        ('Emblem of Severed Fate Feather', '/images/artifact/emblem-of-severed-fate-feather.png', 'Plume of Death'),
+        ('Emblem of Severed Fate Plume', '/images/artifact/emblem-of-severed-fate-plume.png', 'Plume of Death'),
         ('Emblem of Severed Fate Sands', '/images/artifact/emblem-of-severed-fate-sands.png', 'Sands of Eon'),
         ('Emblem of Severed Fate Goblet', '/images/artifact/emblem-of-severed-fate-goblet.png', 'Goblet of Eonothem'),
         ('Emblem of Severed Fate Circlet', '/images/artifact/emblem-of-severed-fate-circlet.png', 'Circlet of Logos'),
+        
+        -- Flower of Paradise Lost Set
         ('Flower of Paradise Lost Flower', '/images/artifact/flower-of-paradise-lost-flower.png', 'Flower of Life'),
         ('Flower of Paradise Lost Plume', '/images/artifact/flower-of-paradise-lost-plume.png', 'Plume of Death'),
         ('Flower of Paradise Lost Sands', '/images/artifact/flower-of-paradise-lost-sands.png', 'Sands of Eon'),
         ('Flower of Paradise Lost Goblet', '/images/artifact/flower-of-paradise-lost-goblet.png', 'Goblet of Eonothem'),
         ('Flower of Paradise Lost Circlet', '/images/artifact/flower-of-paradise-lost-circlet.png', 'Circlet of Logos'),
-        ('Finale of the Deep Galleries Flower', '/images/artifact/finale-of-the-deep-galleries-flower.png', 'Flower of Life'),
-        ('Finale of the Deep Galleries Feather', '/images/artifact/finale-of-the-deep-galleries-feather.png', 'Plume of Death'),
-        ('Finale of the Deep Galleries Sands', '/images/artifact/finale-of-the-deep-galleries-sands.png', 'Sands of Eon'),
-        ('Finale of the Deep Galleries Goblet', '/images/artifact/finale-of-the-deep-galleries-goblet.png', 'Goblet of Eonothem'),
-        ('Finale of the Deep Galleries Circlet', '/images/artifact/finale-of-the-deep-galleries-circlet.png', 'Circlet of Logos'),
-        ('Long Night''s Oath Flower', '/images/artifact/long-nights-oath-flower.png', 'Flower of Life'),
-        ('Long Night''s Oath Plume', '/images/artifact/long-nights-oath-plume.png', 'Plume of Death'),
-        ('Long Night''s Oath Sands', '/images/artifact/long-nights-oath-sands.png', 'Sands of Eon'),
-        ('Long Night''s Oath Goblet', '/images/artifact/long-nights-oath-goblet.png', 'Goblet of Eonothem'),
-        ('Long Night''s Oath Circlet', '/images/artifact/long-nights-oath-circlet.png', 'Circlet of Logos'),
-        ('Obsidian Codex Flower', '/images/artifact/obsidian-codex-flower.png', 'Flower of Life'),
-        ('Obsidian Codex Plume', '/images/artifact/obsidian-codex-plume.png', 'Plume of Death'),
-        ('Obsidian Codex Sands', '/images/artifact/obsidian-codex-sands.png', 'Sands of Eon'),
-        ('Obsidian Codex Goblet', '/images/artifact/obsidian-codex-goblet.png', 'Goblet of Eonothem'),
-        ('Obsidian Codex Circlet', '/images/artifact/obsidian-codex-circlet.png', 'Circlet of Logos'),
-        ('Shimenawa''s Reminiscence Flower', '/images/artifact/shimenawas-reminiscence-flower.png', 'Flower of Life'),
-        ('Shimenawa''s Reminiscence Feather', '/images/artifact/shimenawas-reminiscence-feather.png', 'Plume of Death'),
-        ('Shimenawa''s Reminiscence Sands', '/images/artifact/shimenawas-reminiscence-sands.png', 'Sands of Eon'),
-        ('Shimenawa''s Reminiscence Goblet', '/images/artifact/shimenawas-reminiscence-goblet.png', 'Goblet of Eonothem'),
-        ('Shimenawa''s Reminiscence Circlet', '/images/artifact/shimenawas-reminiscence-circlet.png', 'Circlet of Logos'),
-        ('Pale Flame Flower', '/images/artifact/pale-flame-flower.png', 'Flower of Life'),
-        ('Pale Flame Feather', '/images/artifact/pale-flame-feather.png', 'Plume of Death'),
-        ('Pale Flame Sands', '/images/artifact/pale-flame-sands.png', 'Sands of Eon'),
-        ('Pale Flame Goblet', '/images/artifact/pale-flame-goblet.png', 'Goblet of Eonothem'),
-        ('Pale Flame Circlet', '/images/artifact/pale-flame-circlet.png', 'Circlet of Logos'),
-        ('Tenacity of the Millelith Flower', '/images/artifact/tenacity-of-the-millelith-flower.png', 'Flower of Life'),
-        ('Tenacity of the Millelith Feather', '/images/artifact/tenacity-of-the-millelith-feather.png', 'Plume of Death'),
-        ('Tenacity of the Millelith Sands', '/images/artifact/tenacity-of-the-millelith-sands.png', 'Sands of Eon'),
-        ('Tenacity of the Millelith Goblet', '/images/artifact/tenacity-of-the-millelith-goblet.png', 'Goblet of Eonothem'),
-        ('Tenacity of the Millelith Circlet', '/images/artifact/tenacity-of-the-millelith-circlet.png', 'Circlet of Logos'),
+        
+        -- Gambler Set
+        ('Gambler''s Flower', '/images/artifact/gambler-flower.png', 'Flower of Life'),
+        ('Gambler''s Plume', '/images/artifact/gambler-plume.png', 'Plume of Death'),
+        ('Gambler''s Sands', '/images/artifact/gambler-sands.png', 'Sands of Eon'),
+        ('Gambler''s Goblet', '/images/artifact/gambler-goblet.png', 'Goblet of Eonothem'),
+        ('Gambler''s Circlet', '/images/artifact/gambler-circlet.png', 'Circlet of Logos'),
+        
+        -- Gilded Dreams Set
+        ('Gilded Dreams Flower', '/images/artifact/gilded-dreams-flower.png', 'Flower of Life'),
+        ('Gilded Dreams Plume', '/images/artifact/gilded-dreams-plume.png', 'Plume of Death'),
+        ('Gilded Dreams Sands', '/images/artifact/gilded-dreams-sands.png', 'Sands of Eon'),
+        ('Gilded Dreams Goblet', '/images/artifact/gilded-dreams-goblet.png', 'Goblet of Eonothem'),
+        ('Gilded Dreams Circlet', '/images/artifact/gilded-dreams-circlet.png', 'Circlet of Logos'),
+        
+        -- Gladiator's Finale Set
+        ('Gladiator''s Finale Flower', '/images/artifact/gladiators-finale-flower.png', 'Flower of Life'),
+        ('Gladiator''s Finale Plume', '/images/artifact/gladiators-finale-plume.png', 'Plume of Death'),
+        ('Gladiator''s Finale Sands', '/images/artifact/gladiators-finale-sands.png', 'Sands of Eon'),
+        ('Gladiator''s Finale Goblet', '/images/artifact/gladiators-finale-goblet.png', 'Goblet of Eonothem'),
+        ('Gladiator''s Finale Circlet', '/images/artifact/gladiators-finale-circlet.png', 'Circlet of Logos'),
+        
+        -- Heart of Depth Set
         ('Heart of Depth Flower', '/images/artifact/heart-of-depth-flower.png', 'Flower of Life'),
-        ('Heart of Depth Feather', '/images/artifact/heart-of-depth-feather.png', 'Plume of Death'),
+        ('Heart of Depth Plume', '/images/artifact/heart-of-depth-plume.png', 'Plume of Death'),
         ('Heart of Depth Sands', '/images/artifact/heart-of-depth-sands.png', 'Sands of Eon'),
         ('Heart of Depth Goblet', '/images/artifact/heart-of-depth-goblet.png', 'Goblet of Eonothem'),
         ('Heart of Depth Circlet', '/images/artifact/heart-of-depth-circlet.png', 'Circlet of Logos'),
-        ('Retracing Bolide Flower', '/images/artifact/retracing-bolide-flower.png', 'Flower of Life'),
-        ('Retracing Bolide Feather', '/images/artifact/retracing-bolide-feather.png', 'Plume of Death'),
-        ('Retracing Bolide Sands', '/images/artifact/retracing-bolide-sands.png', 'Sands of Eon'),
-        ('Retracing Bolide Goblet', '/images/artifact/retracing-bolide-goblet.png', 'Goblet of Eonothem'),
-        ('Retracing Bolide Circlet', '/images/artifact/retracing-bolide-circlet.png', 'Circlet of Logos'),
+        
+        -- Husk of Opulent Dreams Set
+        ('Husk of Opulent Dreams Flower', '/images/artifact/husk-of-opulent-dreams-flower.png', 'Flower of Life'),
+        ('Husk of Opulent Dreams Plume', '/images/artifact/husk-of-opulent-dreams-plume.png', 'Plume of Death'),
+        ('Husk of Opulent Dreams Sands', '/images/artifact/husk-of-opulent-dreams-sands.png', 'Sands of Eon'),
+        ('Husk of Opulent Dreams Goblet', '/images/artifact/husk-of-opulent-dreams-goblet.png', 'Goblet of Eonothem'),
+        ('Husk of Opulent Dreams Circlet', '/images/artifact/husk-of-opulent-dreams-circlet.png', 'Circlet of Logos'),
+        
+        -- Instructor Set
+        ('Instructor''s Flower', '/images/artifact/instructor-flower.png', 'Flower of Life'),
+        ('Instructor''s Plume', '/images/artifact/instructor-plume.png', 'Plume of Death'),
+        ('Instructor''s Sands', '/images/artifact/instructor-sands.png', 'Sands of Eon'),
+        ('Instructor''s Goblet', '/images/artifact/instructor-goblet.png', 'Goblet of Eonothem'),
+        ('Instructor''s Circlet', '/images/artifact/instructor-circlet.png', 'Circlet of Logos'),
+        
+        -- Lavawalker Set
+        ('Lavawalker''s Flower', '/images/artifact/lavawalker-flower.png', 'Flower of Life'),
+        ('Lavawalker''s Plume', '/images/artifact/lavawalker-plume.png', 'Plume of Death'),
+        ('Lavawalker''s Sands', '/images/artifact/lavawalker-sands.png', 'Sands of Eon'),
+        ('Lavawalker''s Goblet', '/images/artifact/lavawalker-goblet.png', 'Goblet of Eonothem'),
+        ('Lavawalker''s Circlet', '/images/artifact/lavawalker-circlet.png', 'Circlet of Logos'),
+        
+        -- Lucky Dog Set
+        ('Lucky Dog''s Flower', '/images/artifact/lucky-dog-flower.png', 'Flower of Life'),
+        ('Lucky Dog''s Plume', '/images/artifact/lucky-dog-plume.png', 'Plume of Death'),
+        ('Lucky Dog''s Sands', '/images/artifact/lucky-dog-sands.png', 'Sands of Eon'),
+        ('Lucky Dog''s Goblet', '/images/artifact/lucky-dog-goblet.png', 'Goblet of Eonothem'),
+        ('Lucky Dog''s Circlet', '/images/artifact/lucky-dog-circlet.png', 'Circlet of Logos'),
+        
+        -- Maiden Beloved Set
+        ('Maiden Beloved Flower', '/images/artifact/maiden-beloved-flower.png', 'Flower of Life'),
+        ('Maiden Beloved Plume', '/images/artifact/maiden-beloved-plume.png', 'Plume of Death'),
+        ('Maiden Beloved Sands', '/images/artifact/maiden-beloved-sands.png', 'Sands of Eon'),
+        ('Maiden Beloved Goblet', '/images/artifact/maiden-beloved-goblet.png', 'Goblet of Eonothem'),
+        ('Maiden Beloved Circlet', '/images/artifact/maiden-beloved-circlet.png', 'Circlet of Logos'),
+        
+        -- Martial Artist Set
+        ('Martial Artist''s Flower', '/images/artifact/martial-artist-flower.png', 'Flower of Life'),
+        ('Martial Artist''s Plume', '/images/artifact/martial-artist-plume.png', 'Plume of Death'),
+        ('Martial Artist''s Sands', '/images/artifact/martial-artist-sands.png', 'Sands of Eon'),
+        ('Martial Artist''s Goblet', '/images/artifact/martial-artist-goblet.png', 'Goblet of Eonothem'),
+        ('Martial Artist''s Circlet', '/images/artifact/martial-artist-circlet.png', 'Circlet of Logos'),
+        
+        -- Noblesse Oblige Set
         ('Noblesse Oblige Flower', '/images/artifact/noblesse-oblige-flower.png', 'Flower of Life'),
-        ('Noblesse Oblige Feather', '/images/artifact/noblesse-oblige-feather.png', 'Plume of Death'),
+        ('Noblesse Oblige Plume', '/images/artifact/noblesse-oblige-plume.png', 'Plume of Death'),
         ('Noblesse Oblige Sands', '/images/artifact/noblesse-oblige-sands.png', 'Sands of Eon'),
         ('Noblesse Oblige Goblet', '/images/artifact/noblesse-oblige-goblet.png', 'Goblet of Eonothem'),
         ('Noblesse Oblige Circlet', '/images/artifact/noblesse-oblige-circlet.png', 'Circlet of Logos'),
+        
+        -- Ocean-Hued Clam Set
+        ('Ocean-Hued Clam Flower', '/images/artifact/ocean-hued-clam-flower.png', 'Flower of Life'),
+        ('Ocean-Hued Clam Plume', '/images/artifact/ocean-hued-clam-plume.png', 'Plume of Death'),
+        ('Ocean-Hued Clam Sands', '/images/artifact/ocean-hued-clam-sands.png', 'Sands of Eon'),
+        ('Ocean-Hued Clam Goblet', '/images/artifact/ocean-hued-clam-goblet.png', 'Goblet of Eonothem'),
+        ('Ocean-Hued Clam Circlet', '/images/artifact/ocean-hued-clam-circlet.png', 'Circlet of Logos'),
+        
+        -- Pale Flame Set
+        ('Pale Flame Flower', '/images/artifact/pale-flame-flower.png', 'Flower of Life'),
+        ('Pale Flame Plume', '/images/artifact/pale-flame-plume.png', 'Plume of Death'),
+        ('Pale Flame Sands', '/images/artifact/pale-flame-sands.png', 'Sands of Eon'),
+        ('Pale Flame Goblet', '/images/artifact/pale-flame-goblet.png', 'Goblet of Eonothem'),
+        ('Pale Flame Circlet', '/images/artifact/pale-flame-circlet.png', 'Circlet of Logos'),
+        
+        -- Resolution of Sojourner Set
+        ('Resolution of Sojourner Flower', '/images/artifact/resolution-of-sojourner-flower.png', 'Flower of Life'),
+        ('Resolution of Sojourner Plume', '/images/artifact/resolution-of-sojourner-plume.png', 'Plume of Death'),
+        ('Resolution of Sojourner Sands', '/images/artifact/resolution-of-sojourner-sands.png', 'Sands of Eon'),
+        ('Resolution of Sojourner Goblet', '/images/artifact/resolution-of-sojourner-goblet.png', 'Goblet of Eonothem'),
+        ('Resolution of Sojourner Circlet', '/images/artifact/resolution-of-sojourner-circlet.png', 'Circlet of Logos'),
+        
+        -- Retracing Bolide Set
+        ('Retracing Bolide Flower', '/images/artifact/retracing-bolide-flower.png', 'Flower of Life'),
+        ('Retracing Bolide Plume', '/images/artifact/retracing-bolide-plume.png', 'Plume of Death'),
+        ('Retracing Bolide Sands', '/images/artifact/retracing-bolide-sands.png', 'Sands of Eon'),
+        ('Retracing Bolide Goblet', '/images/artifact/retracing-bolide-goblet.png', 'Goblet of Eonothem'),
+        ('Retracing Bolide Circlet', '/images/artifact/retracing-bolide-circlet.png', 'Circlet of Logos'),
+        
+        -- Scholar Set
+        ('Scholar''s Flower', '/images/artifact/scholar-flower.png', 'Flower of Life'),
+        ('Scholar''s Plume', '/images/artifact/scholar-plume.png', 'Plume of Death'),
+        ('Scholar''s Sands', '/images/artifact/scholar-sands.png', 'Sands of Eon'),
+        ('Scholar''s Goblet', '/images/artifact/scholar-goblet.png', 'Goblet of Eonothem'),
+        ('Scholar''s Circlet', '/images/artifact/scholar-circlet.png', 'Circlet of Logos'),
+        
+        -- Shimenawa's Reminiscence Set
+        ('Shimenawa''s Reminiscence Flower', '/images/artifact/shimenawas-reminiscence-flower.png', 'Flower of Life'),
+        ('Shimenawa''s Reminiscence Plume', '/images/artifact/shimenawas-reminiscence-plume.png', 'Plume of Death'),
+        ('Shimenawa''s Reminiscence Sands', '/images/artifact/shimenawas-reminiscence-sands.png', 'Sands of Eon'),
+        ('Shimenawa''s Reminiscence Goblet', '/images/artifact/shimenawas-reminiscence-goblet.png', 'Goblet of Eonothem'),
+        ('Shimenawa''s Reminiscence Circlet', '/images/artifact/shimenawas-reminiscence-circlet.png', 'Circlet of Logos'),
+        
+        -- Tenacity of the Millelith Set
+        ('Tenacity of the Millelith Flower', '/images/artifact/tenacity-of-the-millelith-flower.png', 'Flower of Life'),
+        ('Tenacity of the Millelith Plume', '/images/artifact/tenacity-of-the-millelith-plume.png', 'Plume of Death'),
+        ('Tenacity of the Millelith Sands', '/images/artifact/tenacity-of-the-millelith-sands.png', 'Sands of Eon'),
+        ('Tenacity of the Millelith Goblet', '/images/artifact/tenacity-of-the-millelith-goblet.png', 'Goblet of Eonothem'),
+        ('Tenacity of the Millelith Circlet', '/images/artifact/tenacity-of-the-millelith-circlet.png', 'Circlet of Logos'),
+        
+        -- The Exile Set
+        ('The Exile Flower', '/images/artifact/the-exile-flower.png', 'Flower of Life'),
+        ('The Exile Plume', '/images/artifact/the-exile-plume.png', 'Plume of Death'),
+        ('The Exile Sands', '/images/artifact/the-exile-sands.png', 'Sands of Eon'),
+        ('The Exile Goblet', '/images/artifact/the-exile-goblet.png', 'Goblet of Eonothem'),
+        ('The Exile Circlet', '/images/artifact/the-exile-circlet.png', 'Circlet of Logos'),
+        
+        -- Thundering Fury Set
+        ('Thundering Fury Flower', '/images/artifact/thundering-fury-flower.png', 'Flower of Life'),
+        ('Thundering Fury Plume', '/images/artifact/thundering-fury-plume.png', 'Plume of Death'),
+        ('Thundering Fury Sands', '/images/artifact/thundering-fury-sands.png', 'Sands of Eon'),
+        ('Thundering Fury Goblet', '/images/artifact/thundering-fury-goblet.png', 'Goblet of Eonothem'),
+        ('Thundering Fury Circlet', '/images/artifact/thundering-fury-circlet.png', 'Circlet of Logos'),
+        
+        -- Thundersoother Set
+        ('Thundersoother''s Flower', '/images/artifact/thundersoother-flower.png', 'Flower of Life'),
+        ('Thundersoother''s Plume', '/images/artifact/thundersoother-plume.png', 'Plume of Death'),
+        ('Thundersoother''s Sands', '/images/artifact/thundersoother-sands.png', 'Sands of Eon'),
+        ('Thundersoother''s Goblet', '/images/artifact/thundersoother-goblet.png', 'Goblet of Eonothem'),
+        ('Thundersoother''s Circlet', '/images/artifact/thundersoother-circlet.png', 'Circlet of Logos'),
+        
+        -- Tiny Miracle Set
+        ('Tiny Miracle''s Flower', '/images/artifact/tiny-miracle-flower.png', 'Flower of Life'),
+        ('Tiny Miracle''s Plume', '/images/artifact/tiny-miracle-plume.png', 'Plume of Death'),
+        ('Tiny Miracle''s Sands', '/images/artifact/tiny-miracle-sands.png', 'Sands of Eon'),
+        ('Tiny Miracle''s Goblet', '/images/artifact/tiny-miracle-goblet.png', 'Goblet of Eonothem'),
+        ('Tiny Miracle''s Circlet', '/images/artifact/tiny-miracle-circlet.png', 'Circlet of Logos'),
+        
+        -- Traveling Doctor Set
+        ('Traveling Doctor''s Flower', '/images/artifact/traveling-doctor-flower.png', 'Flower of Life'),
+        ('Traveling Doctor''s Plume', '/images/artifact/traveling-doctor-plume.png', 'Plume of Death'),
+        ('Traveling Doctor''s Sands', '/images/artifact/traveling-doctor-sands.png', 'Sands of Eon'),
+        ('Traveling Doctor''s Goblet', '/images/artifact/traveling-doctor-goblet.png', 'Goblet of Eonothem'),
+        ('Traveling Doctor''s Circlet', '/images/artifact/traveling-doctor-circlet.png', 'Circlet of Logos'),
+        
+        -- Defender's Will Set
+        ('Defender''s Will Flower', '/images/artifact/defenders-will-flower.png', 'Flower of Life'),
+        ('Defender''s Will Plume', '/images/artifact/defenders-will-plume.png', 'Plume of Death'),
+        ('Defender''s Will Sands', '/images/artifact/defenders-will-sands.png', 'Sands of Eon'),
+        ('Defender''s Will Goblet', '/images/artifact/defenders-will-goblet.png', 'Goblet of Eonothem'),
+        ('Defender''s Will Circlet', '/images/artifact/defenders-will-circlet.png', 'Circlet of Logos'),
+        
+        -- Vermillion Hereafter Set
+        ('Vermillion Hereafter Flower', '/images/artifact/vermillion-hereafter-flower.png', 'Flower of Life'),
+        ('Vermillion Hereafter Plume', '/images/artifact/vermillion-hereafter-plume.png', 'Plume of Death'),
+        ('Vermillion Hereafter Sands', '/images/artifact/vermillion-hereafter-sands.png', 'Sands of Eon'),
+        ('Vermillion Hereafter Goblet', '/images/artifact/vermillion-hereafter-goblet.png', 'Goblet of Eonothem'),
+        ('Vermillion Hereafter Circlet', '/images/artifact/vermillion-hereafter-circlet.png', 'Circlet of Logos'),
+        
+        -- Viridescent Venerer Set
+        ('Viridescent Venerer Flower', '/images/artifact/viridescent-venerer-flower.png', 'Flower of Life'),
+        ('Viridescent Venerer Plume', '/images/artifact/viridescent-venerer-plume.png', 'Plume of Death'),
+        ('Viridescent Venerer Sands', '/images/artifact/viridescent-venerer-sands.png', 'Sands of Eon'),
+        ('Viridescent Venerer Goblet', '/images/artifact/viridescent-venerer-goblet.png', 'Goblet of Eonothem'),
+        ('Viridescent Venerer Circlet', '/images/artifact/viridescent-venerer-circlet.png', 'Circlet of Logos'),
+        
+        -- Wanderer's Troupe Set
         ('Wanderer''s Troupe Flower', '/images/artifact/wanderers-troupe-flower.png', 'Flower of Life'),
-        ('Wanderer''s Troupe Feather', '/images/artifact/wanderers-troupe-feather.png', 'Plume of Death'),
+        ('Wanderer''s Troupe Plume', '/images/artifact/wanderers-troupe-plume.png', 'Plume of Death'),
         ('Wanderer''s Troupe Sands', '/images/artifact/wanderers-troupe-sands.png', 'Sands of Eon'),
         ('Wanderer''s Troupe Goblet', '/images/artifact/wanderers-troupe-goblet.png', 'Goblet of Eonothem'),
-        ('Wanderer''s Troupe Circlet', '/images/artifact/wanderers-troupe-circlet.png', 'Circlet of Logos'),
-        ('The Exile Flower', '/images/artifact/the-exile-flower.png', 'Flower of Life'),
-        ('The Exile Plume', '/images/artifact/the-exile-plume.png', 'Plume of Death'),
-        ('The Exile Timepiece', '/images/artifact/the-exile-timepiece.png', 'Sands of Eon'),
-        ('The Exile Goblet', '/images/artifact/the-exile-goblet.png', 'Goblet of Eonothem'),
-        ('The Exile Circlet', '/images/artifact/the-exile-circlet.png', 'Circlet of Logos'),
-        ('Scholar''s Flower', '/images/artifact/scholars-flower.png', 'Flower of Life'),
-        ('Scholar''s Plume', '/images/artifact/scholars-plume.png', 'Plume of Death'),
-        ('Scholar''s Timepiece', '/images/artifact/scholars-timepiece.png', 'Sands of Eon'),
-        ('Scholar''s Goblet', '/images/artifact/scholars-goblet.png', 'Goblet of Eonothem'),
-        ('Scholar''s Circlet', '/images/artifact/scholars-circlet.png', 'Circlet of Logos'),
-        ('Gambler''s Flower', '/images/artifact/gamblers-flower.png', 'Flower of Life'),
-        ('Gambler''s Plume', '/images/artifact/gamblers-plume.png', 'Plume of Death'),
-        ('Gambler''s Timepiece', '/images/artifact/gamblers-timepiece.png', 'Sands of Eon'),
-        ('Gambler''s Goblet', '/images/artifact/gamblers-goblet.png', 'Goblet of Eonothem'),
-        ('Gambler''s Circlet', '/images/artifact/gamblers-circlet.png', 'Circlet of Logos'),
-        ('Retracing Bolide Flower', '/images/artifact/retracing-bolide-flower.png', 'Flower of Life'),
-        ('Retracing Bolide Feather', '/images/artifact/retracing-bolide-feather.png', 'Plume of Death'),
-        ('Retracing Bolide Sands', '/images/artifact/retracing-bolide-sands.png', 'Sands of Eon'),
-        ('Retracing Bolide Goblet', '/images/artifact/retracing-bolide-goblet.png', 'Goblet of Eonothem'),
-        ('Retracing Bolide Circlet', '/images/artifact/retracing-bolide-circlet.png', 'Circlet of Logos'),
-        ('Exile''s Flower', '/images/artifact/exiles-flower.png', 'Flower of Life'),
-        ('Exile''s Plume', '/images/artifact/exiles-plume.png', 'Plume of Death'),
-        ('Exile''s Timepiece', '/images/artifact/exiles-timepiece.png', 'Sands of Eon'),
-        ('Exile''s Goblet', '/images/artifact/exiles-goblet.png', 'Goblet of Eonothem'),
-        ('Exile''s Circlet', '/images/artifact/exiles-circlet.png', 'Circlet of Logos'),
-        ('Maiden Beloved Flower', '/images/artifact/maiden-beloved-flower.png', 'Flower of Life'),
-        ('Maiden Beloved Plume', '/images/artifact/maiden-beloved-plume.png', 'Plume of Death'),
-        ('Maiden Beloved Timepiece', '/images/artifact/maiden-beloved-timepiece.png', 'Sands of Eon'),
-        ('Maiden Beloved Goblet', '/images/artifact/maiden-beloved-goblet.png', 'Goblet of Eonothem'),
-        ('Maiden Beloved Circlet', '/images/artifact/maiden-beloved-circlet.png', 'Circlet of Logos'),
-        ('Noblesse Oblige Flower', '/images/artifact/noblesse-oblige-flower.png', 'Flower of Life'),
-        ('Noblesse Oblige Plume', '/images/artifact/noblesse-oblige-plume.png', 'Plume of Death'),
-        ('Noblesse Oblige Timepiece', '/images/artifact/noblesse-oblige-timepiece.png', 'Sands of Eon'),
-        ('Noblesse Oblige Goblet', '/images/artifact/noblesse-oblige-goblet.png', 'Goblet of Eonothem'),
-        ('Noblesse Oblige Circlet', '/images/artifact/noblesse-oblige-circlet.png', 'Circlet of Logos'),
-        ('Wanderer''s Troupe Flower', '/images/artifact/wanderers-troupe-flower.png', 'Flower of Life'),
-        ('Wanderer''s Troupe Plume', '/images/artifact/wanderers-troupe-plume.png', 'Plume of Death'),
-        ('Wanderer''s Troupe Timepiece', '/images/artifact/wanderers-troupe-timepiece.png', 'Sands of Eon'),
-        ('Wanderer''s Troupe Goblet', '/images/artifact/wanderers-troupe-goblet.png', 'Goblet of Eonothem'),
-        ('Wanderer''s Troupe Circlet', '/images/artifact/wanderers-troupe-circlet.png', 'Circlet of Logos'),
-        ('The Exile Flower', '/images/artifact/the-exile-flower.png', 'Flower of Life'),
-        ('The Exile Plume', '/images/artifact/the-exile-plume.png', 'Plume of Death'),
-        ('The Exile Timepiece', '/images/artifact/the-exile-timepiece.png', 'Sands of Eon'),
-        ('The Exile Goblet', '/images/artifact/the-exile-goblet.png', 'Goblet of Eonothem'),
-        ('The Exile Circlet', '/images/artifact/the-exile-circlet.png', 'Circlet of Logos'),
-        ('Scholar''s Flower', '/images/artifact/scholars-flower.png', 'Flower of Life'),
-        ('Scholar''s Plume', '/images/artifact/scholars-plume.png', 'Plume of Death'),
-        ('Scholar''s Timepiece', '/images/artifact/scholars-timepiece.png', 'Sands of Eon'),
-        ('Scholar''s Goblet', '/images/artifact/scholars-goblet.png', 'Goblet of Eonothem'),
-        ('Scholar''s Circlet', '/images/artifact/scholars-circlet.png', 'Circlet of Logos'),
-        ('Gambler''s Flower', '/images/artifact/gamblers-flower.png', 'Flower of Life'),
-        ('Gambler''s Plume', '/images/artifact/gamblers-plume.png', 'Plume of Death'),
-        ('Gambler''s Timepiece', '/images/artifact/gamblers-timepiece.png', 'Sands of Eon'),
-        ('Gambler''s Goblet', '/images/artifact/gamblers-goblet.png', 'Goblet of Eonothem'),
-        ('Gambler''s Circlet', '/images/artifact/gamblers-circlet.png', 'Circlet of Logos'),
-        ('Retracing Bolide Flower', '/images/artifact/retracing-bolide-flower.png', 'Flower of Life'),
-        ('Retracing Bolide Feather', '/images/artifact/retracing-bolide-feather.png', 'Plume of Death'),
-        ('Retracing Bolide Sands', '/images/artifact/retracing-bolide-sands.png', 'Sands of Eon'),
-        ('Retracing Bolide Goblet', '/images/artifact/retracing-bolide-goblet.png', 'Goblet of Eonothem'),
-        ('Retracing Bolide Circlet', '/images/artifact/retracing-bolide-circlet.png', 'Circlet of Logos'),
-        ('Exile''s Flower', '/images/artifact/exiles-flower.png', 'Flower of Life'),
-        ('Exile''s Plume', '/images/artifact/exiles-plume.png', 'Plume of Death'),
-        ('Exile''s Timepiece', '/images/artifact/exiles-timepiece.png', 'Sands of Eon'),
-        ('Exile''s Goblet', '/images/artifact/exiles-goblet.png', 'Goblet of Eonothem'),
-        ('Exiles Circlet', '/images/artifact/exiles-circlet.png', 'Circlet of Logos'),
-        ('Maiden Beloved Flower', '/images/artifact/maiden-beloved-flower.png', 'Flower of Life'),
-        ('Maiden Beloved Plume', '/images/artifact/maiden-beloved-plume.png', 'Plume of Death'),
-        ('Maiden Beloved Timepiece', '/images/artifact/maiden-beloved-timepiece.png', 'Sands of Eon'),
-        ('Maiden Beloved Goblet', '/images/artifact/maiden-beloved-goblet.png', 'Goblet of Eonothem'),
-        ('Maiden Beloved Circlet', '/images/artifact/maiden-beloved-circlet.png', 'Circlet of Logos'),
-        ('Noblesse Oblige Flower', '/images/artifact/noblesse-oblige-flower.png', 'Flower of Life'),
-        ('Noblesse Oblige Plume', '/images/artifact/noblesse-oblige-plume.png', 'Plume of Death'),
-        ('Noblesse Oblige Timepiece', '/images/artifact/noblesse-oblige-timepiece.png', 'Sands of Eon'),
-        ('Noblesse Oblige Goblet', '/images/artifact/noblesse-oblige-goblet.png', 'Goblet of Eonothem'),
-        ('Noblesse Oblige Circlet', '/images/artifact/noblesse-oblige-circlet.png', 'Circlet of Logos'),
-        ('Wanderer''s Troupe Flower', '/images/artifact/wanderers-troupe-flower.png', 'Flower of Life'),
-        ('Wanderer''s Troupe Plume', '/images/artifact/wanderers-troupe-plume.png', 'Plume of Death'),
-        ('Wanderer''s Troupe Timepiece', '/images/artifact/wanderers-troupe-timepiece.png', 'Sands of Eon'),
-        ('Wanderer''s Troupe Goblet', '/images/artifact/wanderers-troupe-goblet.png', 'Goblet of Eonothem'),
-        ('Wanderer''s Troupe Circlet', '/images/artifact/wanderers-troupe-circlet.png', 'Circlet of Logos'),
-        ('The Exile Flower', '/images/artifact/the-exile-flower.png', 'Flower of Life'),
-        ('The Exile Plume', '/images/artifact/the-exile-plume.png', 'Plume of Death'),
-        ('The Exile Timepiece', '/images/artifact/the-exile-timepiece.png', 'Sands of Eon'),
-        ('The Exile Goblet', '/images/artifact/the-exile-goblet.png', 'Goblet of Eonothem'),
-        ('The Exile Circlet', '/images/artifact/the-exile-circlet.png', 'Circlet of Logos'),
-        ('Scholar''s Flower', '/images/artifact/scholars-flower.png', 'Flower of Life'),
-        ('Scholar''s Plume', '/images/artifact/scholars-plume.png', 'Plume of Death'),
-        ('Scholar''s Timepiece', '/images/artifact/scholars-timepiece.png', 'Sands of Eon'),
-        ('Scholar''s Goblet', '/images/artifact/scholars-goblet.png', 'Goblet of Eonothem'),
-        ('Scholar''s Circlet', '/images/artifact/scholars-circlet.png', 'Circlet of Logos'),
-        ('Gambler''s Flower', '/images/artifact/gamblers-flower.png', 'Flower of Life'),
-        ('Gambler''s Plume', '/images/artifact/gamblers-plume.png', 'Plume of Death'),
-        ('Gambler''s Timepiece', '/images/artifact/gamblers-timepiece.png', 'Sands of Eon'),
-        ('Gambler''s Goblet', '/images/artifact/gamblers-goblet.png', 'Goblet of Eonothem'),
-        ('Gambler''s Circlet', '/images/artifact/gamblers-circlet.png', 'Circlet of Logos'),
-        ('Retracing Bolide Flower', '/images/artifact/retracing-bolide-flower.png', 'Flower of Life'),
-        ('Retracing Bolide Feather', '/images/artifact/retracing-bolide-feather.png', 'Plume of Death'),
-        ('Retracing Bolide Sands', '/images/artifact/retracing-bolide-sands.png', 'Sands of Eon'),
-        ('Retracing Bolide Goblet', '/images/artifact/retracing-bolide-goblet.png', 'Goblet of Eonothem'),
-        ('Retracing Bolide Circlet', '/images/artifact/retracing-bolide-circlet.png', 'Circlet of Logos'),
-        ('Exile''s Flower', '/images/artifact/exiles-flower.png', 'Flower of Life'),
-        ('Exile''s Plume', '/images/artifact/exiles-plume.png', 'Plume of Death'),
-        ('Exile''s Timepiece', '/images/artifact/exiles-timepiece.png', 'Sands of Eon'),
-        ('Exile''s Goblet', '/images/artifact/exiles-goblet.png', 'Goblet of Eonothem'),
-        ('Exile''s Circlet', '/images/artifact/exiles-circlet.png', 'Circlet of Logos'),
-        ('Maiden Beloved Flower', '/images/artifact/maiden-beloved-flower.png', 'Flower of Life'),
-        ('Maiden Beloved Plume', '/images/artifact/maiden-beloved-plume.png', 'Plume of Death'),
-        ('Maiden Beloved Timepiece', '/images/artifact/maiden-beloved-timepiece.png', 'Sands of Eon');
+        ('Wanderer''s Troupe Circlet', '/images/artifact/wanderers-troupe-circlet.png', 'Circlet of Logos')
     `, (err) => {
-        if (err) console.error("Errore durante la creazione della tabella artefatti:", err.message);
+        if (err) console.error("Errore durante l'inserimento degli artefatti:", err.message);
     });
+
 });
 

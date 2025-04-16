@@ -5,6 +5,7 @@
     <link rel="icon" href="images/icona.webp"/>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/artefatti.css">
     <link rel="stylesheet" href="css/personaggi.css">
     <link rel="stylesheet" href="css/footer.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,14 +21,30 @@
 
             <form class="d-flex me-auto mx-3">
                 <div class="input-group cerca">
-                    <input class="form-control" type="search" placeholder="Cerca personaggio..." aria-label="Search">
+                    <input class="form-control" type="search" name="nome" placeholder="Cerca artefatti..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="bi bi-search">cerca</i>
                     </button>
                 </div>
+                <a class="navbar-brand navbar-genshin" href="/personaggi">personaggi</a>
             </form>
         </div>
     </nav>
+
+    <div class="text-center">
+        <div class="container">
+            <form id="filtro-elemento" method="get" action="/artefatti">
+                <div class="d-flex flex-wrap justify-content-center pt-4">
+                    <button type="submit" name="classe" class="btn-elemento btn-fiore" value="Flower of Life"></button>
+                    <button type="submit" name="classe" class="btn-elemento btn-piuma" value="Plume of Death"></button>
+                    <button type="submit" name="classe" class="btn-elemento btn-clessidra" value="Sands of Eon"></button>
+                    <button type="submit" name="classe" class="btn-elemento btn-coppa" value="Goblet of Eonothem"></button>
+                    <button type="submit" name="classe" class="btn-elemento btn-corona" value="Circlet of Logos"></button>
+                    <button type="submit" name="classe" class="btn btn-outline-light ms-3" value="">Mostra tutti</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="container">
         <div class="row">
@@ -36,6 +53,7 @@
             </div>
             <div class="col-md-12">
                 <div class="row">
+                    
                     <% artefatti.forEach((artefatto) => { %>
                         <div class="col-md-2 mb-4">
                             <div class="character-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= artefatto.id %>">
@@ -49,7 +67,11 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="characterModalLabel<%= artefatto.id %>"><%= artefatto.nome %></h5>
+                                        <h5 class="modal-title" id="characterModalLabel<%= artefatto.id %>"><%= artefatto.nome %>
+                                            <span class="character-element element-<%= artefatto.classe %>">
+                                                <%= artefatto.classe %>
+                                            </span>
+                                        </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">

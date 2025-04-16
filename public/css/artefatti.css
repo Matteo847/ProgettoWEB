@@ -1,0 +1,32 @@
+.btn-clessidra {
+    background: url('/images/artifact/clessidra.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: white !important;
+}
+.btn-coppa {
+    background: url('/images/artifact/coppa.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: white !important;
+}
+.btn-corona {
+    background: url('/images/artifact/corona.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: white !important;
+}
+.btn-fiore {
+    background: url('/images/artifact/fiore.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: white !important;
+}
+.btn-piuma {
+    background: url('/images/artifact/piuma.png') !important; 
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-color: white !important;
+}
+
+
