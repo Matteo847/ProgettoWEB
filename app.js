@@ -38,11 +38,6 @@ app.get('/registrati', (req, res) => {
     res.render('registrati');
 });
 
-app.get('/build', (req, res) => {
-    res.render('build');
-});
-
-
 
 app.get('/artefatti', (req, res) => {
 
@@ -66,9 +61,7 @@ app.get('/artefatti', (req, res) => {
         res.render('artefatti', { artefatti: rows });
     });
 });
-app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
-    console.log(`http://localhost:${port}`);
-});
+
 
 app.get('/personaggi', (req, res) => {
 
@@ -93,9 +86,20 @@ app.get('/personaggi', (req, res) => {
         res.render('personaggi', { personaggi: rows });
     });
 
-    app.post('/build', (req, res) => {
-    
-        let sql = 'SELECT * FROM personaggi INNER JOIN statistiche ON personaggi.id = statistiche.personaggio;i';
+});
+
+app.get('/build', (req, res) => {
+    let sql = ' SELECT * FROM personaggi p INNER JOIN statistiche s ON p.id = s.personaggio';
+
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore del server');
+        }
+        res.render('build', { statistiche: rows });
     });
 });
 
+app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
+    console.log(`http://localhost:${port}`);
+});

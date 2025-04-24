@@ -33,57 +33,41 @@
 		</div>
     </nav>
 
-    <div class="row">  <!-- Questo è il contenitore principale -->
-        <!-- Prima metà -->
-        <div class="col-md-2">
-            <img class="img-fluid im-build" src="/images/character/character-kamisato-ayaka-card.png" alt="Kamisato Ayaka">
+    <% if (!statistiche || statistiche.length === 0) { %>
+        <div class="col-md-12 text-center">
+            <h2>Nessuna statistica presente</h2>
         </div>
-        <div class="col-md-4">
-            <div class="build-stats">
-                <h5>Statistiche consigliate</h5>
-                <ul class="stats-list">
-                    <li><i class="fas fa-snowflake"></i> <strong>4 pezzi Blizzard Strayer:</strong></li>
-                    
-                    <li class="mt-3"><i class="fas fa-bolt"></i> <strong>2 pezzi Emblema del Destino:</strong></li>
-                    
-                    <li class="mt-3"><i class="fas fa-chart-bar"></i> <strong>Priorità statistiche:</strong></li>
-                    <li>- Sand: ATK% o Ricarica Energia</li>
-                    <li>- Calice: Danno Cryo%</li>
-                    <li>- Corona: Tasso CRIT / Danno CRIT</li>
-                    <li>- Sottostat: CRIT > ricarica >ATK%</li>
-                </ul>
+    <% } %>
+
+    <div class="row">  <!-- Questo è il contenitore principale -->
+
+        <% statistiche.forEach((personaggio) => { %>
+            <div class="col-md-2">
+                <img class="img-fluid im-build" src="<%= personaggio.immagine %>">
             </div>
-        </div>
-        
+            <div class="col-md-4">
+                <div class="build-stats">
+                    <h5>Statistiche consigliate</h5>
+                    <ul class="stats-list">
+                        <li><i class="fas fa-snowflake"></i> <strong>4 pezzi: <%= personaggio.quattropezzi %></strong></li>    
+                        <li class="mt-3"><i class="fas fa-bolt"></i> <strong>2 pezzi:  <%= personaggio.duepezzi %></strong></li>
+                        
+                        <li class="mt-3"><i class="fas fa-chart-bar"></i> <strong>Priorità statistiche:</strong></li>
+                        <li>-  <%= personaggio.priorità_fiore %></li>
+                        <li>-  <%= personaggio.priorità_piuma %></li>
+                        <li>-  <%= personaggio.priorità_coppa %></li>
+                        <li>-  <%= personaggio.priorità_calice %></li>
+                        <li>-  <%= personaggio.priorità_corona %></li>
+                        <li class="mt-3"><i class="fas fa-chart-bar"></i> <strong>Priorità substats:</strong></li>
+                        <li>-  <%= personaggio.priorità_statistiche %></li>
 
-
-        <!-- Seconda metà -->
-        <div class="col-md-2">  <!-- Altra metà della larghezza -->
-            <img class="img-fluid im-build" src="/images/character/character-ganyu-card.png" alt="Altro personaggio">
-        </div>
-        <div class="col-md-4">
-        </div>
+                </div>
+            </div>
+        <% }); %>
 
 
     </div>
 
-    <div class="row">  <!-- Questo è il contenitore principale -->
-        <div class="col-md-2">  <!-- Altra metà della larghezza -->
-            <img class="img-fluid im-build" src="/images/character/character-aloy-card.png" alt="Altro personaggio">
-        </div>
-        <div class="col-md-4">
-        </div>
-
-
-        <!-- Seconda metà -->
-        <div class="col-md-2">  <!-- Altra metà della larghezza -->
-            <img class="img-fluid im-build" src="/images/character/character-chongyun-card.png" alt="Altro personaggio">
-        </div>
-        <div class="col-md-4">
-        </div>
-
-        
-    </div>
 </div>
     
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
