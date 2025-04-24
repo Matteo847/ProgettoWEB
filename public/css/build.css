@@ -1,0 +1,37 @@
+.im-build{
+
+    width: auto !important;
+    height: 90% !important;
+    margin-top: 60px !important;
+    margin-left: 20px !important;
+    transition: transform 0.3s ease;
+}
+.im-build:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+.build-stats {
+    background-color: rgba(100, 149, 237, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #6495ED;
+    margin-top: 60px !important;
+    
+}
+
+.stats-list {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.stats-list li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.stats-list i {
+    color: #6495ED;
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}

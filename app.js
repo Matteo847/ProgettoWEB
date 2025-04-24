@@ -38,6 +38,12 @@ app.get('/registrati', (req, res) => {
     res.render('registrati');
 });
 
+app.get('/build', (req, res) => {
+    res.render('build');
+});
+
+
+
 app.get('/artefatti', (req, res) => {
 
     let sql = 'SELECT * FROM artefatti';
@@ -87,5 +93,9 @@ app.get('/personaggi', (req, res) => {
         res.render('personaggi', { personaggi: rows });
     });
 
+    app.post('/build', (req, res) => {
+    
+        let sql = 'SELECT * FROM personaggi INNER JOIN statistiche ON personaggi.id = statistiche.personaggio;i';
+    });
 });
 

@@ -56,8 +56,8 @@
                     
                     <% artefatti.forEach((artefatto) => { %>
                         <div class="col-md-2 mb-4">
-                            <div class="character-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= artefatto.id %>">
-                                <img class="im-personaggio" src="<%= artefatto.immagine %>">
+                            <div class="artefatti-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= artefatto.id %>">
+                                <img class="im-artefatto" src="<%= artefatto.immagine %>">
                                 <div class="barra-info-pers">
                                     <h5 class="character-name"><%= artefatto.nome %></h5>
                                 </div>
@@ -65,8 +65,8 @@
 
                         <div class="modal" id="characterModal<%= artefatto.id %>">
                             <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
+                                <div class="modal-cont">
+                                    <div class="modal-header btn btn-primary">
                                         <h5 class="modal-title" id="characterModalLabel<%= artefatto.id %>"><%= artefatto.nome %>
                                             <span class="character-element element-<%= artefatto.classe %>">
                                                 <%= artefatto.classe %>
@@ -79,13 +79,23 @@
                                             <div class="col-md-4 text-center">
                                                 <img class="img-fluid mb-2" src="<%= artefatto.immagine %>" alt="<%= artefatto.nome %>">
                                             </div>
-                                            <div class="col-md-8 modal-desc modal-header">
+                                            <div class="col-md-8 modal-desc">
                                                 <p><%= artefatto.descrizione %></p>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6 modal-desc">
+                                                <p>2 pezzi:</p>
+                                                <p><%= artefatto.effetto_2_pezzi %></p>
+                                            </div>
+                                            <div class="col-md-6 modal-desc">
+                                                <p>4 pezzi:</p>
+                                                <p><%= artefatto.effetto_4_pezzi %></p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="modal-header">
-                                        <button type="button" class="btn btn-secondary modal-footer " data-bs-dismiss="modal">Personaggi</button>
+                                    <div class="modal-header btn btn-primary">
+                                        <button type="button" class="btn btn-secondary modal-footer " data-bs-dismiss="modal">Build</button>
                                     </div>
                                 </div>
                             </div>

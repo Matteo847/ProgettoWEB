@@ -28,5 +28,25 @@
     background-repeat: no-repeat !important;
     background-color: white !important;
 }
+.artefatti-container {
+    position: relative;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 300px;
+    cursor: pointer;
+}
+.im-artefatto {
+    height: 60% !important; /* Sovrascrivi l'altezza precedente */
+    object-fit: cover; /* Fa sì che l'immagine copra l'intero contenitore */
+    margin-top: 0 !important; /* Rimuovi il margine superiore */
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
 
-
+.modal-cont{
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: aliceblue;
+}
