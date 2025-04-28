@@ -13,24 +13,35 @@
 </head>
 <body class="colore-sfondo">
     <nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
-        <a class="navbar-brand navbar-genshin" href="/">BUILD GENSHIN</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-
+		<a class="navbar-brand navbar-genshin" href="">BUILD GENSHIN</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
             <form class="d-flex me-auto mx-3">
                 <div class="input-group cerca">
-                    <input class="form-control" type="search" name="nome" placeholder="Cerca artefatti..." aria-label="Search">
+                    <input class="form-control" type="search" name="nome" placeholder="Cerca personaggio..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="bi bi-search">cerca</i>
                     </button>
                 </div>
-                <a class="navbar-brand navbar-genshin" href="/personaggi">personaggi</a>
             </form>
-        </div>
-    </nav>
-
+		<ul class="navbar-nav ms-auto"><!--ms-auto usato per posizionare registrati e accedi a destra-->
+			<li class="nav-item active">
+			<a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a><!--fs-5 usato per redere la scritta più grande-->
+			</li>
+			<li class="nav-item">
+			<a class="nav-link fs-5 navbar-destra" href="#">accedi</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link fs-5 navbar-destra" href="build">build</a>
+			</li>
+		</ul>
+		</div>
+	</nav>
     <div class="text-center">
         <div class="container">
             <form id="filtro-elemento" method="get" action="/artefatti">
@@ -86,11 +97,11 @@
                                         <div class="row">
                                             <div class="col-md-6 modal-desc">
                                                 <p>2 pezzi:</p>
-                                                <p><%= artefatto.effetto_2_pezzi %></p>
+                                                <p><%= artefatto. effetto_duepezzi %></p>
                                             </div>
                                             <div class="col-md-6 modal-desc">
                                                 <p>4 pezzi:</p>
-                                                <p><%= artefatto.effetto_4_pezzi %></p>
+                                                <p><%= artefatto.effetto_4pezzi %></p>
                                             </div>
                                         </div>
                                     </div>

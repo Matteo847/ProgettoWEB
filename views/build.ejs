@@ -11,27 +11,41 @@
 </head>
 <body class="colore-sfondo">
     <nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
-		<a class="navbar-brand navbar-genshin" href="">BUILD GENSHIN</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNavDropdown">
-		<ul class="navbar-nav ms-auto"><!--ms-auto usato per posizionare registrati e accedi a destra-->
-			<li class="nav-item active">
-			<a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a><!--fs-5 usato per redere la scritta più grande-->
-			</li>
-			<li class="nav-item">
-			<a class="nav-link fs-5 navbar-destra" href="#">accedi</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="artefatti">artefatti</a>
-			</li>
-		</ul>
-		</div>
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-genshin" href="/">BUILD GENSHIN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" 
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <div class="flex-grow-1 d-flex justify-content-center">
+                    <form class="d-flex mx-3"> 
+                        <div class="input-group cerca">
+                            <input class="form-control" type="search" name="nome" placeholder="Cerca personaggio..." aria-label="Search">
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="bi bi-search">cerca</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link fs-5 navbar-destra" href="#">registrati</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 navbar-destra" href="#">accedi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 navbar-destra" href="artefatti">artefatti</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
+    
 
     <% if (!statistiche || statistiche.length === 0) { %>
         <div class="col-md-12 text-center">

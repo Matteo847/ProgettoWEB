@@ -38,6 +38,9 @@ app.get('/registrati', (req, res) => {
     res.render('registrati');
 });
 
+app.get('/accedi', (req, res) => {
+    res.render('accedi');
+});
 
 app.get('/artefatti', (req, res) => {
 

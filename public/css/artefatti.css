@@ -43,7 +43,10 @@
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
-
+.im-artefatto:hover {
+    transform: scale(1.1);
+    border-color: white;
+}
 .modal-cont{
     border: none;
     border-radius: 12px;
