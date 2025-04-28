@@ -1,0 +1,61 @@
+.riga-profilo {
+    text-align: center;
+    background-repeat: no-repeat;
+    height: 350px;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profilo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profilo-cerchio {
+    width: 120px;
+    height: 120px;
+    border: 5px solid white;
+    border-radius: 50%;
+    background-image: url('/images/emotes/ayaka_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.profilo-nome {
+    font-size: 30px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    font-family: 'Arial', sans-serif;
+}
+.mie_build{
+    color: black !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Arial', sans-serif;
+}
+.separatore {
+    border: 0;
+    height: 2px;
+    width: 40%;
+    background: white;
+    margin: 10px auto 10px auto;
+    opacity: 0.6; 
+}
+.character-container-build{
+    position: relative;
+    margin-top: 100px;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 400px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.character-container-build:hover {
+    transform: scale(1.1);
+    border-color: white;
+}

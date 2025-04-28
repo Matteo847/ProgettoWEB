@@ -42,6 +42,10 @@ app.get('/accedi', (req, res) => {
     res.render('accedi');
 });
 
+app.get('/profilo', (req, res) => {
+    res.render('profilo');
+});
+
 app.get('/artefatti', (req, res) => {
 
     let sql = 'SELECT * FROM artefatti';
@@ -92,6 +96,7 @@ app.get('/personaggi', (req, res) => {
 });
 
 app.get('/build', (req, res) => {
+
     let sql = ' SELECT * FROM personaggi p INNER JOIN statistiche s ON p.id = s.personaggio';
 
     db.all(sql, [], (err, rows) => {

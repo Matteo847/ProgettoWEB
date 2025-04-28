@@ -1,0 +1,11 @@
+Ho pensato un po' a come implementare il concetto di gilda e mi é venuto in mentre che si potrebbe strutturare a "community" dove ogni community (composte da n membri) hanno una pagina riservata in cui mostrare le proprie build (diciamo che un utente quando vuole condividere la sua build può scegliere se condividerla pubblicamente o privatamente (se ne fa parte a una community). Per entrare dentro una community é necessario un codice (l'amministratore bypassa questa funzionalità)
+
+Riassunto dei tipi di utente:
+
+Non registrato: visualizzare le pagine (build pubbliche, profili etc etc), mettere mi piace o no (senza accesso alla pagina dedicata dei preferiti).
+
+Registrato: salvare nei preferiti build di altri giocatori. Creare build (pubbliche o visibili solo ai membri della community) e queste verranno mostrate sul proprio profilo (solo quelle pubbliche).
+
+Capo-Community: può rimuovere utenti e build dalla community
+
+Amministratore: (accorpato da editor di contenuti in quanto alla fine l'amministratore aveva solo una funzionalità in più) gestisce i contenuti sul sito e nel caso può rimuovere quelli di altri utenti.
