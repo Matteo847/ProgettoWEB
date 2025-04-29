@@ -23,8 +23,7 @@ db.serialize(() => {
         CREATE TABLE IF NOT EXISTS utenti (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             mail TEXT UNIQUE,
-            nome TEXT,
-            cognome TEXT,
+            username TEXT UNIQUE,
             password TEXT NOT NULL,
             ruolo TEXT DEFAULT 'utente'
         );
@@ -56,7 +55,7 @@ db.serialize(() => {
             effetto_4pezzi TEXT NOT NULL
         );
     `, (err) => {
-        if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
+        if (err) console.error("Errore durante la creazione della tabella artefatti:", err.message);
     });
 
     db.run(`
@@ -171,7 +170,7 @@ db.serialize(() => {
         if (err) console.error("Errore durante la creazione della tabella personaggi:", err.message);
     });
 
-    db.run(`effetto_4pezzi
+    db.run(`
         INSERT INTO artefatti (nome, immagine, categoria, descrizione, effetto_duepezzi, effetto_4pezzi) VALUES
         -- Adventurer Set
         ('Adventurer''s Flower', '/images/artifact/adventurer-flower.png', 'Flower of Life', 'Un fiore che non appassisce mai, raccolto da un avventuriero durante i suoi viaggi.', 'Aumenta HP massimo di 1000 punti.', 'Recupera 30% HP quando apri un forziere.'),

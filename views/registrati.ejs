@@ -51,6 +51,11 @@
                                 <a type="button" class="btn btn-primary w-50" href="/">Indietro</a>
                                 <button type="submit" class="btn btn-primary w-50">Registrati</button>
                             </div>
+                            <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                                <div class="alert alert-danger mt-3">
+                                  <%= error %>
+                                </div>
+                              <% } %>
                             <div class="text-center">
                                 <span>Sei già registrato? <a href="/accedi">Accedi</a></span>
                             </div>
