@@ -59,3 +59,73 @@
     transform: scale(1.1);
     border-color: white;
 }
+.character-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .character-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+  }
+  
+  .character-name {
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  }
+  
+  .character-card:hover .character-overlay {
+    opacity: 1;
+  }
+  .character-card {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .character-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .modal-content {
+    background-color: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #444;
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #444;
+  }
+  
+  .build-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .btn-success {
+    background-color: #00bc8c;
+    border-color: #00bc8c;
+  }
+  
+  .btn-success:hover {
+    background-color: #009670;
+    border-color: #009670;
+  }
+  
+  

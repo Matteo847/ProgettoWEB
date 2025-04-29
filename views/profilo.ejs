@@ -5,6 +5,7 @@
 <link rel="icon" href="images/icona.webp"/>
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/profilo.css">
+<link rel="stylesheet" href="css/personaggi.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/footer.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,10 +20,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav ms-auto">
-			
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="#">crea le tue build</a>
-			</li>
 			<li class="nav-item">
 				<a class="nav-link fs-5 navbar-destra" href="/">log out</a>
 			</li>
@@ -43,18 +40,76 @@
     </div>
       <div class="container">
         <div class="row ">
-          <div class="col-lg-3 col-md-6">
-            <img src="/images/personaggi/alhaitham.png" class="character-container-build">
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <img src="/images/personaggi/alhaitham.png" class="character-container-build">
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <img src="/images/personaggi/alhaitham.png" class="character-container-build">
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <img src="/images/personaggi/alhaitham.png" class="character-container-build">
-          </div>
+			<div class="col-lg-3 col-md-6">
+				<div class="character-card" data-bs-toggle="modal" data-bs-target="#characterModal-alhaitham">
+				  <img src="/images/personaggi/alhaitham.png" class="character-container-build">
+				  <div class="character-overlay">
+					<div class="character-name">Alhaitham</div>
+				  </div>
+				</div>
+			  </div>
+			  
+			  <!-- Modal per Alhaitham -->
+			  <div class="modal fade" id="characterModal-alhaitham" tabindex="-1" aria-labelledby="characterModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title" id="characterModalLabel">Alhaitham</h5>
+					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+					  <div class="row">
+						<div class="col-md-4">
+						  <img src="/images/personaggi/alhaitham.png" class="img-fluid">
+						</div>
+						<div class="col-md-8">
+						  <h4>Informazioni sul personaggio</h4>
+						  <p><strong>Elemento:</strong> Dendro</p>
+						  <p><strong>Arma:</strong> Sword</p>
+						  <p><strong>Rarità:</strong> ★★★★★</p>
+						  <p><strong>Regione:</strong> Sumeru</p>
+						  
+						  <h4 class="mt-3">Build consigliate</h4>
+						  <div class="build-options">
+							<a href="/build/alhaitham/1" class="btn btn-success mb-2">Build DPS</a>
+							<a href="/build/alhaitham/2" class="btn btn-success mb-2">Build Sub-DPS</a>
+						  </div>
+						</div>
+					  </div>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+					  <a href="/personaggio/alhaitham" class="btn btn-primary">Visualizza dettagli</a>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  
+			  
+			  <div class="col-lg-3 col-md-6">
+				<div class="character-card">
+				  <img src="/images/personaggi/alhaitham.png" class="character-container-build">
+				  <div class="character-overlay">
+					<div class="character-name">Alhaitham</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-lg-3 col-md-6">
+				<div class="character-card">
+				  <img src="/images/personaggi/alhaitham.png" class="character-container-build">
+				  <div class="character-overlay">
+					<div class="character-name">Alhaitham</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-lg-3 col-md-6">
+				<div class="character-card">
+				  <img src="/images/personaggi/alhaitham.png" class="character-container-build">
+				  <div class="character-overlay">
+					<div class="character-name">Alhaitham</div>
+				  </div>
+				</div>
+			  </div>
         </div>
       </div>
     

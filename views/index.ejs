@@ -17,22 +17,35 @@
 		<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
-		<ul class="navbar-nav ms-auto"><!--ms-auto usato per posizionare registrati e accedi a destra-->
-			<li class="nav-item active">
-			<a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a><!--fs-5 usato per redere la scritta più grande-->
-			</li>
-			<li class="nav-item">
-			<a class="nav-link fs-5 navbar-destra" href="accedi">accedi</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="artefatti">artefatti</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="build">build</a>
-			</li>
+		<ul class="navbar-nav ms-auto">
+			<% if (!user) { %>
+				<li class="nav-item active">
+				<a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a><!--fs-5 usato per redere la scritta più grande-->
+				</li>
+				<li class="nav-item">
+				<a class="nav-link fs-5 navbar-destra" href="accedi">accedi</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link fs-5 navbar-destra" href="artefatti">artefatti</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link fs-5 navbar-destra" href="build">build</a>
+				</li>
+			<% } else{ %>
+				<li class="nav-item">
+					<a class="nav-link fs-5 navbar-destra" href="personaggi">personaggi</a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link fs-5 navbar-destra" href="/profilo">Profilo</a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link fs-5 navbar-destra" href="/logout">Logout</a>
+				</li>
+				
+			<% } %>
 		</ul>
 		</div>
 	</nav>
