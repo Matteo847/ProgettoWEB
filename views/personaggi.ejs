@@ -29,17 +29,18 @@
             </form>
 
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item active">
-                    <a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fs-5 navbar-destra" href="#">accedi</a>
-                </li>
+              
                 <li class="nav-item">
                     <a class="nav-link fs-5 navbar-destra" href="build">build</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fs-5 navbar-destra" href="artefatti">artefatti</a>
+                </li> 
+                <li class="nav-item active">
+                    <a class="nav-link fs-5 navbar-destra" href="registrati">registrati</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 navbar-destra" href="accedi">accedi</a>
                 </li>
             </ul>
         </div>
@@ -95,7 +96,7 @@
                         <div class="modal" id="characterModal<%= personaggio.id %>">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-<%= personaggio.elemento %>"> <!-- colore del titolo in base all'elemento -->
+                                    <div class="modal-header bg-<%= personaggio.elemento %>">
                                         <h5 class="modal-title text-white" id="characterModalLabel<%= personaggio.id %>"><%= personaggio.nome %></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>

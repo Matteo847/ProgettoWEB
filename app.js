@@ -6,9 +6,9 @@ const session = require('express-session');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
-const passport = require('passport'); // Aggiunta questa importazione
-const LocalStrategy = require('passport-local').Strategy; // Aggiunta questa importazione
-const flash = require('connect-flash'); // Aggiunta per gestire i messaggi flash
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
 
 
 const port = 8000;
@@ -25,7 +25,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Database
 const db = new sqlite3.Database('./genshin.db', (err) => {
     if (err) {
         console.error('Errore nel collegamento al database:', err.message);
@@ -33,7 +32,7 @@ const db = new sqlite3.Database('./genshin.db', (err) => {
         console.log('Connesso al database');
     }
 });
-// Funzione helper per trovare un utente per username
+// Funzione per trovare un utente tramite username
 function trovaUtenteNelDB(username) {
     return new Promise((resolve, reject) => {
         db.get('SELECT * FROM utenti WHERE username = ?', [username], (err, row) => {
@@ -43,7 +42,7 @@ function trovaUtenteNelDB(username) {
     });
 }
 
-// Funzione helper per trovare un utente per email
+// Funzione per trovare un utente tramite email
 function trovaUtenteDaEmailNelDB(mail) {
     return new Promise((resolve, reject) => {
         db.get('SELECT * FROM utenti WHERE mail = ?', [mail], (err, row) => {
@@ -53,9 +52,9 @@ function trovaUtenteDaEmailNelDB(mail) {
     });
 }
 
-// Configurazione strategia Local di Passport
+
 passport.use(new LocalStrategy(
-    { usernameField: 'email' }, // Questo specifica che il campo del form è 'email'
+    { usernameField: 'email' },
     async (email, password, done) => {
         try {
             const user = await trovaUtenteDaEmailNelDB(email);
@@ -72,12 +71,11 @@ passport.use(new LocalStrategy(
 ));
 
 
-// Serializzazione dell'utente (cosa salvare nella sessione)
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-// Deserializzazione dell'utente (recupero dai dati di sessione)
+
 passport.deserializeUser((id, done) => {
     db.get('SELECT id, username, mail, ruolo FROM utenti WHERE id = ?', [id], (err, user) => {
         done(err, user);
@@ -90,7 +88,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(flash()); // Aggiunta per gestire i messaggi flash
+app.use(flash());
 
 // Middleware per passare l'utente autenticato ai template
 app.use((req, res, next) => {
@@ -125,12 +123,10 @@ function isAdmin(req, res, next) {
     res.redirect('/');
 }
 
-// Route base
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Routes di autenticazione
 app.get('/registrati', isNotLogged, (req, res) => {
     res.render('registrati');
 });
@@ -140,7 +136,7 @@ app.post('/registrati', isNotLogged, async (req, res) => {
         console.log('Tentativo di registrazione:', req.body);
         const { username, email, password } = req.body;
         
-        // Verifica campi obbligatori
+        // Verifica che i campi vengano inseriti 
         if (!username || !email || !password) {
             console.log('Dati mancanti nel form');
             req.flash('error', 'Tutti i campi sono obbligatori');
@@ -161,7 +157,6 @@ app.post('/registrati', isNotLogged, async (req, res) => {
             return res.redirect('/registrati');
         }
         
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
         
         // Salva nuovo utente
@@ -224,7 +219,6 @@ app.get('/logout', isLogged, (req, res, next) => {
     });
 });
 
-// Rotta profilo protetta da autenticazione
 app.get('/profilo', isLogged, (req, res) => {
     res.render('profilo');
 })
@@ -234,17 +228,17 @@ app.get('/artefatti', (req, res) => {
     let sql = 'SELECT * FROM artefatti';
     let filtro = [];
 
-    if (req.query.classe) { //controllo se l'utente ha selezionato un elemento
+    if (req.query.classe) {
         sql += ' WHERE categoria = ?';
-        filtro.push(req.query.classe); //aggiungo il filtro per elemento alla query
+        filtro.push(req.query.classe); //aggiungo il filtro per categoria alla query
     }
 
-    if (req.query.nome) { //controllo se l'utente ha selezionato un elemento
-        sql += ' WHERE nome like ?'; //aggiungo l'ordinamento per nome
-        filtro.push(req.query.nome+'%'); //aggiungo l'elemento alla lista dei nomi;
+    if (req.query.nome_artefatto) {
+        sql += ' WHERE nome like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
+        filtro.push(req.query.nome_artefatto+'%'); //aggiungo l'elemento alla lista dei nomi;
     }
 
-    db.all(sql, filtro, (err, rows) => { //rows sono i dati restituiti dalla query
+    db.all(sql, filtro, (err, rows) => {
         if (err) {
             throw err;
         }
@@ -258,13 +252,13 @@ app.get('/personaggi', (req, res) => {
     let sql = 'SELECT * FROM personaggi';
     let filtro = [];
     
-    if (req.query.elemento) { //controllo se l'utente ha selezionato un elemento
+    if (req.query.elemento) {
         sql += ' WHERE elemento = ?';
-        filtro.push(req.query.elemento); //aggiungo il filtro per elemento alla query
+        filtro.push(req.query.elemento);
     }
 
-    if (req.query.nome) { //controllo se l'utente ha selezionato un elemento
-        sql += ' WHERE nome like ?'; //aggiungo l'ordinamento per nome
+    if (req.query.nome) {
+        sql += ' WHERE nome like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
         filtro.push(req.query.nome+'%'); //aggiungo l'elemento alla lista dei nomi
     }
 
@@ -291,6 +285,6 @@ app.get('/build', (req, res) => {
     });
 });
 
-app.listen(port, '127.0.0.1', () => { //route principale per avviare l'app
+app.listen(port, '127.0.0.1', () => {
     console.log(`http://localhost:${port}`);
 });

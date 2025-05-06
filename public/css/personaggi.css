@@ -107,15 +107,15 @@
     margin-bottom: 20px;
     overflow: hidden;
     border-radius: 8px;
-    height: 400px; /* Definisci un'altezza fissa per la card */
+    height: 400px;
     cursor: pointer;
 }
 
 .im-personaggio {
-    width: 100% !important; /* Sovrascrivi l'ampiezza precedente */
-    height: 100% !important; /* Sovrascrivi l'altezza precedente */
-    object-fit: cover; /* Fa sì che l'immagine copra l'intero contenitore */
-    margin-top: 0 !important; /* Rimuovi il margine superiore */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    margin-top: 0 !important; 
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
