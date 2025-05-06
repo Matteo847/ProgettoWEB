@@ -21,7 +21,7 @@
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav ms-auto">
 			<li class="nav-item">
-				<a class="nav-link fs-5 navbar-destra" href="/">log out</a>
+				<a class="nav-link fs-5 navbar-destra" href="/">Log out</a>
 			</li>
 		</ul>
 		</div>
@@ -30,8 +30,8 @@
 
     <div class="riga-profilo d-flex justify-content-center align-items-center">
         <div class="profilo-box d-flex flex-column align-items-center">
-            <div class="profilo-cerchio"></div>
-            <p class="profilo-nome">teox</p>
+            <img src="<%= utenti.immagine %>" class="profilo-immagine" alt="Immagine del profilo" data-bs-toggle="modal" data-bs-target="#avatarModal">
+            <p class="profilo-nome"><%= utenti.username %></p>
         </div>
     </div>
     <hr class="separatore">
@@ -113,7 +113,29 @@
       </div>
     
 
-
+	  <!-- Modal per l'immagine del profilo -->
+	<div class="modal fade" id="avatarModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Avatar di <%= utenti.username %></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+				  <% avatar.forEach((a) => { %>
+					<div class="col-md-4 mb-3 text-center">
+					  <img src="<%= a.immagine %>" class="popap">
+					</div>
+				  <% }); %>
+				</div>
+			</div>
+			<div class="justify-content-end popap-footer modal-header"> <!-- Allineamento a destra -->
+				<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Chiudi</button>
+			</div>
+		</div>
+		</div>
+	</div>
 
 
 	  <footer class="footer navbar-sfondo">

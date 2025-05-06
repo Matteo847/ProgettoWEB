@@ -25,7 +25,17 @@ db.serialize(() => {
             mail TEXT UNIQUE,
             username TEXT UNIQUE,
             password TEXT NOT NULL,
-            ruolo TEXT DEFAULT 'utente'
+            ruolo TEXT DEFAULT 'utente',
+            avatar INTEGER DEFAULT 0
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
+    });
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS avatar (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            immagine TEXT NOT NULL
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
@@ -87,6 +97,25 @@ db.serialize(() => {
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
     });
+
+
+    db.run(`
+      INSERT INTO "avatar" ("id", "immagine") VALUES
+        (1, 'images/emotes/ayaka_icon.png'),
+        (2, 'images/emotes/kokomi_icon.png'),
+        (3, 'images/emotes/navia_icon.png'),
+        (4, 'images/emotes/nilou_icon.png'),
+        (5, 'images/emotes/paimon_icon.png'),
+        (6, 'images/emotes/raiden_icon.png'),
+        (7, 'images/emotes/arlecchino_icon.png'),
+        (8, 'images/emotes/chiori_icon.png'),
+        (9, 'images/emotes/albedo_icon.png'),
+        (10, 'images/emotes/fishel_icon.png'),
+        (11, 'images/emotes/clorinde_icon.png');
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
+    });
+
 
     db.run(`
         INSERT INTO "personaggi" ("id", "nome", "immagine", "elemento", "rarità", "descrizione") VALUES

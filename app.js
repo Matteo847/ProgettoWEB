@@ -25,7 +25,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = new sqlite3.Database('./genshin.db', (err) => {
+const db = new sqlite3.Database('./genshin.db', (err) => {//assegna alla variabile db un nuovo database sqlite3
     if (err) {
         console.error('Errore nel collegamento al database:', err.message);
     } else {
@@ -71,12 +71,12 @@ passport.use(new LocalStrategy(
 ));
 
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user, done) => { // Serializza l'utente per la sessione
     done(null, user.id);
 });
 
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((id, done) => { // Deserializza l'utente dalla sessione
     db.get('SELECT id, username, mail, ruolo FROM utenti WHERE id = ?', [id], (err, user) => {
         done(err, user);
     });
@@ -106,6 +106,7 @@ function isLogged(req, res, next) {
     req.flash('error', 'Devi effettuare l\'accesso');
     res.redirect('/accedi');
 }
+
 function isNotLogged(req, res, next) {
     if (!req.isAuthenticated()) {
         return next();
@@ -161,8 +162,7 @@ app.post('/registrati', isNotLogged, async (req, res) => {
         
         // Salva nuovo utente
         console.log('Inserisco nuovo utente nel database');
-        db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', 
-            [username, email, hashedPassword], function(err) {
+        db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', [username, email, hashedPassword], function(err) {
                 if (err) {
                     console.error('Errore inserimento:', err.message);
                     req.flash('error', 'Errore durante la registrazione: ' + err.message);
@@ -211,17 +211,22 @@ app.post('/accedi', isNotLogged, (req, res, next) => {
     })(req, res, next);
 });
 
-app.get('/logout', isLogged, (req, res, next) => {
-    req.logout((err) => {
-        if (err) return next(err);
-        req.flash('success', 'Logout effettuato con successo');
-        res.redirect('/');
+app.get('/profilo', isLogged, (req, res) => {
+    db.all('SELECT * FROM avatar', [], (err, avatars) => {
+        if (err) {
+            throw err;
+        }
+        console.log('avatar:', avatars);
+
+        db.get('SELECT * FROM utenti u INNER JOIN avatar a ON u.avatar = a.id', [], (err, utenti) => {
+            if (err) {
+                throw err;
+            }
+            console.log('utenti:', utenti);
+            res.render('profilo', { utenti, avatar: avatars });
+        });
     });
 });
-
-app.get('/profilo', isLogged, (req, res) => {
-    res.render('profilo');
-})
 
 app.get('/artefatti', (req, res) => {
 
@@ -275,8 +280,13 @@ app.get('/personaggi', (req, res) => {
 app.get('/build', (req, res) => {
 
     let sql = ' SELECT * FROM personaggi p INNER JOIN statistiche s ON p.id = s.personaggio';
+    let filtro = [];
+    if (req.query.nome_personaggio) {
+        sql += ' WHERE p.nome like ?';
+        filtro.push(req.query.nome_personaggio+'%');
+    }
 
-    db.all(sql, [], (err, rows) => {
+    db.all(sql, filtro, (err, rows) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore del server');
