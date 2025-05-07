@@ -100,6 +100,7 @@
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     width: 50% !important;
     margin-top: 50px;
+    
 }
 
 .character-container {
@@ -151,6 +152,12 @@
 .bg-Cryo { background-color: #9fdeff; }
 .bg-Geo { background-color: #f3b565; }
 
+
+.modal-title{
+   
+   margin-left: 200px !important;
+   color: black !important;
+}
 .modal-content {
     border: none;
     border-radius: 12px;

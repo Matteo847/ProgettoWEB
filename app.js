@@ -202,6 +202,18 @@ app.get('/accedi', isNotLogged, (req, res) => {
     res.render('accedi');
 });
 
+app.get('/armi', isNotLogged, (req, res) => {
+
+    let sql = 'SELECT * FROM armi';
+
+    db.all(sql, [], (err, tabella) => { //cambiare rows in tabella per evitare confusione con la variabile di sopra
+        if (err) {
+            throw err;
+        }
+        res.render('armi', { armi: tabella});
+    });
+});
+
 app.post('/accedi', isNotLogged, (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/',
@@ -212,6 +224,18 @@ app.post('/accedi', isNotLogged, (req, res, next) => {
 });
 
 app.get('/profilo', isLogged, (req, res) => {
+    if (req.query.avatarSelezionato) {
+        let avatarSelezionato = req.query.avatarSelezionato;
+        db.run('UPDATE utenti SET avatar = ? WHERE id = ?', [avatarSelezionato, req.user.id], function(err) {
+            if (err) {
+                req.flash('error', 'Errore durante l\'aggiornamento dell\'avatar: ' + err.message);
+                return res.redirect('/profilo');
+            }
+            req.flash('success', 'Avatar aggiornato con successo!');
+            return res.redirect('/profilo');
+        });
+    }
+
     db.all('SELECT * FROM avatar', [], (err, avatars) => {
         if (err) {
             throw err;

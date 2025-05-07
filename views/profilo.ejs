@@ -113,28 +113,35 @@
       </div>
     
 
-	  <!-- Modal per l'immagine del profilo -->
 	<div class="modal fade" id="avatarModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5>Avatar di <%= utenti.username %></h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-				  <% avatar.forEach((a) => { %>
-					<div class="col-md-4 mb-3 text-center">
-					  <img src="<%= a.immagine %>" class="popap">
-					</div>
-				  <% }); %>
+			<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<h5>Avatar di <%= utenti.username %></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
+				<div class="modal-body">
+					<div class="row">
+						<% avatar.forEach((a) => { %>
+							<div class="col-md-4 mb-3 text-center">
+								<form id="avatar" method="get" action="/profilo">
+									<input type="hidden" name="avatarSelezionato" value="<%= a.id %>">
+									<button type="submit" class="image-button-container">
+										<img src="<%= a.immagine %>" class="circular-avatar">
+									</button>
+								</form>
+							</div>
+						<% }); %>
+					</div>
+				</div>
+				<div class="justify-content-end popap-footer modal-header">
+					<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Chiudi</button>
+				</div>
+			
 			</div>
-			<div class="justify-content-end popap-footer modal-header"> <!-- Allineamento a destra -->
-				<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Chiudi</button>
+			
 			</div>
-		</div>
-		</div>
 	</div>
 
 

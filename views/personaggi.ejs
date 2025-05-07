@@ -83,7 +83,7 @@
                             <div class="character-container" data-bs-toggle="modal" data-bs-target="#characterModal<%= personaggio.id %>">
                                 <img class="im-personaggio" src="<%= personaggio.immagine %>">
                                 <div class="barra-info-pers">
-                                    <h5 class="character-name"><%= personaggio.nome %></h5>
+                                    <h5 class="character-name "><%= personaggio.nome %></h5>
                                     <span class="character-element element-<%= personaggio.elemento %>">
                                         <%= personaggio.elemento %>
                                     </span>
@@ -97,7 +97,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header bg-<%= personaggio.elemento %>">
-                                        <h5 class="modal-title text-white" id="characterModalLabel<%= personaggio.id %>"><%= personaggio.nome %></h5>
+                                        <h5 class="modal-title" id="characterModalLabel<%= personaggio.id %>"><%= personaggio.nome %></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
@@ -117,9 +117,6 @@
                                                 <p><%= personaggio.descrizione %></p>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-header bg-<%= personaggio.elemento %>">
-                                        <button type="button" class="btn btn-secondary modal-footer " data-bs-dismiss="modal">Build</button>
                                     </div>
                                 </div>
                             </div>

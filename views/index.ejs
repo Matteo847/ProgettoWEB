@@ -18,9 +18,11 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav ms-auto">
-			<% if (!user) { %>
 				<li class="nav-item">
 					<a class="nav-link fs-5 navbar-destra" href="personaggi">Personaggi</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link fs-5 navbar-destra" href="armi">Armi</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link fs-5 navbar-destra" href="artefatti">Artefatti</a>
@@ -28,24 +30,21 @@
 				<li class="nav-item">
 					<a class="nav-link fs-5 navbar-destra" href="build">Build</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link fs-5 navbar-destra" href="registrati">Registrati</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="accedi">Accedi</a>
-				</li>
-			<% } else{ %>
-				<li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="personaggi">Personaggi</a>
-				</li>
-				<li class="nav-item">
-				  <a class="nav-link fs-5 navbar-destra" href="/profilo">Profilo</a>
-				</li>
-				<li class="nav-item">
-				  <a class="nav-link fs-5 navbar-destra" href="/logout">Logout</a>
-				</li>
-				
-			<% } %>
+				<% if (!user) { %>
+					<li class="nav-item">
+						<a class="nav-link fs-5 navbar-destra" href="accedi">Accedi</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link fs-5 navbar-destra" href="registrati">Registrati</a>
+					</li>
+				<% } else{ %>
+					<li class="nav-item active">
+						<a class="nav-link fs-5 navbar-destra" href="profilo">Profilo</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link fs-5 navbar-destra" href="/logout">Logout</a>
+				  	</li>
+				<% } %>
 		</ul>
 		</div>
 	</nav>

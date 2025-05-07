@@ -26,7 +26,7 @@ db.serialize(() => {
             username TEXT UNIQUE,
             password TEXT NOT NULL,
             ruolo TEXT DEFAULT 'utente',
-            avatar INTEGER DEFAULT 0
+            avatar INTEGER DEFAULT 1
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
@@ -98,6 +98,79 @@ db.serialize(() => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
     });
 
+    db.run(`
+        
+        CREATE TABLE IF NOT EXISTS armi (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome_arma TEXT NOT NULL,
+            immagine TEXT NOT NULL,
+            tipo_arma TEXT NOT NULL,
+            rarità TINYINT NOT NULL
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella build:", err.message);
+    });
+
+    db.run(`
+
+        INSERT INTO "armi" ("id", "nome_arma", "immagine", "tipo_arma", "rarità") VALUES
+            (1, 'gravestone', 'images\\armi\\gravestone.png', 'spadone', 5),
+            (2, 'great_magic', 'images\\armi\\great_magic.png', 'arco', 5),
+            (3, 'alley_flash', 'images\\armi\\alley_flash.png', 'spada', 4),
+            (4, 'skyward_harp', 'images\\armi\\skyward_harp.png', 'arco', 5),
+            (5, 'wolf_gravestone', 'images\\armi\\wolf_gravestone.png', 'spadone', 5),
+            (6, 'primordial_jade_cutter', 'images\\armi\\primordial_jade_cutter.png', 'spada', 5),
+            (7, 'amos_bow', 'images\\armi\\amos_bow.png', 'arco', 5),
+            (8, 'the_flute', 'images\\armi\\the_flute.png', 'spada', 4),
+            (9, 'sacrificial_sword', 'images\\armi\\sacrificial_sword.png', 'spada', 4),
+            (10, 'favonius_lance', 'images\\armi\\favonius_lance.png', 'lancia', 4),
+            (11, 'the_widsith', 'images\\armi\\the_widsith.png', 'catalizzatore', 4),
+            (12, 'rust', 'images\\armi\\rust.png', 'arco', 4),
+            (13, 'blackcliff_pole', 'images\\armi\\blackcliff_pole.png', 'lancia', 4),
+            (14, 'deathmatch', 'images\\armi\\deathmatch.png', 'lancia', 4),
+            (15, 'lost_prayer', 'images\\armi\\lost_prayer.png', 'catalizzatore', 5),
+            (16, 'skyward_blade', 'images\\armi\\skyward_blade.png', 'spada', 5),
+            (17, 'aquila_favonia', 'images\\armi\\aquila_favonia.png', 'spada', 5),
+            (18, 'mistsplitter_reforged', 'images\\armi\\mistsplitter_reforged.png', 'spada', 5),
+            (19, 'staff_of_homa', 'images\\armi\\staff_of_homa.png', 'lancia', 5),
+            (20, 'vortex_vanquisher', 'images\\armi\\vortex_vanquisher.png', 'lancia', 5),
+            (21, 'elegy_for_the_end', 'images\\armi\\elegy_for_the_end.png', 'arco', 5),
+            (22, 'polar_star', 'images\\armi\\polar_star.png', 'arco', 5),
+            (23, 'thundering_pulse', 'images\\armi\\thundering_pulse.png', 'arco', 5),
+            (24, 'aqua_simulacra', 'images\\armi\\aqua_simulacra.png', 'arco', 5),
+            (25, 'haran_geppaku_futsu', 'images\\armi\\haran_geppaku_futsu.png', 'spada', 5),
+            (26, 'freedom_sworn', 'images\\armi\\freedom_sworn.png', 'spada', 5),
+            (27, 'summit_shaper', 'images\\armi\\summit_shaper.png', 'spada', 5),
+            (28, 'the_unforged', 'images\\armi\\the_unforged.png', 'spadone', 5),
+            (29, 'redhorn_stonethresher', 'images\\armi\\redhorn_stonethresher.png', 'spadone', 5),
+            (30, 'engulfing_lightning', 'images\\armi\\engulfing_lightning.png', 'lancia', 5),
+            (31, 'calamity_queller', 'images\\armi\\calamity_queller.png', 'lancia', 5),
+            (32, 'everlasting_moonglow', 'images\\armi\\everlasting_moonglow.png', 'catalizzatore', 5),
+            (33, 'kagura_verity', 'images\\armi\\kagura_verity.png', 'catalizzatore', 5),
+            (34, 'memory_of_dust', 'images\\armi\\memory_of_dust.png', 'catalizzatore', 5),
+            (35, 'favonius_warbow', 'images\\armi\\favonius_warbow.png', 'arco', 4),
+            (36, 'sacrificial_bow', 'images\\armi\\sacrificial_bow.png', 'arco', 4),
+            (37, 'the_stringless', 'images\\armi\\the_stringless.png', 'arco', 4),
+            (38, 'windblume_ode', 'images\\armi\\windblume_ode.png', 'arco', 4),
+            (39, 'prototype_crescent', 'images\\armi\\prototype_crescent.png', 'arco', 4),
+            (40, 'iron_sting', 'images\\armi\\iron_sting.png', 'spada', 4),
+            (41, 'blackcliff_long_sword', 'images\\armi\\blackcliff_long_sword.png', 'spada', 4),
+            (42, 'prototype_rancour', 'images\\armi\\prototype_rancour.png', 'spada', 4),
+            (43, 'royal_greatsword', 'images\\armi\\royal_greatsword.png', 'spadone', 4),
+            (44, 'whiteblind', 'images\\armi\\whiteblind.png', 'spadone', 4),
+            (45, 'dragonspine_spear', 'images\\armi\\dragonspine_spear.png', 'lancia', 4),
+            (46, 'kitain_cross_spear', 'images\\armi\\kitain_cross_spear.png', 'lancia', 4),
+            (47, 'wavebreaker_fin', 'images\\armi\\wavebreaker_fin.png', 'lancia', 4),
+            (48, 'hakushin_ring', 'images\\armi\\hakushin_ring.png', 'catalizzatore', 4),
+            (49, 'solar_pearl', 'images\\armi\\solar_pearl.png', 'catalizzatore', 4),
+            (50, 'dodoco_tales', 'images\\armi\\dodoco_tales.png', 'catalizzatore', 4)
+
+
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella armi:", err.message);
+    });
+
+
 
     db.run(`
       INSERT INTO "avatar" ("id", "immagine") VALUES
@@ -111,7 +184,15 @@ db.serialize(() => {
         (8, 'images/emotes/chiori_icon.png'),
         (9, 'images/emotes/albedo_icon.png'),
         (10, 'images/emotes/fishel_icon.png'),
-        (11, 'images/emotes/clorinde_icon.png');
+        (11, 'images/emotes/clorinde_icon.png'),
+        (12, 'images/emotes/barbara_icon.png'),
+        (13, 'images/emotes/xiao_icon.png'),
+        (14, 'images/emotes/ganyu_icon.png'),
+        (15, 'images/emotes/sucrose_icon.png'),
+        (16, 'images/emotes/charlotte_icon.png'),
+        (17, 'images/emotes/yae_icon.png'),
+        (18, 'images/emotes/kazuha_icon.png'),
+        (19, 'images/emotes/xianling_icon.png');
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
     });

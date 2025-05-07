@@ -1,0 +1,8 @@
+.im-armi {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    margin-top: 0 !important; 
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
