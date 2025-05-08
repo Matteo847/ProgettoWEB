@@ -73,13 +73,59 @@
             </div>
         </div>
     </div>
+
+    
     <div class="col-md-12">
         <div class="row">
-            <% armi.forEach((armi) => { %>
-                <div class="col-md-2 mb-4">
-                    <div>
-                        <img class="im-armi" src="<%= armi.immagine %>">
+            <% if(armi.length === 0) { %>
+                <div class="col-md-12 text-center">
+                    <h2>Nessuna arma trovata</h2>
+                </div>
+            <% } %>
+            <% armi.forEach((arma) => { %>
+                <div class="col-md-3 mb-4">
+                    <div class="weapon-container" data-bs-toggle="modal" data-bs-target="#weaponModal<%= arma.id %>">
+                        <img class="im-armi" src="<%= arma.immagine %>">
+                        <div class="weapon-info-bar">
+                            <h5 class="weapon-name"><%= arma.nome_arma %></h5>
+                            <span class="ms-2 rarity-<%= arma.rarità %> weapon-rarity">
+                                <%= "★".repeat(arma.rarità) %>
+                            </span>
+                        </div>
                     </div>
+    
+                    <!-- Modal -->
+                    <div class="modal" id="weaponModal<%= arma.id %>">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-<%= arma.tipo %>">
+                                    <h5 class="modal-title" id="weaponModalLabel<%= arma.id %>"><%= arma.nome_arma %></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center">
+                                            <img class="img-fluid mb-2" src="<%= arma.immagine %>" alt="<%= arma.nome %>">
+                                            <div>
+                                                <span class="badge bg-<%= arma.tipo %>">
+                                                    <%= arma.tipo %>
+                                                </span>
+                                                <span class="ms-2 stelle">
+                                                    <%= "★".repeat(arma.rarità) %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 modal-desc">
+                                            <p><strong>Statistica Principale:</strong> <%= arma.statistica_principale_armi %></p>
+                                            <p><strong>Abilità Passiva:</strong> <%= arma.effetto_armi %></p>
+                                            <p><%= arma.descrizione %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <% }); %>
         </div>
     </div>

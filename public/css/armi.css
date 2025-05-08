@@ -6,3 +6,61 @@
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
+.weapon-container {
+
+    margin-top: 20px;
+    width: 70%;
+    height: auto;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.weapon-container:hover {
+    transform: translateY(-5px);
+}
+
+.im-armi {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+}
+
+.weapon-info-bar {
+
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+}
+
+.weapon-name {
+
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.weapon-rarity {
+
+    margin-top: 10px !important;
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+/* Colori per i tipi di arma (personalizzali) */
+.type-Spada { background-color: #4a90e2; }
+.type-Arco { background-color: #e2a84a; }
+.type-Claymore { background-color: #e24a4a; }
+.type-Catalizzatore { background-color: #a84ae2; }
+.type-Lancia { background-color: #4ae2a8; }
+
+/* Stelle rarità */
+.rarity-5 { color: #ffd700; }
+.rarity-4 { color: #c77dff; }
+.rarity-3 { color: #7d9cff; }
+.rarity-2 { color: #7dff8f; }
+.rarity-1 { color: #ffffff; }
