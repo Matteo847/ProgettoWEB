@@ -71,17 +71,18 @@ passport.use(new LocalStrategy(
 ));
 
 
-passport.serializeUser((user, done) => { // Serializza l'utente per la sessione
+passport.serializeUser((user, done) => {
+    console.log('utente:', user);
     done(null, user.id);
 });
 
-
-passport.deserializeUser((id, done) => { // Deserializza l'utente dalla sessione
+passport.deserializeUser((id, done) => {
+    console.log('Deserializzo ID:', id);
     db.get('SELECT id, username, mail, ruolo FROM utenti WHERE id = ?', [id], (err, user) => {
+        console.log('deserializzato:', user);
         done(err, user);
     });
 });
-
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -190,28 +191,17 @@ app.post('/registrati', isNotLogged, async (req, res) => {
     }
 });
 
-app.get('/logout', isLogged, (req, res, next) => {
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        req.flash('success', 'Logout effettuato con successo');
-        res.redirect('/');
+app.get('/logout', (req, res) => {
+  req.logout(err => {
+    if (err) return next(err);
+    req.session.destroy(() => {
+      res.redirect('/');
     });
+  });
 });
 
 app.get('/accedi', isNotLogged, (req, res) => {
     res.render('accedi');
-});
-
-app.get('/armi', isNotLogged, (req, res) => {
-
-    let sql = 'SELECT * FROM armi';
-
-    db.all(sql, [], (err, tabella) => { //cambiare rows in tabella per evitare confusione con la variabile di sopra
-        if (err) {
-            throw err;
-        }
-        res.render('armi', { armi: tabella});
-    });
 });
 
 app.post('/accedi', isNotLogged, (req, res, next) => {
@@ -240,17 +230,16 @@ app.get('/profilo', isLogged, (req, res) => {
         if (err) {
             throw err;
         }
-        console.log('avatar:', avatars);
 
-        db.get('SELECT * FROM utenti u INNER JOIN avatar a ON u.avatar = a.id', [], (err, utenti) => {
+        db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
             if (err) {
                 throw err;
             }
-            console.log('utenti:', utenti);
-            res.render('profilo', { utenti, avatar: avatars });
+            res.render('profilo', { utente, avatar: avatars });
         });
     });
 });
+
 
 app.get('/artefatti', (req, res) => {
 
@@ -264,7 +253,7 @@ app.get('/artefatti', (req, res) => {
 
     if (req.query.nome_artefatto) {
         sql += ' WHERE nome like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push(req.query.nome_artefatto+'%'); //aggiungo l'elemento alla lista dei nomi;
+        filtro.push('%'+req.query.nome_artefatto+'%');  //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -288,7 +277,7 @@ app.get('/personaggi', (req, res) => {
 
     if (req.query.nome) {
         sql += ' WHERE nome like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push(req.query.nome+'%'); //aggiungo l'elemento alla lista dei nomi
+        filtro.push('%'+req.query.nome+'%'); //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -305,9 +294,9 @@ app.get('/build', (req, res) => {
 
     let sql = ' SELECT * FROM personaggi p INNER JOIN statistiche s ON p.id = s.personaggio';
     let filtro = [];
-    if (req.query.nome_personaggio) {
+    if (req.query.nome_build) {
         sql += ' WHERE p.nome like ?';
-        filtro.push(req.query.nome_personaggio+'%');
+        filtro.push('%'+req.query.nome_build+'%');  //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -316,6 +305,29 @@ app.get('/build', (req, res) => {
             return res.status(500).send('Errore del server');
         }
         res.render('build', { statistiche: rows });
+    });
+});
+
+app.get('/armi', isNotLogged, (req, res) => {
+
+    let sql = 'SELECT * FROM armi';
+    let filtro = [];
+
+     if (req.query.tipo_arma) {
+        sql += ' WHERE tipo_arma = ?';
+        filtro.push(req.query.tipo_arma); //aggiungo il filtro per categoria alla query
+    }
+
+    if (req.query.nome_arma) {
+        sql += ' WHERE nome_arma like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
+        filtro.push('%'+req.query.nome_arma+'%'); //aggiungo al filtro il nome da cerare (% nome %)
+    }
+
+    db.all(sql, filtro, (err, tabella) => { //cambiare rows in tabella per evitare confusione con la variabile di sopra
+        if (err) {
+            throw err;
+        }
+        res.render('armi', { armi: tabella});
     });
 });
 

@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
+    <a class="navbar-brand navbar-genshin" href="/">BUILD GENSHIN</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+            <form class="d-flex me-auto mx-3">
+                <div class="input-group cerca">
+                    <% if (ricerca===1) { %>
+                        <input class="form-control" type="search" name="nome_arma" placeholder="Cerca Arma..." aria-label="Search"><!--filtro del cerca per nome arma-->
+                    <% } else if (ricerca===2){ %>
+                        <input class="form-control" type="search" name="nome_build" placeholder="Cerca build..." aria-label="Search"><!--filtro del cerca per nome personaggi-->
+                    <% } else if (ricerca===3){ %>
+                        <input class="form-control" type="search" name="nome" placeholder="Cerca personaggio..." aria-label="Search">
+                    <% } else {%>
+                        <input class="form-control" type="search" name="nome_artefatto" placeholder="Cerca artefatto..." aria-label="Search"><!--filtro del cerca per nome artefatto-->
+                    <% } %>
+                        <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search">cerca</i>
+                    </button>
+                </div>
+            </form>
+            <li class="nav-item">
+                <a class="nav-link fs-5 navbar-destra" href="personaggi">Personaggi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 navbar-destra" href="armi">Armi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 navbar-destra" href="artefatti">Artefatti</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 navbar-destra" href="build">Build</a>
+            </li>
+            <% if (!user) { %>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 navbar-destra" href="accedi">Accedi</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link fs-5 navbar-destra" href="registrati">Registrati</a>
+                </li>
+            <% } else{ %>
+                <li class="nav-item active">
+                    <a class="nav-link fs-5 navbar-destra" href="profilo">Profilo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-5 navbar-destra" href="/logout">Logout</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>

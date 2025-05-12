@@ -51,16 +51,53 @@
     border-radius: 4px;
 }
 
-/* Colori per i tipi di arma (personalizzali) */
+
 .type-Spada { background-color: #4a90e2; }
 .type-Arco { background-color: #e2a84a; }
 .type-Claymore { background-color: #e24a4a; }
 .type-Catalizzatore { background-color: #a84ae2; }
 .type-Lancia { background-color: #4ae2a8; }
 
-/* Stelle rarità */
 .rarity-5 { color: #ffd700; }
 .rarity-4 { color: #c77dff; }
 .rarity-3 { color: #7d9cff; }
 .rarity-2 { color: #7dff8f; }
 .rarity-1 { color: #ffffff; }
+
+.tipo_arma {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px;
+    border: 2px solid #4a5568;
+    background-color: #2d3748; 
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.tipo_arma_spada {
+    background-image: url('/images/armi/spada.png') !important;
+}
+
+.tipo_arma_spadone {
+    background-image: url('/images/armi/spadone.png') !important;
+}
+
+.tipo_arma_arco {
+    background-image: url('/images/armi/arco.png') !important;
+}
+
+.tipo_arma_catalizzatore {
+    background-image: url('/images/armi/catalizzatore.png') !important;
+}
+.tipo_arma_lancia {
+    background-image: url('/images/armi/lancia.png') !important;
+}
+.tipo_arma:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}

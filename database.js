@@ -11,10 +11,7 @@ const db = new sqlite3.Database('genshin.db', (err) => {
 db.serialize(() => {
 
     db.run(`
-
         PRAGMA foreign_keys = ON;
-
-        
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
     });

@@ -8,59 +8,23 @@
 <link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="css/armi.css">
 <link rel="stylesheet" href="css/personaggi.css">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body class="colore-sfondo">
-	<nav class="navbar navbar-expand-lg navbar-light navbar-sfondo">
-		<a class="navbar-brand navbar-genshin" href="">BUILD GENSHIN</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNavDropdown">
-		<ul class="navbar-nav ms-auto">
-
-            <form class="d-flex me-auto mx-3">
-                <div class="input-group cerca">
-                    <input class="form-control" type="search" name="nome" placeholder="Cerca arma..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">
-                        <i class="bi bi-search">cerca</i>
-                    </button>
-                </div>
-            </form>
-
-				<li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="personaggi">Personaggi</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="artefatti">Artefatti</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="build">Build</a>
-				</li>
-                <li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="accedi">Accedi</a>
-				</li>
-                <li class="nav-item">
-					<a class="nav-link fs-5 navbar-destra" href="registrati">Registrati</a>
-				</li>
-		</ul>
-		</div>
-	</nav>
+	<%- include('navbar-ric.ejs', {ricerca: 1}) %>
 
     <div class="text-center">
         <div class="container">
-            <form id="filtro-elemento" method="get" action="/personaggi">
-                <div class="d-flex flex-wrap justify-content-center pt-4">
-                    <button type="submit" name="elemento" class="btn-elemento btn-pyro" value="Pyro"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-hydro" value="Hydro"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-electro" value="Electro"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-dendro" value="Dendro"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-cryo" value="Cryo"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-geo" value="Geo"></button>
-                    <button type="submit" name="elemento" class="btn-elemento btn-anemo" value="Anemo"></button>
-                    <button type="submit" name="elemento" class="btn btn-outline-light ms-3" value="">Mostra tutti</button>
+            <form id="tipo_arma" method="get" action="/armi">
+                <div class="d-flex flex-wrap justify-content-center pt-4"><!--filtro a bottone per la ricercarca dei tipi di arma-->
+                    <button type="submit" name="tipo_arma" class="tipo_arma tipo_arma_spada" value="spada" title="Spada"></button>
+                    <button type="submit" name="tipo_arma" class="tipo_arma tipo_arma_spadone" value="spadone" title="Spadone"></button>
+                    <button type="submit" name="tipo_arma" class="tipo_arma tipo_arma_arco" value="arco" title="Arco"></button>
+                    <button type="submit" name="tipo_arma" class="tipo_arma tipo_arma_catalizzatore" value="catalizzatore" title="Catalyst"></button>
+                    <button type="submit" name="tipo_arma" class="tipo_arma tipo_arma_lancia" value="lancia" title="Lancia"></button>
+                    <button type="submit" name="tipo_arma" class="btn btn-outline-light ms-3" value="">Mostra tutti</button>
                 </div>
             </form>
         </div>
@@ -77,12 +41,12 @@
     
     <div class="col-md-12">
         <div class="row">
-            <% if(armi.length === 0) { %>
+            <% if(armi.length === 0) { %><!--se non ci sono armi mi visualizza il messaggio "nessuna arma trovata"-->
                 <div class="col-md-12 text-center">
                     <h2>Nessuna arma trovata</h2>
                 </div>
             <% } %>
-            <% armi.forEach((arma) => { %>
+            <% armi.forEach((arma) => { %><!--ciclo per mostrare le armi-->
                 <div class="col-md-3 mb-4">
                     <div class="weapon-container" data-bs-toggle="modal" data-bs-target="#weaponModal<%= arma.id %>">
                         <img class="im-armi" src="<%= arma.immagine %>">
