@@ -59,10 +59,10 @@ passport.use(new LocalStrategy(
         try {
             const user = await trovaUtenteDaEmailNelDB(email);
             if (!user) return done(null, false, { message: 'Email non trovata' });
-            
+
             const match = await bcrypt.compare(password, user.password);
             if (!match) return done(null, false, { message: 'Password non corretta' });
-            
+
             return done(null, user);
         } catch (err) {
             return done(err);
@@ -137,52 +137,52 @@ app.post('/registrati', isNotLogged, async (req, res) => {
     try {
         console.log('Tentativo di registrazione:', req.body);
         const { username, email, password } = req.body;
-        
+
         // Verifica che i campi vengano inseriti 
         if (!username || !email || !password) {
             console.log('Dati mancanti nel form');
             req.flash('error', 'Tutti i campi sono obbligatori');
             return res.redirect('/registrati');
         }
-        
+
         // Verifica username già esistente
         const userByUsername = await trovaUtenteNelDB(username);
         if (userByUsername) {
             req.flash('error', 'Username già in uso');
             return res.redirect('/registrati');
         }
-        
+
         // Verifica email già esistente
         const userByEmail = await trovaUtenteDaEmailNelDB(email);
         if (userByEmail) {
             req.flash('error', 'Email già in uso');
             return res.redirect('/registrati');
         }
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         // Salva nuovo utente
         console.log('Inserisco nuovo utente nel database');
-        db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', [username, email, hashedPassword], function(err) {
-                if (err) {
-                    console.error('Errore inserimento:', err.message);
-                    req.flash('error', 'Errore durante la registrazione: ' + err.message);
-                    return res.redirect('/registrati');
-                }
-                
-                console.log('Utente inserito con ID:', this.lastID);
-                // Login automatico dopo registrazione
-                const newUser = { id: this.lastID, username, mail: email, ruolo: 'utente' };
-                req.login(newUser, (err) => {
-                    if (err) {
-                        req.flash('error', 'errore durante il login automatico');
-                        return res.redirect('/accedi');
-                    }
-                    req.flash('success', 'Registrazione completata con successo!');
-                    res.redirect('/'); 
-                });
-                
+        db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', [username, email, hashedPassword], function (err) {
+            if (err) {
+                console.error('Errore inserimento:', err.message);
+                req.flash('error', 'Errore durante la registrazione: ' + err.message);
+                return res.redirect('/registrati');
             }
+
+            console.log('Utente inserito con ID:', this.lastID);
+            // Login automatico dopo registrazione
+            const newUser = { id: this.lastID, username, mail: email, ruolo: 'utente' };
+            req.login(newUser, (err) => {
+                if (err) {
+                    req.flash('error', 'errore durante il login automatico');
+                    return res.redirect('/accedi');
+                }
+                req.flash('success', 'Registrazione completata con successo!');
+                res.redirect('/');
+            });
+
+        }
         );
     } catch (err) {
         console.error('Eccezione durante la registrazione:', err);
@@ -192,12 +192,12 @@ app.post('/registrati', isNotLogged, async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  req.logout(err => {
-    if (err) return next(err);
-    req.session.destroy(() => {
-      res.redirect('/');
+    req.logout(err => {
+        if (err) return next(err);
+        req.session.destroy(() => {
+            res.redirect('/');
+        });
     });
-  });
 });
 
 app.get('/accedi', isNotLogged, (req, res) => {
@@ -216,7 +216,7 @@ app.post('/accedi', isNotLogged, (req, res, next) => {
 app.get('/profilo', isLogged, (req, res) => {
     if (req.query.avatarSelezionato) {
         let avatarSelezionato = req.query.avatarSelezionato;
-        db.run('UPDATE utenti SET avatar = ? WHERE id = ?', [avatarSelezionato, req.user.id], function(err) {
+        db.run('UPDATE utenti SET avatar = ? WHERE id = ?', [avatarSelezionato, req.user.id], function (err) {
             if (err) {
                 req.flash('error', 'Errore durante l\'aggiornamento dell\'avatar: ' + err.message);
                 return res.redirect('/profilo');
@@ -224,20 +224,25 @@ app.get('/profilo', isLogged, (req, res) => {
             req.flash('success', 'Avatar aggiornato con successo!');
             return res.redirect('/profilo');
         });
-    }
+    } else {
+        db.all('SELECT * FROM avatar', [], (err, avatars) => {
+            if (err) throw err;
 
-    db.all('SELECT * FROM avatar', [], (err, avatars) => {
-        if (err) {
-            throw err;
-        }
+            db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
+                if (err) throw err;
 
-        db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
-            if (err) {
-                throw err;
-            }
-            res.render('profilo', { utente, avatar: avatars });
+                db.all('SELECT * FROM set_artefatti WHERE id_utente = ?', [req.user.id], (err, setArtefatti) => {
+                    if (err) throw err;
+
+                    res.render('profilo', {
+                        utente,
+                        avatar: avatars,
+                        setArtefatti
+                    });
+                });
+            });
         });
-    });
+    }
 });
 
 
@@ -253,7 +258,7 @@ app.get('/artefatti', (req, res) => {
 
     if (req.query.nome_artefatto) {
         sql += ' WHERE nome like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%'+req.query.nome_artefatto+'%');  //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome_artefatto + '%');  //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -264,12 +269,84 @@ app.get('/artefatti', (req, res) => {
     });
 });
 
+app.get('/set-artefatti', (req, res) => {
+
+    const sql = `SELECT id, nome, categoria FROM artefatti`;
+    const sqlArmi = `SELECT * FROM armi`;
+
+    db.all(sql, [], (err, artefatti) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore nel recupero degli artefatti');
+        }
+
+        const categorie = {
+            fiore: artefatti.filter(a => a.categoria === 'Flower of Life'),
+            piuma: artefatti.filter(a => a.categoria === 'Plume of Death'),
+            clessidra: artefatti.filter(a => a.categoria === 'Sands of Eon'),
+            coppa: artefatti.filter(a => a.categoria === 'Goblet of Eonothem'),
+            corona: artefatti.filter(a => a.categoria === 'Circlet of Logos')
+        };
+
+        db.all('SELECT * FROM personaggi', [], (err, personaggi) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Errore nel recupero dei personaggi');
+            }
+
+            db.all(sqlArmi, [], (err, queryarmi) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Errore nel recupero delle armi');
+                }
+
+                const armi = {
+                    spada: queryarmi.filter(a => a.tipo_arma === 'spada'),
+                    spadone: queryarmi.filter(a => a.tipo_arma === 'spadone'),
+                    catalizzatore: queryarmi.filter(a => a.tipo_arma === 'catalizzatore'),
+                    lancia: queryarmi.filter(a => a.tipo_arma === 'lancia'),
+                    arco: queryarmi.filter(a => a.tipo_arma === 'arco'),
+                };
+                res.render('creaSetArtefatti', { categorie, personaggi, armi });
+
+            });
+        });
+    });
+});
+
+
+app.post('/set-artefatti', (req, res) => {
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona } = req.body;
+    const id_utente = req.user?.id;
+
+    if (!id_utente) {
+        return res.status(401).send('Utente non autenticato');
+    }
+
+    const sql = `
+        INSERT INTO set_artefatti 
+        (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
+
+    db.run(sql, values, function (err) {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore nel salvataggio del set di artefatti');
+        }
+
+        res.redirect('/profilo');
+    });
+});
+
 
 app.get('/personaggi', (req, res) => {
 
     let sql = 'SELECT * FROM personaggi';
     let filtro = [];
-    
+
     if (req.query.elemento) {
         sql += ' WHERE elemento = ?';
         filtro.push(req.query.elemento);
@@ -277,7 +354,7 @@ app.get('/personaggi', (req, res) => {
 
     if (req.query.nome) {
         sql += ' WHERE nome like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%'+req.query.nome+'%'); //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome + '%'); //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -292,11 +369,48 @@ app.get('/personaggi', (req, res) => {
 
 app.get('/build', (req, res) => {
 
-    let sql = ' SELECT * FROM personaggi p INNER JOIN statistiche s ON p.id = s.personaggio';
+
+    let sql = `
+        SELECT 
+            p.nome AS nome_personaggio,
+            p.immagine AS immagine_personaggio,
+
+            ar.nome_arma AS nome_arma,
+            ar.immagine AS immagine_arma,
+
+            sa.nome_set AS nome_set,
+
+            a1.nome AS nome_artefatto1,
+            a1.immagine AS immagine_artefatto1,
+
+            a2.nome AS nome_artefatto2,
+            a2.immagine AS immagine_artefatto2,
+
+            a3.nome AS nome_artefatto3,
+            a3.immagine AS immagine_artefatto3,
+
+            a4.nome AS nome_artefatto4,
+            a4.immagine AS immagine_artefatto4,
+
+            a5.nome AS nome_artefatto5,
+            a5.immagine AS immagine_artefatto5
+
+        FROM build b
+        INNER JOIN set_artefatti sa ON b.id_set = sa.id
+        INNER JOIN artefatti a1 ON sa.fiore = a1.id
+        INNER JOIN artefatti a2 ON sa.piuma = a2.id
+        INNER JOIN artefatti a3 ON sa.clessidra = a3.id
+        INNER JOIN artefatti a4 ON sa.coppa = a4.id
+        INNER JOIN artefatti a5 ON sa.corona = a5.id
+        INNER JOIN personaggi p ON b.personaggio = p.id
+        INNER JOIN armi ar ON b.arma = ar.id
+    `;
+
+
     let filtro = [];
     if (req.query.nome_build) {
         sql += ' WHERE p.nome like ?';
-        filtro.push('%'+req.query.nome_build+'%');  //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome_build + '%');  //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -304,7 +418,7 @@ app.get('/build', (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-        res.render('build', { statistiche: rows });
+        res.render('build', { build: rows });
     });
 });
 
@@ -313,21 +427,21 @@ app.get('/armi', isNotLogged, (req, res) => {
     let sql = 'SELECT * FROM armi';
     let filtro = [];
 
-     if (req.query.tipo_arma) {
+    if (req.query.tipo_arma) {
         sql += ' WHERE tipo_arma = ?';
         filtro.push(req.query.tipo_arma); //aggiungo il filtro per categoria alla query
     }
 
     if (req.query.nome_arma) {
         sql += ' WHERE nome_arma like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%'+req.query.nome_arma+'%'); //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome_arma + '%'); //aggiungo al filtro il nome da cerare (% nome %)
     }
 
     db.all(sql, filtro, (err, tabella) => { //cambiare rows in tabella per evitare confusione con la variabile di sopra
         if (err) {
             throw err;
         }
-        res.render('armi', { armi: tabella});
+        res.render('armi', { armi: tabella });
     });
 });
 

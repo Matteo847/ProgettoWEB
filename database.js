@@ -68,16 +68,20 @@ db.serialize(() => {
     db.run(`
         CREATE TABLE IF NOT EXISTS set_artefatti (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_utente INTEGER,
             nome_set TEXT NOT NULL,
             descrizione TEXT,
-            artefatto1 INTEGER,
-            artefatto2 INTEGER,
-            artefatto3 INTEGER,
-            artefatto4 INTEGER,
-            FOREIGN KEY(artefatto1) REFERENCES artefatti(id),
-            FOREIGN KEY(artefatto2) REFERENCES artefatti(id),
-            FOREIGN KEY(artefatto3) REFERENCES artefatti(id),
-            FOREIGN KEY(artefatto4) REFERENCES artefatti(id)
+            fiore INTEGER,
+            piuma INTEGER,
+            clessidra INTEGER,
+            coppa INTEGER,
+            corona INTEGER,
+            FOREIGN KEY(fiore) REFERENCES artefatti(id),
+            FOREIGN KEY(piuma) REFERENCES artefatti(id),
+            FOREIGN KEY(clessidra) REFERENCES artefatti(id),
+            FOREIGN KEY(coppa) REFERENCES artefatti(id),
+            FOREIGN KEY(corona) REFERENCES artefatti(id),
+            FOREIGN KEY(id_utente) REFERENCES utenti(id)
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella set_artefatti:", err.message);
@@ -86,17 +90,20 @@ db.serialize(() => {
     db.run(`
         CREATE TABLE IF NOT EXISTS build (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_utente INTEGER,
+            arma INTEGER NOT NULL,
             personaggio INTEGER NOT NULL,
             id_set INTEGER NOT NULL,
             FOREIGN KEY(personaggio) REFERENCES personaggi(id),
-            FOREIGN KEY(id_set) REFERENCES set_artefatti(id)
+            FOREIGN KEY(id_set) REFERENCES set_artefatti(id),
+            FOREIGN KEY(arma) REFERENCES armi(id),
+            FOREIGN KEY(id_utente) REFERENCES utenti(id)
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
     });
 
     db.run(`
-        
         CREATE TABLE IF NOT EXISTS armi (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome_arma TEXT NOT NULL,
@@ -108,6 +115,24 @@ db.serialize(() => {
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
+    });
+
+     db.run(`
+        CREATE TABLE IF NOT EXISTS statistiche (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            personaggio INTEGER NOT NULL,
+            duepezzi TEXT NOT NULL,
+            quattropezzi TEXT NOT NULL,
+            priorità_fiore TEXT NOT NULL,
+            priorità_piuma TEXT NOT NULL,
+            priorità_coppa TEXT NOT NULL,
+            priorità_calice TEXT NOT NULL,
+            priorità_corona TEXT NOT NULL,
+            priorità_statistiche TEXT NOT NULL,
+            FOREIGN KEY(personaggio) REFERENCES personaggi(id)
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella statistiche:", err.message);
     });
 
     db.run(`
@@ -166,8 +191,6 @@ db.serialize(() => {
         if (err) console.error("Errore durante la popolazione della tabella armi:", err.message);
     });
 
-
-
     db.run(`
       INSERT INTO "avatar" ("id", "immagine") VALUES
         (1, 'images/emotes/ayaka_icon.png'),
@@ -192,7 +215,6 @@ db.serialize(() => {
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
     });
-
 
     db.run(`
         INSERT INTO "personaggi" ("id", "nome", "immagine", "elemento", "rarità", "descrizione") VALUES
@@ -554,57 +576,6 @@ db.serialize(() => {
 
     `, (err) => {
         if (err) console.error("Errore durante l'inserimento degli artefatti:", err.message);
-    });
-
-    db.run(`
-        INSERT INTO set_artefatti (nome_set, descrizione, artefatto1, artefatto2, artefatto3, artefatto4) VALUES
-        ('Emblema del Fato Forgiato', 'Ottimo per personaggi che usano spesso il Burst', 1, 2, 3, 4),
-        ('Cuore delle Profondità', 'Ideale per personaggi Hydro', 5, 6, 7, 8),
-        ('Bruciargilla di Crimson Witch', 'Perfetto per i DPS Pyro', 2, 3, 5, 9),
-        ('Ombra Verde', 'Eccellente per le reazioni Dendro', 1, 3, 6, 10),
-        ('Blizzard Strayer', 'Ottimo per DPS Cryo', 4, 6, 8, 10),
-        ('Tuono Rugginoso', 'Eccellente per DPS Electro', 2, 4, 7, 9),
-        ('Pietra Antica di Archaic Petra', 'Potenzia i personaggi Geo', 1, 5, 7, 10),
-        ('Battaglia del Vagabondo', 'Per abilità elementali', 3, 6, 8, 9),
-        ('Paladino di Tenacità', 'Per personaggi di supporto', 1, 4, 6, 8),
-        ('Sognatori Dorati', 'Per team Dendro', 2, 5, 7, 10);
-    `, (err) => {
-        if (err) console.error("Errore inserimento set artefatti:", err.message);
-    });
-    
- 
-    db.run(`
-        INSERT INTO build (personaggio, id_set) VALUES
-        (1, 5),   
-        (2, 3),  
-        (3, 7),  
-        (4, 1),   
-        (5, 8),  
-        (6, 6),  
-        (7, 5),   
-        (8, 4),  
-        (9, 2),  
-        (10, 5); 
-    `, (err) => {
-        if (err) console.error("Errore inserimento build:", err.message);
-    });
-
-    db.run(`
-        CREATE TABLE IF NOT EXISTS statistiche (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            personaggio INTEGER NOT NULL,
-            duepezzi TEXT NOT NULL,
-            quattropezzi TEXT NOT NULL,
-            priorità_fiore TEXT NOT NULL,
-            priorità_piuma TEXT NOT NULL,
-            priorità_coppa TEXT NOT NULL,
-            priorità_calice TEXT NOT NULL,
-            priorità_corona TEXT NOT NULL,
-            priorità_statistiche TEXT NOT NULL,
-            FOREIGN KEY(personaggio) REFERENCES personaggi(id)
-        );
-    `, (err) => {
-        if (err) console.error("Errore durante la creazione della tabella statistiche:", err.message);
     });
 
     db.run(`

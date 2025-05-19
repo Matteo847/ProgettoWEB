@@ -1,192 +1,322 @@
+.main-container {
+	flex: 1;
+}
+
 .riga-profilo {
-    text-align: center;
-    background-repeat: no-repeat;
-    height: 350px;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	text-align: center;
+	background-repeat: no-repeat;
+	height: 350px;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .profilo-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .profilo-cerchio {
-  width: 120px;
-  height: 120px;
-  border: 5px solid white;
-  border-radius: 50%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  box-sizing: border-box;
+	width: 120px;
+	height: 120px;
+	border: 5px solid white;
+	border-radius: 50%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	box-sizing: border-box;
 }
 
 .profilo-nome {
-    font-size: 30px;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    margin-top: 30px;
-    font-family: 'Arial', sans-serif;
+	font-size: 30px;
+	color: white;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	margin-top: 30px;
+	font-family: 'Arial', sans-serif;
 }
-.mie_build{
-    color: black !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Arial', sans-serif;
+
+.mie_build {
+	color: black !important;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	font-family: 'Arial', sans-serif;
 }
+
 .separatore {
-    border: 0;
-    height: 2px;
-    width: 40%;
-    background: white;
-    margin: 10px auto 10px auto;
-    opacity: 0.6; 
+	border: 0;
+	height: 2px;
+	width: 40%;
+	background: white;
+	margin: 10px auto 10px auto;
+	opacity: 0.6;
 }
-.character-container-build{
-    position: relative;
-    margin-top: 100px;
-    overflow: hidden;
-    border-radius: 8px;
-    height: 400px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+
+.character-container-build {
+	position: relative;
+	margin-top: 100px;
+	overflow: hidden;
+	border-radius: 8px;
+	height: 400px;
+	cursor: pointer;
+	transition: transform 0.3s ease;
 }
 
 .character-container-build:hover {
-    transform: scale(1.1);
-    border-color: white;
+	transform: scale(1.1);
+	border-color: white;
 }
+
 .character-card {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  
-  .character-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 80%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 10px;
-  }
-  
-  .character-name {
-    color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-  }
-  
-  .character-card:hover .character-overlay {
-    opacity: 1;
-  }
-  .character-card {
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  .character-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .modal-content {
-    background-color: #2a2a2a;
-    color: #fff;
-    border: 1px solid #444;
-  }
-  
-  .modal-header {
-    border-bottom: 1px solid #444;
-  }
-  
-  .modal-footer {
-    border-top: 1px solid #444;
-  }
-  
-  .build-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .btn-success {
-    background-color: #00bc8c;
-    border-color: #00bc8c;
-  }
-  
-  .btn-success:hover {
-    background-color: #009670;
-    border-color: #009670;
-  }
-.profilo-immagine{
-
-    width: 150px;
-    height: auto;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
+	position: relative;
+	overflow: hidden;
+	cursor: pointer;
 }
-.modal-header{
 
-  background-color: #3a38a2;
+.character-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 80%;
+	height: 100%;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 50%);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	padding-bottom: 10px;
 }
-.img-fluid{
 
-  width: 100px;
-  height: auto;
+.character-name {
+	color: white;
+	font-weight: bold;
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.character-card:hover .character-overlay {
+	opacity: 1;
+}
+
+
+.character-card:hover {
+	transform: translateY(-5px);
+}
+
+.modal-content {
+	background-color: #2a2a2a;
+	color: #fff;
+	border: 1px solid #444;
+}
+
+.modal-header {
+	border-bottom: 1px solid #444;
+}
+
+.modal-footer {
+	border-top: 1px solid #444;
+}
+
+.build-options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.btn-success {
+	background-color: #00bc8c;
+	border-color: #00bc8c;
+}
+
+.btn-success:hover {
+	background-color: #009670;
+	border-color: #009670;
+}
+
+.profilo-immagine {
+
+	width: 150px;
+	height: auto;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-top: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s ease;
+}
+
+.modal-header {
+
+	background-color: #3a38a2;
+}
+
+.img-fluid {
+
+	width: 100px;
+	height: auto;
 }
 
 .image-button-container {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	border-radius: 50%;
+	transition: all 0.3s ease;
 }
 
 .image-button-container::after {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
-  border: 2px solid transparent;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+	content: '';
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	right: -5px;
+	bottom: -5px;
+	border: 2px solid transparent;
+	border-radius: 50%;
+	transition: all 0.3s ease;
 }
 
 .image-button-container:hover::after {
-  border-color: #4CAF50;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+	border-color: #4CAF50;
+	box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
 }
 
 .circular-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-  transition: all 0.3s ease;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	object-fit: cover;
+	display: block;
+	transition: all 0.3s ease;
 }
 
 .image-button-container:hover .circular-avatar {
-  transform: scale(1.05);
+	transform: scale(1.05);
 }
 
 .image-button-container:focus {
-  outline: none;
+	outline: none;
+}
+
+.character-card.add-character {
+	display: flex;
+	margin-top: 30px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 2px dashed rgba(255, 255, 255, 0.3);
+	height: 500px;
+	width: auto;
+}
+
+.add-character-icon {
+	font-size: 3rem;
+	font-weight: bold;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.add-character-text {
+	margin-top: 10px;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.character-card.add-character:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Stile del modal */
+.build-modal-content {
+	background-color: #2a2a3a;
+	border: 1px solid #e0c79b;
+	border-radius: 10px;
+	color: white;
+}
+
+.build-modal-header {
+	border-bottom: 1px solid #e0c79b55;
+	background-color: #3a38a2;
+}
+
+.build-modal-footer {
+	border-top: 1px solid #e0c79b55;
+}
+
+/* Stile dei bottoni di opzione */
+.build-option-btn {
+	width: 100%;
+	height: 120px;
+	background: rgba(40, 40, 60, 0.8);
+	border: 2px dashed #e0c79b55;
+	border-radius: 8px;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+.build-option-btn:hover {
+	background: rgba(60, 60, 80, 0.9);
+	border-color: #e0c79b;
+	transform: translateY(-3px);
+}
+
+.option-icon {
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+	color: #e0c79b;
+}
+
+.option-text {
+	font-size: 1.1rem;
+	font-weight: 500;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  min-width: 200px;
+  z-index: 1100;
+}
+
+.modal,
+.modal-dialog,
+.modal-content {
+  overflow: visible !important;
+}
+
+
+
+/* Rendi i dropdown visibili sopra il modal */
+.custom-dropdown {
+	position: static;
+}
+
+.custom-dropdown-menu {
+	z-index: 1100 !important;
+	/* maggiore del modal (che è 1050) */
+	position: absolute !important;
+	transform: translate3d(0px, 38px, 0px) !important;
+	/* offset verticale sotto al bottone */
+	inset: auto auto auto 0px !important;
+	/* reset posizione */
+	will-change: transform;
+	display: block;
+	/* forzato per mostrare il comportamento */
+	visibility: hidden;
+	/* sarà rimosso da Bootstrap dinamicamente */
+}
+
+.custom-dropdown.show .custom-dropdown-menu {
+	visibility: visible;
+}
+
+/* Risolvi eventuale overflow del modal */
+.modal-content {
+	overflow: visible;
 }
