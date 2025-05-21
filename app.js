@@ -316,20 +316,27 @@ app.get('/set-artefatti', (req, res) => {
 
 
 app.post('/set-artefatti', (req, res) => {
-    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona } = req.body;
+
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma} = req.body;
     const id_utente = req.user?.id;
 
     if (!id_utente) {
         return res.status(401).send('Utente non autenticato');
     }
 
-    const sql = `
+    const sqlSet = `
         INSERT INTO set_artefatti 
-        (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente)
+        (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const values = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
+    const sqlBuild = `
+        INSERT INTO build (id_utente, arma, personaggio, id_set)
+        values (?, ?, ?, ?)
+    `;
+
+    const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
+    const valuesBuild = [req.user.id, tipo_arma, personaggi, null];
 
     db.run(sql, values, function (err) {
         if (err) {
