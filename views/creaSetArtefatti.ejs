@@ -29,7 +29,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="descrizione" class="form-label">Descrizione:</label>
+                                    <label for="descrizione" class="form-label">statistiche principali del personaggio:</label>
                                     <textarea id="descrizione" name="descrizione" rows="4"
                                         class="form-textarea"></textarea>
                                 </div>
@@ -128,8 +128,8 @@
                             <div class="white-box">
                                 <div class="artifact-selection">
                                     <div class="form-group">
-                                        <label for="spada" class="form-label">Spada:</label>
-                                        <select id="spada" name="spada" class="form-select">
+                                        <label for="spada" class="form-label">Spade:</label>
+                                        <select id="spada" class="form-select" >
                                             <option value="">Seleziona</option>
                                             <% armi.spada.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -140,8 +140,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="spadone" class="form-label">Spadone:</label>
-                                        <select id="spadone" name="spadone" class="form-select" required>
+                                        <label for="spadone" class="form-label">Spadoni:</label>
+                                        <select id="spadone" class="form-select">
                                             <option value="">Seleziona</option>
                                             <% armi.spadone.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -152,8 +152,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="catalizzatore" class="form-label">Catalizzatore:</label>
-                                        <select id="catalizzatore" name="catalizzatore" class="form-select" required>
+                                        <label for="catalizzatore" class="form-label">Catalizzatori:</label>
+                                        <select id="catalizzatore" class="form-select" >
                                             <option value="">Seleziona</option>
                                             <% armi.catalizzatore.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -164,8 +164,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="lancia" class="form-label">Lancia:</label>
-                                        <select id="lancia" name="lancia" class="form-select" required>
+                                        <label for="lancia" class="form-label">Lance:</label>
+                                        <select id="lancia" class="form-select">
                                             <option value="">Seleziona</option>
                                             <% armi.lancia.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -174,9 +174,10 @@
                                                 <% }) %>
                                         </select>
                                     </div>
+
                                     <div class="form-group">
-                                        <label for="arco" class="form-label">Arco:</label>
-                                        <select id="arco" name="arco" class="form-select" required>
+                                        <label for="arco" class="form-label">Archi:</label>
+                                        <select id="arco" class="form-select">
                                             <option value="">Seleziona</option>
                                             <% armi.arco.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -187,6 +188,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

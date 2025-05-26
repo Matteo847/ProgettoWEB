@@ -231,15 +231,60 @@ app.get('/profilo', isLogged, (req, res) => {
             db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
                 if (err) throw err;
 
-                db.all('SELECT * FROM set_artefatti WHERE id_utente = ?', [req.user.id], (err, setArtefatti) => {
-                    if (err) throw err;
 
+                let sql = `
+                    SELECT 
+                        p.nome AS nome_personaggio,
+                        p.immagine AS immagine_personaggio,
+
+                        b.id AS id_build,
+
+                        ar.nome_arma AS nome_arma,
+                        ar.immagine AS immagine_arma,
+
+                        sa.nome_set AS nome_set,
+                        sa.descrizione AS descrizione_set,
+
+                        a1.nome AS nome_artefatto1,
+                        a1.immagine AS immagine_artefatto1,
+
+                        a2.nome AS nome_artefatto2,
+                        a2.immagine AS immagine_artefatto2,
+
+                        a3.nome AS nome_artefatto3,
+                        a3.immagine AS immagine_artefatto3,
+
+                        a4.nome AS nome_artefatto4,
+                        a4.immagine AS immagine_artefatto4,
+
+                        a5.nome AS nome_artefatto5,
+                        a5.immagine AS immagine_artefatto5
+
+                    FROM build b
+                    INNER JOIN set_artefatti sa ON b.id_set = sa.id
+                    INNER JOIN artefatti a1 ON sa.fiore = a1.id
+                    INNER JOIN artefatti a2 ON sa.piuma = a2.id
+                    INNER JOIN artefatti a3 ON sa.clessidra = a3.id
+                    INNER JOIN artefatti a4 ON sa.coppa = a4.id
+                    INNER JOIN artefatti a5 ON sa.corona = a5.id
+                    INNER JOIN personaggi p ON b.personaggio = p.id
+                    INNER JOIN armi ar ON b.arma = ar.id
+                    where b.id_utente = ?
+                `;
+
+                db.all(sql, req.user.id, (err, build) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Errore del server');
+                    }
                     res.render('profilo', {
                         utente,
                         avatar: avatars,
-                        setArtefatti
+                        build
                     });
                 });
+                    
+                
             });
         });
     }
@@ -269,7 +314,7 @@ app.get('/artefatti', (req, res) => {
     });
 });
 
-app.get('/set-artefatti', (req, res) => {
+app.get('/set-artefatti', isLogged, (req, res) => {
 
     const sql = `SELECT id, nome, categoria FROM artefatti`;
     const sqlArmi = `SELECT * FROM armi`;
@@ -314,19 +359,14 @@ app.get('/set-artefatti', (req, res) => {
     });
 });
 
+app.post('/set-artefatti', isLogged,(req, res) => {
 
-app.post('/set-artefatti', (req, res) => {
-
-    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma} = req.body;
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma } = req.body;
     const id_utente = req.user?.id;
-
-    if (!id_utente) {
-        return res.status(401).send('Utente non autenticato');
-    }
 
     const sqlSet = `
         INSERT INTO set_artefatti 
-        (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona)
+        (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
@@ -336,15 +376,23 @@ app.post('/set-artefatti', (req, res) => {
     `;
 
     const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
-    const valuesBuild = [req.user.id, tipo_arma, personaggi, null];
 
-    db.run(sql, values, function (err) {
+    db.run(sqlSet, valuesSet, function (err) {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore nel salvataggio del set di artefatti');
         }
+        const valuesBuild = [req.user.id, tipo_arma, personaggi, this.lastID];
 
-        res.redirect('/profilo');
+        db.run(sqlBuild, valuesBuild, function (err) {
+
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Errore nel salvataggio della build');
+            }
+
+            res.redirect('/profilo');
+        });
     });
 });
 
@@ -375,8 +423,6 @@ app.get('/personaggi', (req, res) => {
 });
 
 app.get('/build', (req, res) => {
-
-
     let sql = `
         SELECT 
             p.nome AS nome_personaggio,
@@ -412,7 +458,6 @@ app.get('/build', (req, res) => {
         INNER JOIN personaggi p ON b.personaggio = p.id
         INNER JOIN armi ar ON b.arma = ar.id
     `;
-
 
     let filtro = [];
     if (req.query.nome_build) {

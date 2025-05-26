@@ -75,14 +75,15 @@ db.serialize(() => {
             fiore INTEGER,
             piuma INTEGER,
             clessidra INTEGER,
-            coppa INTEGER,
             corona INTEGER,
-            FOREIGN KEY(fiore) REFERENCES artefatti(id),
-            FOREIGN KEY(piuma) REFERENCES artefatti(id),
-            FOREIGN KEY(clessidra) REFERENCES artefatti(id),
-            FOREIGN KEY(coppa) REFERENCES artefatti(id),
-            FOREIGN KEY(corona) REFERENCES artefatti(id),
-            FOREIGN KEY(id_utente) REFERENCES utenti(id)
+            coppa INTEGER,
+            FOREIGN KEY(fiore) REFERENCES artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(piuma) REFERENCES artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(clessidra) REFERENCES artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(coppa) REFERENCES artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(corona) REFERENCES artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(id_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
+
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella set_artefatti:", err.message);
@@ -96,10 +97,10 @@ db.serialize(() => {
             arma INTEGER NOT NULL,
             personaggio INTEGER NOT NULL,
             id_set INTEGER NOT NULL,
-            FOREIGN KEY(personaggio) REFERENCES personaggi(id),
-            FOREIGN KEY(id_set) REFERENCES set_artefatti(id),
-            FOREIGN KEY(arma) REFERENCES armi(id),
-            FOREIGN KEY(id_utente) REFERENCES utenti(id)
+            FOREIGN KEY(personaggio) REFERENCES personaggi(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(id_set) REFERENCES set_artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(arma) REFERENCES armi(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(id_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
@@ -131,7 +132,7 @@ db.serialize(() => {
             priorità_calice TEXT NOT NULL,
             priorità_corona TEXT NOT NULL,
             priorità_statistiche TEXT NOT NULL,
-            FOREIGN KEY(personaggio) REFERENCES personaggi(id)
+            FOREIGN KEY(personaggio) REFERENCES personaggi(id) ON DELETE CASCADE ON UPDATE CASCADE
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella statistiche:", err.message);

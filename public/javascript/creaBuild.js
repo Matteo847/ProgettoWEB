@@ -1,60 +1,49 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', function () {
-    const selectPersonaggio = document.getElementById('pesonaggi');
-    const selectSpada = document.getElementById('spada');
-    const selectSpadone = document.getElementById('spadone');
-    const selectCatalizzatore = document.getElementById('catalizzatore');
-    const selectLancia = document.getElementById('lancia');
-    const selectArco = document.getElementById('arco');
+    const personaggioSelezionato = document.getElementById('pesonaggi');
 
-    function hideAllWeaponSelects() {
-        selectSpada.closest('.form-group').style.display = 'none';
-        selectSpadone.closest('.form-group').style.display = 'none';
-        selectCatalizzatore.closest('.form-group').style.display = 'none';
-        selectLancia.closest('.form-group').style.display = 'none';
-        selectArco.closest('.form-group').style.display = 'none';
-    }
+    const weaponSelects = {
+        spada: document.getElementById('spada'),
+        spadone: document.getElementById('spadone'),
+        catalizzatore: document.getElementById('catalizzatore'),
+        lancia: document.getElementById('lancia'),
+        arco: document.getElementById('arco')
+    };
 
-    function showAllowedWeapon(weaponType) {
-        hideAllWeaponSelects();
-
-        switch (weaponType) {
-            case 'spada':
-                selectSpada.closest('.form-group').style.display = 'block';
-                break;
-            case 'spadone':
-                selectSpadone.closest('.form-group').style.display = 'block';
-                break;
-            case 'catalizzatore':
-                selectCatalizzatore.closest('.form-group').style.display = 'block';
-                break;
-            case 'lancia':
-                selectLancia.closest('.form-group').style.display = 'block';
-                break;
-            case 'arco':
-                selectArco.closest('.form-group').style.display = 'block';
-                break;
+    function nascondiArmi() {
+        for (const key in weaponSelects) {
+            const select = weaponSelects[key];
+            select.closest('.form-group').style.display = 'none';
+            select.removeAttribute('name');
         }
     }
 
+    function mostraArmaGiusta(weaponType) {
+        nascondiArmi();
 
-    selectPersonaggio.addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
+        const corretta = weaponSelects[weaponType];
+        if (corretta) {
+            corretta.closest('.form-group').style.display = 'block';
+            corretta.setAttribute('name', 'tipo_arma');
+        }
+    }
+
+    personaggioSelezionato.addEventListener('change', function () {
+        const personaggioSel = this.options[this.selectedIndex];
 
         if (!this.value) {
-            hideAllWeaponSelects();
+            nascondiArmi();
             return;
         }
 
-
-        const weaponType = selectedOption.getAttribute('data-tipo');
-
-        if (weaponType) {
-            showAllowedWeapon(weaponType);
+        const tipoArma = personaggioSel.getAttribute('data-tipo');
+        if (tipoArma) {
+            mostraArmaGiusta(tipoArma);
         } else {
-            hideAllWeaponSelects();
+            nascondiArmi();
             console.warn('Tipo di arma non definito per il personaggio selezionato');
         }
     });
-    hideAllWeaponSelects();
+
+    nascondiArmi();
 });
