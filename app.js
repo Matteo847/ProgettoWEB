@@ -231,7 +231,6 @@ app.get('/profilo', isLogged, (req, res) => {
             db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
                 if (err) throw err;
 
-
                 let sql = `
                     SELECT 
                         p.nome AS nome_personaggio,
@@ -361,7 +360,7 @@ app.get('/set-artefatti', isLogged, (req, res) => {
 
 app.post('/set-artefatti', isLogged,(req, res) => {
 
-    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma } = req.body;
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma, pubblico } = req.body;
     const id_utente = req.user?.id;
 
     const sqlSet = `
@@ -371,8 +370,8 @@ app.post('/set-artefatti', isLogged,(req, res) => {
     `;
 
     const sqlBuild = `
-        INSERT INTO build (id_utente, arma, personaggio, id_set)
-        values (?, ?, ?, ?)
+        INSERT INTO build (id_utente, arma, personaggio, id_set, pubblico)
+        values (?, ?, ?, ?, ?)
     `;
 
     const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
@@ -382,7 +381,7 @@ app.post('/set-artefatti', isLogged,(req, res) => {
             console.error(err);
             return res.status(500).send('Errore nel salvataggio del set di artefatti');
         }
-        const valuesBuild = [req.user.id, tipo_arma, personaggi, this.lastID];
+        const valuesBuild = [req.user.id, tipo_arma, personaggi, this.lastID, pubblico];
 
         db.run(sqlBuild, valuesBuild, function (err) {
 
@@ -396,6 +395,25 @@ app.post('/set-artefatti', isLogged,(req, res) => {
     });
 });
 
+app.get('/delete-build/:id', async (req, res) => {
+    try {
+        const buildId = req.params.id;
+        const sql = 'DELETE FROM build WHERE id = ?';
+        db.run(sql, buildId, function (err) {
+            if (err) {
+                console.error(err);
+                return res.status(500);
+            }
+            if (this.changes === 0) {
+                return res.status(404);
+            }
+        });
+        res.status(200).json();
+    } catch (error) {
+        console.error(error);
+        res.status(500);
+    }
+});
 
 app.get('/personaggi', (req, res) => {
 
@@ -445,6 +463,8 @@ app.get('/build', (req, res) => {
             a4.nome AS nome_artefatto4,
             a4.immagine AS immagine_artefatto4,
 
+            b.pubblico AS pubblico,
+
             a5.nome AS nome_artefatto5,
             a5.immagine AS immagine_artefatto5
 
@@ -457,12 +477,15 @@ app.get('/build', (req, res) => {
         INNER JOIN artefatti a5 ON sa.corona = a5.id
         INNER JOIN personaggi p ON b.personaggio = p.id
         INNER JOIN armi ar ON b.arma = ar.id
+        WHERE b.pubblico = 1
     `;
 
     let filtro = [];
+    
+    // Se c'è un filtro per nome build
     if (req.query.nome_build) {
-        sql += ' WHERE p.nome like ?';
-        filtro.push('%' + req.query.nome_build + '%');  //aggiungo al filtro il nome da cerare (% nome %)
+        sql += ' AND p.nome LIKE ?';
+        filtro.push('%' + req.query.nome_build + '%');
     }
 
     db.all(sql, filtro, (err, rows) => {

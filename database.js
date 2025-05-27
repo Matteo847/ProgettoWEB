@@ -97,6 +97,7 @@ db.serialize(() => {
             arma INTEGER NOT NULL,
             personaggio INTEGER NOT NULL,
             id_set INTEGER NOT NULL,
+            pubblico INTEGER DEFAULT 0,
             FOREIGN KEY(personaggio) REFERENCES personaggi(id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY(id_set) REFERENCES set_artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY(arma) REFERENCES armi(id) ON DELETE CASCADE ON UPDATE CASCADE,

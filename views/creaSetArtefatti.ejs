@@ -29,7 +29,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="descrizione" class="form-label">statistiche principali del personaggio:</label>
+                                    <label for="descrizione" class="form-label">statistiche principali del
+                                        personaggio:</label>
                                     <textarea id="descrizione" name="descrizione" rows="4"
                                         class="form-textarea"></textarea>
                                 </div>
@@ -120,7 +121,20 @@
                         <div class="form-actions">
                             <button type="submit" class="submit-button">Crea Build</button>
                         </div>
+
+                        <div class="container-small mt-3">
+                            <div class="white-box">
+                                <div class="form-group">
+                                    <label for="pubblico" class="form-label">Vuoi rendere pubblico?</label>
+                                    <select id="pubblico" name="pubblico" class="form-select" required>
+                                        <option value="1">Sì (pubblico)</option>
+                                        <option value="0">No (privato)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div class="col-lg-4 col-md-6">
                         <div class="container-small">
@@ -129,7 +143,7 @@
                                 <div class="artifact-selection">
                                     <div class="form-group">
                                         <label for="spada" class="form-label">Spade:</label>
-                                        <select id="spada" class="form-select" >
+                                        <select id="spada" class="form-select">
                                             <option value="">Seleziona</option>
                                             <% armi.spada.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -153,7 +167,7 @@
 
                                     <div class="form-group">
                                         <label for="catalizzatore" class="form-label">Catalizzatori:</label>
-                                        <select id="catalizzatore" class="form-select" >
+                                        <select id="catalizzatore" class="form-select">
                                             <option value="">Seleziona</option>
                                             <% armi.catalizzatore.forEach(a=> { %>
                                                 <option value="<%= a.id %>">
@@ -186,11 +200,14 @@
                                                 <% }) %>
                                         </select>
                                     </div>
+
                                 </div>
                             </div>
 
                         </div>
                     </div>
+
+
                 </div>
             </form>
         </div>

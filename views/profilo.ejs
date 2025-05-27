@@ -33,8 +33,6 @@
 				<h1>le mie build</h1>
 			</div>
 
-
-
 			<div class="container">
 				<div class="row">
 
@@ -81,17 +79,16 @@
 														</li>
 														<li>Coppa: <%= b.nome_artefatto4 %>
 														</li>
-														<li>Corona: <%= b.stat_corona %>
+														<li>Corona: <%= b.nome_artefatto5 %>
 														</li>
 													</ul>
 												</div>
 											</div>
 										</div>
 									</div>
-									<!-- Footer personalizzato -->
 									<div class="modal-footer-custom">
 										<div class="footer-buttons">
-											<button type="button" class="btn-delete">Elimina Build</button>
+											<button type="button" class="btn-delete" onclick="confirmDelete('<%= b.id_build %>')">Elimina Build</button>
 											<button type="button" class="btn-edit">Modifica Build</button>
 										</div>
 									</div>
@@ -100,18 +97,14 @@
 						</div>
 						<% }); %>
 
-							<a href="/set-artefatti" class="col-lg-3 col-md-6 text-decoration-none">
-								<div class="character-card add-character">
-									<div class="add-character-icon">+</div>
-									<div class="add-character-text">Crea nuovo Set</div>
-								</div>
-							</a>
-
+						<a href="/set-artefatti" class="col-lg-3 col-md-6 text-decoration-none">
+							<div class="character-card add-character">
+								<div class="add-character-icon">+</div>
+								<div class="add-character-text">Crea nuovo Set</div>
+							</div>
+						</a>
 				</div>
 			</div>
-
-
-
 
 			<div class="modal fade" id="avatarModal" tabindex="-1" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
@@ -169,6 +162,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 			crossorigin="anonymous"></script>
+		<script src="\javascript\build.js"></script>			
 </body>
 
 </html>
