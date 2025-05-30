@@ -1,0 +1,78 @@
+<div class="container-tutto">
+  <div class="row ">
+    <div class="col-lg-2">
+      <div class="character-mini-profile">
+        <p>build di <%= b.username_utente %>
+        </p>
+        <div class="character-face-frame">
+          <div class="character-face-mask">
+            <img src="<%= b.immagine_personaggio %>" alt="Albedo" class="character-face">
+          </div>
+        </div>
+        <div class="character-name">
+          <%= b.nome_personaggio %>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-lg-4 justify-content-center">
+      <div class="recommended-item">
+        <img src="<%= b.immagine_arma %>" alt="Primordial Jade Cutter" class="item-icon weapon-icon">
+        <span class="item-name">
+          <%= b.nome_arma %>
+        </span>
+
+      </div>
+      <div class="favorite-btn-container mt-2">
+        <button class="favorite-btn bg-transparent border-0 p-0" value="<%= b.id_build %>">
+          <span class="material-icons mi-piace">
+            <%= mipiace.some(p=> p.like_build === b.id_build) ? 'favorite' : 'favorite_border' %>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="recommended-item">
+            <img src="<%= b.immagine_artefatto1 %>" alt="Husk of Opulent Dreams" class="item-icon artifact-icon">
+            <span class="item-name">
+              <%= b.nome_artefatto1 %>
+            </span>
+          </div>
+          <div class="recommended-item">
+            <img src="<%= b.immagine_artefatto2 %>" alt="Husk of Opulent Dreams" class="item-icon artifact-icon">
+            <span class="item-name">
+              <%= b.nome_artefatto2 %>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="recommended-item">
+            <img src="<%= b.immagine_artefatto3 %>" alt="Husk of Opulent Dreams" class="item-icon artifact-icon">
+            <span class="item-name">
+              <%= b.nome_artefatto3 %>
+            </span>
+          </div>
+          <div class="recommended-item">
+            <img src="<%= b.immagine_artefatto4 %>" alt="Husk of Opulent Dreams" class="item-icon artifact-icon">
+            <span class="item-name">
+              <%= b.nome_artefatto4 %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="artifact-main-stats-container mt-3">
+        <div class="artifact-main-stats">
+          <div class="stat-details">
+            <p><strong> statistiche principali del personaggio: </strong>
+              <%= b.descrizione_set %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

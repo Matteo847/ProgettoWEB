@@ -35,7 +35,7 @@ db.serialize(() => {
             immagine TEXT NOT NULL
         );
     `, (err) => {
-        if (err) console.error("Errore durante la creazione della tabella utenti:", err.message);
+        if (err) console.error("Errore durante la creazione della tabella avatar:", err.message);
     });
 
     db.run(`
@@ -138,6 +138,22 @@ db.serialize(() => {
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella statistiche:", err.message);
     });
+
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS preferiti(
+            
+            like_utente INTEGER NOT NULL,
+            like_build INTEGER NOT NULL,
+            FOREIGN KEY(like_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(like_build) REFERENCES build(id) ON DELETE CASCADE ON UPDATE CASCADE
+
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella preferiti:", err.message);
+    });
+
 
     db.run(`
 

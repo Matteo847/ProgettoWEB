@@ -231,7 +231,7 @@ app.get('/profilo', isLogged, (req, res) => {
             db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
                 if (err) throw err;
 
-                let sql = `
+                const sqlBuildBase = `
                     SELECT 
                         p.nome AS nome_personaggio,
                         p.immagine AS immagine_personaggio,
@@ -268,26 +268,39 @@ app.get('/profilo', isLogged, (req, res) => {
                     INNER JOIN artefatti a5 ON sa.corona = a5.id
                     INNER JOIN personaggi p ON b.personaggio = p.id
                     INNER JOIN armi ar ON b.arma = ar.id
-                    where b.id_utente = ?
                 `;
+                const sqlNostreBuild = sqlBuildBase + ' WHERE b.id_utente = ?';
 
-                db.all(sql, req.user.id, (err, build) => {
+                db.all(sqlNostreBuild, [req.user.id], (err, build) => {
                     if (err) {
                         console.error(err);
                         return res.status(500).send('Errore del server');
                     }
-                    res.render('profilo', {
-                        utente,
-                        avatar: avatars,
-                        build
+
+                    const sqlPreferite = sqlBuildBase + `
+                        INNER JOIN preferiti pref ON pref.like_build = b.id
+                        WHERE pref.like_utente = ?
+                    `;
+
+                    db.all(sqlPreferite, [req.user.id], (err, buildPreferite) => {
+                        if (err) {
+                            console.error(err);
+                            return res.status(500).send('Errore del server');
+                        }
+
+                        res.render('profilo', {
+                            utente,
+                            avatar: avatars,
+                            build,
+                            buildPreferite,
+                        });
                     });
                 });
-                    
-                
             });
         });
     }
 });
+
 
 
 app.get('/artefatti', (req, res) => {
@@ -358,7 +371,7 @@ app.get('/set-artefatti', isLogged, (req, res) => {
     });
 });
 
-app.post('/set-artefatti', isLogged,(req, res) => {
+app.post('/set-artefatti', isLogged, (req, res) => {
 
     const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma, pubblico } = req.body;
     const id_utente = req.user?.id;
@@ -415,6 +428,31 @@ app.get('/delete-build/:id', async (req, res) => {
     }
 });
 
+app.post('/preferiti/toggle', (req, res) => {
+
+    const userId = req.user?.id;
+    const buildId = req.body.buildId;
+
+    const checkSql = `SELECT * FROM preferiti WHERE like_utente = ? AND like_build = ?`;
+    db.get(checkSql, [userId, buildId], (err, row) => {
+        if (err) return res.status(500).json({ error: 'Errore DB' });
+
+        if (row) {
+            // Esiste già, quindi lo rimuoviamo (unlike)
+            db.run(`DELETE FROM preferiti WHERE like_utente = ? AND like_build = ?`, [userId, buildId], (err) => {
+                if (err) return res.status(500).json({ error: 'Errore rimozione' });
+                res.json({ liked: false });
+            });
+        } else {
+            // Non esiste, quindi lo aggiungiamo (like)
+            db.run(`INSERT INTO preferiti (like_utente, like_build) VALUES (?, ?)`, [userId, buildId], (err) => {
+                if (err) return res.status(500).json({ error: 'Errore inserimento' });
+                res.json({ liked: true });
+            });
+        }
+    });
+});
+
 app.get('/personaggi', (req, res) => {
 
     let sql = 'SELECT * FROM personaggi';
@@ -442,6 +480,7 @@ app.get('/personaggi', (req, res) => {
 
 app.get('/build', (req, res) => {
     let sql = `
+
         SELECT 
             p.nome AS nome_personaggio,
             p.immagine AS immagine_personaggio,
@@ -457,6 +496,8 @@ app.get('/build', (req, res) => {
             a2.nome AS nome_artefatto2,
             a2.immagine AS immagine_artefatto2,
 
+            sa.descrizione AS descrizione_set,
+
             a3.nome AS nome_artefatto3,
             a3.immagine AS immagine_artefatto3,
 
@@ -464,6 +505,8 @@ app.get('/build', (req, res) => {
             a4.immagine AS immagine_artefatto4,
 
             b.pubblico AS pubblico,
+            b.id AS id_build,
+            u.username AS username_utente,
 
             a5.nome AS nome_artefatto5,
             a5.immagine AS immagine_artefatto5
@@ -477,11 +520,12 @@ app.get('/build', (req, res) => {
         INNER JOIN artefatti a5 ON sa.corona = a5.id
         INNER JOIN personaggi p ON b.personaggio = p.id
         INNER JOIN armi ar ON b.arma = ar.id
+        INNER JOIN utenti u ON b.id_utente = u.id
         WHERE b.pubblico = 1
     `;
 
     let filtro = [];
-    
+
     // Se c'è un filtro per nome build
     if (req.query.nome_build) {
         sql += ' AND p.nome LIKE ?';
@@ -493,7 +537,17 @@ app.get('/build', (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-        res.render('build', { build: rows });
+        if (req.user) {
+            db.all('SELECT * FROM preferiti WHERE like_utente = ?', [req.user.id], (err, liked) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Errore del server');
+                }
+                res.render('build', { build: rows, mipiace: liked });
+            });
+        } else {
+            res.render('build', { build: rows, mipiace: [] });
+        }
     });
 });
 
