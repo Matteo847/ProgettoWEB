@@ -288,11 +288,19 @@ app.get('/profilo', isLogged, (req, res) => {
                             return res.status(500).send('Errore del server');
                         }
 
-                        res.render('profilo', {
-                            utente,
-                            avatar: avatars,
-                            build,
-                            buildPreferite,
+                        db.all('SELECT * FROM preferiti WHERE like_utente = ?', [req.user.id], (err, liked) => {
+                            if (err) {
+                                console.error(err);
+                                return res.status(500).send('Errore del server');
+                            }
+
+                            res.render('profilo', {
+                                utente,
+                                avatar: avatars,
+                                build,
+                                buildPreferite,
+                                mipiace: liked
+                            });
                         });
                     });
                 });
@@ -301,7 +309,81 @@ app.get('/profilo', isLogged, (req, res) => {
     }
 });
 
+app.get('/profilo/modificaBuild/:id', isLogged, (req, res) => {
+    const buildId = req.params.id;
+    
+    if (!buildId) {
+        req.flash('error', 'ID della build mancante');
+        return res.redirect('/profilo');
+    }
 
+    const sqlBuild = `
+        SELECT 
+            b.id AS id_build,
+            b.arma,
+            b.personaggio,
+            b.id_set,
+            b.pubblico,
+            sa.nome_set,
+            sa.descrizione,
+            sa.fiore,
+            sa.piuma,
+            sa.clessidra,
+            sa.coppa,
+            sa.corona
+        FROM build b
+        INNER JOIN set_artefatti sa ON b.id_set = sa.id
+        WHERE b.id = ? AND b.id_utente = ?
+    `; 
+
+    db.get(sqlBuild, [buildId, req.user.id], (err, build) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server durante il recupero della build');
+            return res.redirect('/profilo');
+        }
+        
+        if (!build) {
+            req.flash('error', 'Build non trovata o non autorizzato');
+            return res.redirect('/profilo');
+        }
+
+        Promise.all([
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM armi', [], (err, armi) => {
+                    if (err) reject(err);
+                    else resolve(armi);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM artefatti', [], (err, artefatti) => {
+                    if (err) reject(err);
+                    else resolve(artefatti);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM personaggi', [], (err, personaggi) => {
+                    if (err) reject(err);
+                    else resolve(personaggi);
+                });
+            })
+        ])
+        .then(([armi, artefatti, personaggi]) => {
+            res.render('modificaBuild', { 
+                build, 
+                armi, 
+                artefatti, 
+                personaggi,
+                currentUser: req.user
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            req.flash('error', 'Errore del server durante il recupero dei dati');
+            res.redirect('/profilo');
+        });
+    });
+});
 
 app.get('/artefatti', (req, res) => {
 

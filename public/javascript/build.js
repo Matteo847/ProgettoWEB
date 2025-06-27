@@ -18,3 +18,8 @@ function confirmDelete(buildId) {
         });
     }
 }
+function openEditModal(){
+    
+    const modal = document.getElementById('editModal');
+    modal.style.display = 'block';
+}
