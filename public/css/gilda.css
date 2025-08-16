@@ -1,0 +1,74 @@
+body {
+      font-family: "Segoe UI", sans-serif;
+      background: url("https://uploadstatic-sea.mihoyo.com/ys-obc/2020/10/16/fe54e51cdd8c6f7f6e93c8e5f0a06d52_1737066.png") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: white;
+      text-align: center;
+    }
+    header {
+        padding: 20px;
+        font-size: 2em;
+        text-align: center;
+        margin-top: 80px;
+    }
+    .gilde {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 30px auto;
+      gap: 20px;
+    }
+    .gilda {
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 15px;
+      width: 300px;
+      height: 250px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .gilda:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.1);
+    }
+    .gilda img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    button {
+      
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: green;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ffaa00;
+    }
+.crea-gilda {
+  position: fixed;
+  bottom: 20px;   /* distanza dal fondo */
+  right: 20px;    /* distanza dal lato destro */
+  background: green;
+  color: #000;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  transition: 0.3s;
+  z-index: 1000; /* rimane sopra agli altri elementi */
+  left: 50%;
+    transform: translateX(-50%);
+}
+
+.crea-gilda:hover {
+  background: #ffaa00;
+  transform: scale(1.05);
+}

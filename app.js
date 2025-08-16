@@ -72,14 +72,14 @@ passport.use(new LocalStrategy(
 
 
 passport.serializeUser((user, done) => {
-    console.log('utente:', user);
+    //console.log('utente:', user);
     done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-    console.log('Deserializzo ID:', id);
+    //console.log('Deserializzo ID:', id);
     db.get('SELECT id, username, mail, ruolo FROM utenti WHERE id = ?', [id], (err, user) => {
-        console.log('deserializzato:', user);
+        //console.log('deserializzato:', user);
         done(err, user);
     });
 });
@@ -308,38 +308,149 @@ app.get('/profilo', isLogged, (req, res) => {
         });
     }
 });
+app.get('/gilda', (req, res) => {
+    res.render('gilda');
+});
 
-app.get('/profilo/modificaBuild/:id', isLogged, (req, res) => {
+app.get('/modificaBuild/:id', isLogged, async (req, res) => {
+    try {
+        const buildId = req.params.id;
+        
+        if (!buildId) {
+            req.flash('error', 'ID della build mancante');
+            return res.status(400).redirect('/profilo');
+        }
+
+        const sqlBuild = `
+            SELECT 
+                b.id AS id_build,
+                b.pubblico,
+                
+                p.id AS personaggio_id,
+                p.nome AS personaggio_nome,
+                p.immagine AS personaggio_immagine,
+                
+                ar.id AS arma_id,
+                ar.nome_arma AS arma_nome,
+                ar.immagine AS arma_immagine,
+                ar.tipo_arma AS arma_tipo,
+                
+                sa.id AS set_id,
+                sa.nome_set,
+                sa.descrizione,
+                
+                fiore.id AS fiore_id,
+                fiore.nome AS fiore_nome,
+                fiore.immagine AS fiore_immagine,
+                
+                piuma.id AS piuma_id,
+                piuma.nome AS piuma_nome,
+                piuma.immagine AS piuma_immagine,
+                
+                clessidra.id AS clessidra_id,
+                clessidra.nome AS clessidra_nome,
+                clessidra.immagine AS clessidra_immagine,
+                
+                coppa.id AS coppa_id,
+                coppa.nome AS coppa_nome,
+                coppa.immagine AS coppa_immagine,
+                
+                corona.id AS corona_id,
+                corona.nome AS corona_nome,
+                corona.immagine AS corona_immagine
+            FROM build b
+            INNER JOIN set_artefatti sa ON b.id_set = sa.id
+            INNER JOIN personaggi p ON b.personaggio = p.id
+            INNER JOIN armi ar ON b.arma = ar.id
+            INNER JOIN artefatti fiore ON sa.fiore = fiore.id
+            INNER JOIN artefatti piuma ON sa.piuma = piuma.id
+            INNER JOIN artefatti clessidra ON sa.clessidra = clessidra.id
+            INNER JOIN artefatti coppa ON sa.coppa = coppa.id
+            INNER JOIN artefatti corona ON sa.corona = corona.id
+            WHERE b.id = ? AND b.id_utente = ?
+        `;
+
+        const build = await new Promise((resolve, reject) => {
+            db.get(sqlBuild, [buildId, req.user.id], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+
+        if (!build) {
+            req.flash('error', 'Build non trovata o non autorizzato');
+            return res.status(404).redirect('/profilo');
+        }
+
+        const [armi, artefatti, personaggi] = await Promise.all([
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM armi WHERE tipo_arma = ? ORDER BY nome_arma ASC ', [build.arma_tipo], (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM artefatti ORDER BY nome ASC', [], (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                });
+            }),
+            new Promise((resolve, reject) => {
+                db.all('SELECT * FROM personaggi ORDER BY nome ASC', [], (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                });
+            })
+        ]);
+
+        const categorie_artefatti = {
+            fiore: artefatti.filter(a => a.categoria === 'Flower of Life'),
+            piuma: artefatti.filter(a => a.categoria === 'Plume of Death'),
+            clessidra: artefatti.filter(a => a.categoria === 'Sands of Eon'),
+            coppa: artefatti.filter(a => a.categoria === 'Goblet of Eonothem'),
+            corona: artefatti.filter(a => a.categoria === 'Circlet of Logos')
+        };
+
+        res.render('modificaBuild', { 
+            build, 
+            armi, 
+            categorie_artefatti, 
+            personaggi,
+            currentUser: req.user
+        });
+
+    } catch (err) {
+        console.error('Errore in /profilo/modificaBuild:', err);
+        req.flash('error', 'Errore del server durante il recupero dei dati');
+        res.status(500).redirect('/profilo');
+    }
+});
+
+app.post('/modificaBuild/:id', isLogged, (req, res) => {
     const buildId = req.params.id;
-    
+    const { 
+        arma, 
+        personaggio, 
+        id_set, 
+        pubblico,
+        fiore, 
+        piuma, 
+        clessidra, 
+        coppa, 
+        corona 
+    } = req.body;
+
     if (!buildId) {
         req.flash('error', 'ID della build mancante');
         return res.redirect('/profilo');
     }
 
-    const sqlBuild = `
-        SELECT 
-            b.id AS id_build,
-            b.arma,
-            b.personaggio,
-            b.id_set,
-            b.pubblico,
-            sa.nome_set,
-            sa.descrizione,
-            sa.fiore,
-            sa.piuma,
-            sa.clessidra,
-            sa.coppa,
-            sa.corona
-        FROM build b
-        INNER JOIN set_artefatti sa ON b.id_set = sa.id
-        WHERE b.id = ? AND b.id_utente = ?
-    `; 
-
-    db.get(sqlBuild, [buildId, req.user.id], (err, build) => {
+    // verifichiamo che la build appartenga all'utente
+    const sqlCheck = 'SELECT id FROM build WHERE id = ? AND id_utente = ?';
+    db.get(sqlCheck, [buildId, req.user.id], (err, build) => {
         if (err) {
             console.error(err);
-            req.flash('error', 'Errore del server durante il recupero della build');
+            req.flash('error', 'Errore del server durante la verifica della build');
             return res.redirect('/profilo');
         }
         
@@ -348,39 +459,45 @@ app.get('/profilo/modificaBuild/:id', isLogged, (req, res) => {
             return res.redirect('/profilo');
         }
 
-        Promise.all([
-            new Promise((resolve, reject) => {
-                db.all('SELECT * FROM armi', [], (err, armi) => {
-                    if (err) reject(err);
-                    else resolve(armi);
-                });
-            }),
-            new Promise((resolve, reject) => {
-                db.all('SELECT * FROM artefatti', [], (err, artefatti) => {
-                    if (err) reject(err);
-                    else resolve(artefatti);
-                });
-            }),
-            new Promise((resolve, reject) => {
-                db.all('SELECT * FROM personaggi', [], (err, personaggi) => {
-                    if (err) reject(err);
-                    else resolve(personaggi);
-                });
-            })
-        ])
-        .then(([armi, artefatti, personaggi]) => {
-            res.render('modificaBuild', { 
-                build, 
-                armi, 
-                artefatti, 
-                personaggi,
-                currentUser: req.user
+        // Aggiorniamo prima il set artefatti
+        const sqlUpdateSet = `
+            UPDATE set_artefatti 
+            SET 
+                fiore = ?,
+                piuma = ?,
+                clessidra = ?,
+                coppa = ?,
+                corona = ?
+            WHERE id = ?
+        `;
+
+        db.run(sqlUpdateSet, [fiore, piuma, clessidra, coppa, corona, id_set], function(err) {
+            if (err) {
+                console.error(err);
+                req.flash('error', 'Errore durante l\'aggiornamento del set artefatti');
+                return res.redirect('/profilo');
+            }
+
+            // Poi aggiorniamo la build
+            const sqlUpdateBuild = `
+                UPDATE build 
+                SET 
+                    arma = ?,
+                    personaggio = ?,
+                    pubblico = ?
+                WHERE id = ?
+            `;
+
+            db.run(sqlUpdateBuild, [arma, personaggio, pubblico, buildId], function(err) {
+                if (err) {
+                    console.error(err);
+                    req.flash('error', 'Errore durante l\'aggiornamento della build');
+                    return res.redirect('/profilo');
+                }
+
+                req.flash('success', 'Build aggiornata con successo');
+                res.redirect('/profilo');
             });
-        })
-        .catch(err => {
-            console.error(err);
-            req.flash('error', 'Errore del server durante il recupero dei dati');
-            res.redirect('/profilo');
         });
     });
 });
@@ -408,8 +525,7 @@ app.get('/artefatti', (req, res) => {
     });
 });
 
-app.get('/set-artefatti', isLogged, (req, res) => {
-
+app.get('/creaBuild', isLogged, (req, res) => {
     const sql = `SELECT id, nome, categoria FROM artefatti`;
     const sqlArmi = `SELECT * FROM armi`;
 
@@ -453,7 +569,7 @@ app.get('/set-artefatti', isLogged, (req, res) => {
     });
 });
 
-app.post('/set-artefatti', isLogged, (req, res) => {
+app.post('/creaBuild', isLogged, (req, res) => {
 
     const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma, pubblico } = req.body;
     const id_utente = req.user?.id;
