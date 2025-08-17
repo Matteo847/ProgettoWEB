@@ -762,3 +762,22 @@ db.serialize(() => {
     });
 
 });
+db.run(`
+
+        CREATE TABLE IF NOT EXISTS gilda (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome_gilda TEXT NOT NULL,
+            limite_partecipanti INTEGER NOT NULL,
+            paese TEXT NOT NULL,
+            descrizione_gilda TEXT NOT NULL,
+            lingua TEXT NOT NULL,
+            ruolo_gilda TEXT DEFAULT 'membro'
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella gilde:", err.message);
+    });
+
+
+
+

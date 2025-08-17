@@ -309,7 +309,27 @@ app.get('/profilo', isLogged, (req, res) => {
     }
 });
 app.get('/gilda', (req, res) => {
-    res.render('gilda');
+
+    let sql = 'SELECT * FROM gilda';
+    let filtro = [];
+
+    if (req.query.lingua) {
+        sql += ' WHERE lingua = ?';
+        filtro.push(req.query.lingua);
+    }
+
+    if (req.query.nome_gilda) {
+        sql += ' WHERE nome_gilda like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
+        filtro.push('%' + req.query.nome_gilda + '%'); //aggiungo al filtro il nome da cerare (% nome %)
+    }
+
+    db.all(sql, filtro, (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore del server');
+        }
+        res.render('gilda', { gilda: rows });
+    });
 });
 
 app.get('/modificaBuild/:id', isLogged, async (req, res) => {
