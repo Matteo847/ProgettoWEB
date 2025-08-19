@@ -760,23 +760,40 @@ db.serialize(() => {
     `, (err) => {
         if (err) console.error("Errore durante l'inserimento delle statistiche:", err.message);
     });
+    db.run(`
 
-});
-db.run(`
+            CREATE TABLE IF NOT EXISTS gilda (
 
-        CREATE TABLE IF NOT EXISTS gilda (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome_gilda TEXT NOT NULL,
+                limite_partecipanti INTEGER NOT NULL,
+                descrizione_gilda TEXT NOT NULL,
+                lingua TEXT NOT NULL,
+                ruolo_gilda TEXT DEFAULT 'membro'
+            );
+        `, (err) => {
+            if (err) console.error("Errore durante la creazione della tabella gilde:", err.message);
+        });
 
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome_gilda TEXT NOT NULL,
-            limite_partecipanti INTEGER NOT NULL,
-            paese TEXT NOT NULL,
-            descrizione_gilda TEXT NOT NULL,
-            lingua TEXT NOT NULL,
-            ruolo_gilda TEXT DEFAULT 'membro'
-        );
+    db.run(`
+
+    INSERT INTO gilda (nome_gilda, limite_partecipanti, descrizione_gilda, lingua)
+    VALUES
+        ('Cavalieri di Mondstadt', 50, 'Proteggiamo Mondstadt con onore e giustizia.', 'italiano'),
+        ('Knights of Freedom', 60, 'Defenders of Mondstadt, guided by the wind of freedom.', 'inglese'),
+        ('稲妻の守護者 (Inazuma no Shugosha)', 40, '永遠を追い求める稲妻の忠実な守護者。', 'giapponese'),
+        ('璃月守护者 (Lìyuè Shǒuhùzhě)', 70, '守护璃月的繁荣与传统。', 'cinese'),
+        ('리월의 수호자 (Liweol-ui Suhoja)', 55, '리월의 번영과 문화를 지키는 자들.', 'coreano')
+        
     `, (err) => {
-        if (err) console.error("Errore durante la creazione della tabella gilde:", err.message);
+    if (err) {
+        console.error("Errore durante l'inserimento delle gilde:", err.message);
+    } else {
+        console.log("Gilde inserite correttamente!");
+    }
     });
+});
+
 
 
 

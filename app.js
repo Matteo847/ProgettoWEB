@@ -332,6 +332,57 @@ app.get('/gilda', (req, res) => {
     });
 });
 
+app.get('/creaGilda',isLogged, (req, res) => {
+    res.render('creaGilda');
+});
+app.post('/creaGilda',isLogged, (req, res) => {
+
+    const nome_gilda = req.body.nome_gilda;
+    const descrizione_gilda = req.body.descrizione_gilda;
+    const lingua = req.body.lingua;
+    const limite_partecipanti = req.body.limite_partecipanti;
+
+    console.log('Dati ricevuti per la creazione della gilda:', {
+        nome_gilda,
+        descrizione_gilda,
+        lingua,
+        limite_partecipanti
+    });
+
+    if (!nome_gilda || !descrizione_gilda || !lingua || !limite_partecipanti) {
+        req.flash('error', 'Tutti i campi sono obbligatori');
+        return res.redirect('/creaGilda');
+    }
+    if(lingua != 'italiano' && lingua != 'inglese' && lingua != 'giapponese' && lingua != 'cinese' && lingua != 'coreano'){
+        req.flash('error', 'Lingua non valida');
+        return res.redirect('/creaGilda');
+    }
+    if(limite_partecipanti < 1 || limite_partecipanti > 1000){
+        req.flash('error', 'Limite partecipanti non valido');
+        return res.redirect('/creaGilda');
+    }
+    if(nome_gilda.length < 3 || nome_gilda.length > 100){
+        req.flash('error', 'Nome gilda non valido');
+        return res.redirect('/creaGilda');
+    }
+    if(descrizione_gilda.length < 10 || descrizione_gilda.length > 500){
+        req.flash('error', 'Descrizione gilda non valida');
+        return res.redirect('/creaGilda');
+    }
+    const sql = `
+        INSERT INTO gilda (nome_gilda, descrizione_gilda, lingua, limite_partecipanti)
+        VALUES ( ?, ?, ?, ?)
+    `;
+
+    db.run(sql, [nome_gilda, descrizione_gilda, lingua, limite_partecipanti], function (err) {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore del server');
+        }
+        req.flash('success', 'Gilda creata con successo');
+        res.redirect('/gilda');
+    });
+});
 app.get('/modificaBuild/:id', isLogged, async (req, res) => {
     try {
         const buildId = req.params.id;

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>Crea la tua Gilda</title>
+	<link rel="icon" href="images/icona.webp" />
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/gilda.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/footer.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="colore-sfondo">
+	<%- include('navbar-noRIc.ejs') %>
+	<% if (typeof error !== 'undefined' && error.length > 0) { %>
+	<div class="alert alert-danger mt-3">
+		<%= error %>
+	</div>
+	<% } %>
+	<div class="container my-5">
+		<h1 class="text-center mb-4">⚔️ Crea la tua Gilda ⚔️</h1>
+
+		<form action="/creaGilda" method="POST">
+			<div class="row g-4">
+
+				<div class="col-md-4">
+					<div class="mb-3">
+						<label for="limite_partecipanti" class="form-label">Limite partecipanti</label>
+						<input type="number" id="limite_partecipanti" name="limite_partecipanti" class="form-control" min="1" max="1000" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="lingua" class="form-label">Lingua</label>
+						<select id="lingua" name="lingua" class="form-select" required>
+							<option value="">-- Seleziona una lingua --</option>
+							<option value="italiano">Italiano</option>
+							<option value="inglese">Inglese</option>
+							<option value="giapponese">Giapponese</option>
+							<option value="cinese">Cinese</option>
+							<option value="coreano">Coreano</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-8">
+					<div class="mb-3">
+						<label for="nome_gilda" class="form-label">Dai il nome alla tua gilda</label>
+						<input type="text" id="nome_gilda" name="nome_gilda" class="form-control" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="descrizione_gilda" class="form-label">Descrizione gilda</label>
+						<textarea id="descrizione_gilda" name="descrizione_gilda" class="form-control" rows="6" required></textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-center mt-4">
+				<button type="submit" class="btn btn-warning btn-lg">Crea Gilda</button>
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>

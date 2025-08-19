@@ -15,98 +15,40 @@
 </head>
 
 <body class="colore-sfondo">
-	<%- include('navbar-noRIc.ejs') %>
+	<%- include('navbar-ric.ejs', {ricerca: 4}) %>
 
     <div class="text-center">
         <div class="container">
-            <form id="filtro-elemento" method="get" action="/gilda"><!--filtro a bottone per la ricercarca dei tipi di personaggio-->
+            <form id="filtro-elemento" method="get" action="/gilda">
                 <div class="d-flex flex-wrap justify-content-center pt-4">
-                    <button type="submit" name="lingua" class="btn-gilda btn-italia" value="Italiano"></button>
-                    <button type="submit" name="lingua" class="btn-gilda btn-inglese" value="Inglese"></button>
-                   <button type="submit" name="lingua" class="btn-gilda btn-giapponese" value="Giapponese"></button>
-                    <button type="submit" name="lingua" class="btn-gilda btn-cinese" value="Cina"></button>
-                    <button type="submit" name="lingua" class="btn-gilda btn-coreano" value="Coreano"></button>
+                    <button type="submit" name="lingua" class="btn-gilda btn-italia" value="italiano"></button>
+                    <button type="submit" name="lingua" class="btn-gilda btn-inglese" value="inglese"></button>
+                   <button type="submit" name="lingua" class="btn-gilda btn-giapponese" value="giapponese"></button>
+                    <button type="submit" name="lingua" class="btn-gilda btn-cinese" value="cinese"></button>
+                    <button type="submit" name="lingua" class="btn-gilda btn-coreano" value="coreano"></button>
                     <button type="submit" name="lingua" class="btn btn-outline-light ms-3" value="">Mostra tutti</button>
                 </div>
             </form>
         </div>
     </div>
+
     <header>
         ⚔️ Scegli la tua Gilda in Genshin Impact ⚔️
     </header>
-    <section class="gilde">
-        <div class="container">
+    <div class="container">
         <div class="row ">
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Ordine di Favonius</h2>
-                <p>Proteggi Mondstadt e i suoi abitanti con onore e giustizia.</p>
-                <button>Scegli questa gilda</button>
+            <% gilda.forEach((g) => { %>
+                <div class="col-lg-3 col-md-6">
+                    <div class="gilda">
+                        <h2><%= g.nome_gilda %></h2>
+                        <p><%= g.descrizione_gilda %></p>
+                        <button>Scegli questa gilda</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Qixing di Liyue</h2>
-                <p>Difendi la prosperità commerciale e culturale di Liyue.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Shogunato di Inazuma</h2>
-                <p>Segui il cammino dell Eternità sotto la guida della Shogun Raiden.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="gilda">
-                <h2>Shogunato di Inazuma</h2>
-                <p>Segui il cammino dell Eternità sotto la guida della Shogun Raiden.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
+            <% }); %>
         </div>
     </div>
-</section>
-<section class="gilde">
-        <div class="container">
-        <div class="row ">
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Ordine di Favonius</h2>
-                <p>Proteggi Mondstadt e i suoi abitanti con onore e giustizia.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
 
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Qixing di Liyue</h2>
-                <p>Difendi la prosperità commerciale e culturale di Liyue.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
 
-            <div class="col-lg-3 col-md-6">
-            <div class="gilda">
-                <h2>Shogunato di Inazuma</h2>
-                <p>Segui il cammino dell Eternità sotto la guida della Shogun Raiden.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="gilda">
-                <h2>Shogunato di Inazuma</h2>
-                <p>Segui il cammino dell Eternità sotto la guida della Shogun Raiden.</p>
-                <button>Scegli questa gilda</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<button class="crea-gilda">Crea la tua gilda</button>
+<a href="/creaGilda" class="crea-gilda">Crea la tua gilda</a>
 </body>
