@@ -38,13 +38,13 @@
     <div class="container">
         <div class="row ">
             <% gilda.forEach((g) => { %>
-                <div class="col-lg-3 col-md-6">
-                    <div class="gilda">
-                        <h2><%= g.nome_gilda %></h2>
-                        <p><%= g.descrizione_gilda %></p>
-                        <button>Scegli questa gilda</button>
-                    </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gilda">
+                    <h2><%= g.nome_gilda %></h2>
+                    <p><%= g.descrizione_gilda %></p>
+                    <a href="/mostraGilda?id=<%= g.id %>" class="bottone">Mostra questa gilda</a>
                 </div>
+            </div>
             <% }); %>
         </div>
     </div>

@@ -383,6 +383,37 @@ app.post('/creaGilda',isLogged, (req, res) => {
         res.redirect('/gilda');
     });
 });
+
+app.get('/mostraGilda', isLogged, (req, res) => {
+    const gildaId = req.query.id;
+
+    if (!gildaId) {
+        req.flash('error', 'ID gilda mancante');
+        return res.status(400).redirect('/gilda');
+    }
+    
+    const sql = 'SELECT * FROM gilda WHERE id = ?';
+    db.get(sql, [gildaId], (err, gilda) => {
+    
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Errore del server');
+        }
+
+        const utentiGildaSql = 'SELECT count(*) AS totale FROM utentiGilda WHERE id_gilda = ?';
+        db.get(utentiGildaSql, [gildaId], (err, row) => {
+        
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Errore del server');
+            }
+            const membri = row ? row.totale : 0;
+
+            res.render('mostraGilda', { gilda , membri});
+        });
+    });
+});
+
 app.get('/modificaBuild/:id', isLogged, async (req, res) => {
     try {
         const buildId = req.params.id;

@@ -154,6 +154,11 @@ db.serialize(() => {
         if (err) console.error("Errore durante la creazione della tabella preferiti:", err.message);
     });
 
+    db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', ['utente1', 'utente1@mail.com', 'password1']);
+    db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', ['utente2', 'utente2@mail.com', 'password2']);
+    db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', ['utente3', 'utente3@mail.com', 'password3']);
+    db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', ['utente4', 'utente4@mail.com', 'password4']);
+    db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', ['utente5', 'utente5@mail.com', 'password5']);
 
     db.run(`
 
@@ -768,8 +773,7 @@ db.serialize(() => {
                 nome_gilda TEXT NOT NULL,
                 limite_partecipanti INTEGER NOT NULL,
                 descrizione_gilda TEXT NOT NULL,
-                lingua TEXT NOT NULL,
-                ruolo_gilda TEXT DEFAULT 'membro'
+                lingua TEXT NOT NULL
             );
         `, (err) => {
             if (err) console.error("Errore durante la creazione della tabella gilde:", err.message);
@@ -786,11 +790,31 @@ db.serialize(() => {
         ('리월의 수호자 (Liweol-ui Suhoja)', 55, '리월의 번영과 문화를 지키는 자들.', 'coreano')
         
     `, (err) => {
-    if (err) {
-        console.error("Errore durante l'inserimento delle gilde:", err.message);
-    } else {
-        console.log("Gilde inserite correttamente!");
-    }
+        if (err) console.error("Errore durante l'inserimento delle gilde", err.message);
+    });
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS utentiGilda (
+            id_utente INTEGER NOT NULL,
+            id_gilda INTEGER NOT NULL,
+            ruolo TEXT NOT NULL DEFAULT 'membro',
+            FOREIGN KEY(id_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY(id_gilda) REFERENCES gilda(id) ON DELETE CASCADE ON UPDATE CASCADE
+        );
+    `, (err) => {
+        if (err) console.error("Errore durante la creazione della tabella utentiGilda:", err.message);
+    });
+    db.run(`
+        INSERT INTO utentiGilda (id_utente, id_gilda, ruolo)
+        VALUES
+            (1, 1, 'leader'),
+            (2, 2, 'leader'),           
+            (3, 1, 'membro'),
+            (4, 1, 'membro'),
+            (5, 2, 'membro')
+
+    `, (err) => {
+        if (err) console.error("Errore durante l'inserimento degli utenti nella gilda:", err.message);
     });
 });
 
