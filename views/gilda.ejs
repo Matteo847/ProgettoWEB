@@ -6,6 +6,7 @@
 	<link rel="icon" href="images/icona.webp" />
 	<meta charset="utf-8">
     <link rel="stylesheet" href="css/gilda.css">
+    <link rel="stylesheet" href="css/profilo.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/footer.css">
 
@@ -17,6 +18,46 @@
 <body class="colore-sfondo">
 	<%- include('navbar-ric.ejs', {ricerca: 4}) %>
 
+    <% if(mieGilde.length > 0){ %>
+        <div class="mie_build d-flex justify-content-center align-items-center">
+            <h1>le mie gilde</h1>
+        </div>
+        <hr class="separatore">
+        <div class="container">
+            <div class="row ">
+                <% mieGilde.forEach((g) => { %>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gilda">
+                        <h2><%= g.nome_gilda %></h2>
+                        <p><%= g.descrizione_gilda %></p>
+                        <a href="/mostraGilda?id=<%= g.id %>" class="bottone">Mostra questa gilda</a>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+
+    <% if(Membro.length > 0){ %>
+    <div class="mie_build d-flex justify-content-center align-items-center">
+		<h1>Gilde a cui sono iscritto</h1>
+	</div>
+    <hr class="separatore">
+    <div class="container">
+        <div class="row ">
+            <% Membro.forEach((g) => { %>
+                <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gilda">
+                    <h2><%= g.nome_gilda %></h2>
+                    <p><%= g.descrizione_gilda %></p>
+                    <a href="/mostraGilda?id=<%= g.id %>" class="bottone">Mostra questa gilda</a>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+    <% } %>
+    
     <div class="text-center">
         <div class="container">
             <form id="filtro-elemento" method="get" action="/gilda">
@@ -31,7 +72,6 @@
             </form>
         </div>
     </div>
-
     <header>
         ⚔️ Scegli la tua Gilda in Genshin Impact ⚔️
     </header>

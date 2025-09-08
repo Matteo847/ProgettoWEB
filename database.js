@@ -811,7 +811,10 @@ db.serialize(() => {
             (2, 2, 'leader'),           
             (3, 1, 'membro'),
             (4, 1, 'membro'),
-            (5, 2, 'membro')
+            (5, 2, 'membro'),
+            
+            foreign key (id_utente) references utenti(id) on delete cascade on update cascade,
+            foreign key (id_gilda) references gilda(id) on delete cascade on update cascade
 
     `, (err) => {
         if (err) console.error("Errore durante l'inserimento degli utenti nella gilda:", err.message);

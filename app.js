@@ -328,7 +328,27 @@ app.get('/gilda', (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-        res.render('gilda', { gilda: rows });
+
+        if(req.user != null){ //se l'utente è loggato visualiziamo le sue gilde o quelle in cui é membro
+            const sqlMieGilde = `select * from gilda g where g.id IN (select id_gilda from utentiGilda where id_utente = ? and ruolo like 'leader')`;
+            db.all(sqlMieGilde, [req.user.id], (err, mieGilde) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Errore del server');
+                }
+                const sqlMembro = `select * from gilda g where g.id IN (select id_gilda from utentiGilda where id_utente = ? and ruolo like 'membro')`;
+                db.all(sqlMembro, [req.user.id], (err, Membro) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Errore del server');
+                    }
+
+                    res.render('gilda', { gilda: rows, mieGilde, Membro });
+                });
+            });
+        }else{
+            res.render('gilda', { gilda: rows });
+        }
     });
 });
 
@@ -379,8 +399,15 @@ app.post('/creaGilda',isLogged, (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-        req.flash('success', 'Gilda creata con successo');
-        res.redirect('/gilda');
+        const sql2 = `INSERT INTO utentiGilda (id_utente, id_gilda, ruolo) VALUES (?, ?, 'leader')`;
+        db.run(sql2, [req.user.id, this.lastID], function (err) {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Errore del server');
+            }
+            req.flash('success', 'Gilda creata con successo');
+            res.redirect('/gilda');
+        });
     });
 });
 
@@ -409,7 +436,133 @@ app.get('/mostraGilda', isLogged, (req, res) => {
             }
             const membri = row ? row.totale : 0;
 
-            res.render('mostraGilda', { gilda , membri});
+            const isLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+            db.get(isLeader, [gildaId, req.user.id], (err, row) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Errore del server');
+                }
+                const leader = row ? true : false; //se esiste la riga, l'utente è leader
+
+                const isMember = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "membro"';
+                db.get(isMember, [gildaId, req.user.id], (err, row) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Errore del server');
+                    }
+                    const membro = row ? true : false; //se esiste la riga, l'utente è membro
+
+                    res.render('mostraGilda', { gilda , membri, isLeader: leader, isMembro: membro });
+                });
+            });
+        });
+    });
+});
+app.post('/gilda/unisciti', isLogged, (req, res) => {
+    const { gildaId } = req.body;
+
+    if (!gildaId) {
+        req.flash('error', 'ID gilda mancante');
+        return res.redirect('/gilda');
+    }
+
+    // Verifica se l'utente è già membro
+    const checkSql = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ?';
+    db.get(checkSql, [gildaId, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect('/gilda');
+        }
+
+        if (row) {
+            req.flash('info', 'Sei già membro di questa gilda');
+            return res.redirect(`/mostraGilda?id=${gildaId}`);
+        }
+
+        // Inserimento nella gilda
+        const insertSql = 'INSERT INTO utentiGilda (id_utente, id_gilda, ruolo) VALUES (?, ?, ?)';
+        db.run(insertSql, [req.user.id, gildaId, 'membro'], function(err) {
+            if (err) {
+                console.error(err);
+                req.flash('error', 'Errore nell\'unirsi alla gilda');
+                return res.redirect('/gilda');
+            }
+
+            req.flash('success', 'Ti sei unito alla gilda con successo');
+            res.redirect(`/mostraGilda?id=${gildaId}`);
+        });
+    });
+});
+
+app.post('/gilda/sciogli', isLogged, (req, res) => {
+    const { id_gilda } = req.body;
+
+    if (!id_gilda) {
+        req.flash('error', 'ID gilda mancante');
+        return res.redirect('/gilda');
+    }
+
+    // Verifica che l'utente sia leader
+    const verificaLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+    db.get(verificaLeader, [id_gilda, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect('/gilda');
+        }
+
+        if (!row) {
+            req.flash('error', 'Permessi insufficienti a sciogliere la gilda');
+            return res.redirect('/gilda');
+        }
+
+        const deleteGilda = 'DELETE FROM gilda WHERE id = ?';
+        db.run(deleteGilda, [id_gilda], function(err) {
+            if (err) {
+                console.error(err);
+                req.flash('error', 'Errore durante lo scioglimento della gilda');
+                return res.redirect('/gilda');
+            }
+     
+            req.flash('success', 'Gilda sciolta con successo');
+            res.redirect('/gilda');
+        });
+    });
+});
+app.post('/gilda/esci', isLogged, (req, res) => {
+    const { gildaId } = req.body;
+
+    if (!gildaId) {
+        req.flash('error', 'ID gilda mancante');
+        return res.redirect('/gilda');
+    }
+
+    // Controlla se l'utente è leader
+    const leaderSql = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+    db.get(leaderSql, [gildaId, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect(`/mostraGilda?id=${gildaId}`);
+        }
+
+        if (row) {
+            req.flash('error', 'Il leader non può uscire dalla gilda');
+            return res.redirect(`/mostraGilda?id=${gildaId}`);
+        }
+
+        // Rimuove l'utente dalla gilda
+        const deleteSql = 'DELETE FROM utentiGilda WHERE id_gilda = ? AND id_utente = ?';
+        db.run(deleteSql, [gildaId, req.user.id], function(err) {
+            if (err) {
+                console.error(err);
+                req.flash('error', 'Errore nell\'uscire dalla gilda');
+                return res.redirect(`/mostraGilda?id=${gildaId}`);
+            }
+
+            req.flash('success', 'Sei uscito dalla gilda con successo');
+            res.redirect('/gilda');
         });
     });
 });
