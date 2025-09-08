@@ -131,7 +131,7 @@
 				</div>
 
 				<div class="col-lg-4 col-md-6">
-			
+
 					<div class="form-actions">
 						<button type="submit" class="submit-button">Salva Modifiche</button>
 						<a href="/profilo" class="btn btn-secondary">Annulla</a>
@@ -170,19 +170,25 @@
 							<div class="artifact-selection">
 								<div class="form-group">
 									<label for="arma" class="form-label">Cambia arma:</label>
-									<select id="arma" name="arma" class="form-select" required>
-										<option value="<%= build.arma_id %>" selected>
-											<%= build.arma_nome %> (attuale)
-										</option>
-										<% armi.forEach(a => { %>
-										<% if (a.id !== build.arma_id) { %>
-										<option value="<%= a.id %>" data-tipo="<%= a.tipo_arma %>">
-											<%= a.nome_arma %>
-										</option>
-										<% } %>
-										<% }) %>
-									</select>
+									<div class="select-with-img">
+										<div class="select-container">
+											<select id="arma" name="arma" class="form-select" required>
+												<option value="<%= build.arma_id %>" data-img="<%= build.arma_immagine %>" selected>
+													<%= build.arma_nome %> (attuale)
+												</option>
+												<% armi.forEach(a => { %>
+													<!--rimuovo l'arma attuale dalla lista delle armi-->
+													<% if (a.id !== build.arma_id) { %>
+													<option value="<%= a.id %>" data-img="<%= a.immagine %>">
+														<%= a.nome_arma %>
+													</option>
+													<% } %>
+												<% }) %>
+											</select>
+										</div>
+									</div>
 								</div>
+
 							</div>
 						</div>
 					</div>
@@ -192,7 +198,7 @@
 		</form>
 	</div>
 
-	<script src="\javascript\creaBuild.js"></script>
+	<!--<script src="\javascript\creaBuild.js"></script>-->
 </body>
 
 </html>

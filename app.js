@@ -528,11 +528,11 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
     }
 });
 
-app.post('/modificaBuild/:id', isLogged, (req, res) => {
+app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
     const buildId = req.params.id;
     const { 
         arma, 
-        personaggio, 
+        personaggio,
         id_set, 
         pubblico,
         fiore, 
@@ -541,6 +541,8 @@ app.post('/modificaBuild/:id', isLogged, (req, res) => {
         coppa, 
         corona 
     } = req.body;
+
+    console.log(req.body);
 
     if (!buildId) {
         req.flash('error', 'ID della build mancante');
@@ -585,12 +587,11 @@ app.post('/modificaBuild/:id', isLogged, (req, res) => {
                 UPDATE build 
                 SET 
                     arma = ?,
-                    personaggio = ?,
                     pubblico = ?
                 WHERE id = ?
             `;
 
-            db.run(sqlUpdateBuild, [arma, personaggio, pubblico, buildId], function(err) {
+            db.run(sqlUpdateBuild, [arma, pubblico, buildId], function(err) {
                 if (err) {
                     console.error(err);
                     req.flash('error', 'Errore durante l\'aggiornamento della build');
@@ -672,9 +673,9 @@ app.get('/creaBuild', isLogged, (req, res) => {
 });
 
 app.post('/creaBuild', isLogged, (req, res) => {
-
-    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggi, tipo_arma, pubblico } = req.body;
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggio, arma, pubblico } = req.body;
     const id_utente = req.user?.id;
+    console.log(req.body);
 
     const sqlSet = `
         INSERT INTO set_artefatti 
@@ -684,7 +685,7 @@ app.post('/creaBuild', isLogged, (req, res) => {
 
     const sqlBuild = `
         INSERT INTO build (id_utente, arma, personaggio, id_set, pubblico)
-        values (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
     `;
 
     const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
@@ -694,10 +695,12 @@ app.post('/creaBuild', isLogged, (req, res) => {
             console.error(err);
             return res.status(500).send('Errore nel salvataggio del set di artefatti');
         }
-        const valuesBuild = [req.user.id, tipo_arma, personaggi, this.lastID, pubblico];
+
+        // this.lastID = id del set appena inserito
+        const id_set = this.lastID;
+        const valuesBuild = [id_utente, arma, personaggio, id_set, pubblico];
 
         db.run(sqlBuild, valuesBuild, function (err) {
-
             if (err) {
                 console.error(err);
                 return res.status(500).send('Errore nel salvataggio della build');

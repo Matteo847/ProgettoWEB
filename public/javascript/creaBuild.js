@@ -78,3 +78,4 @@ setupImagePreview('piuma', 'piuma-img');
 setupImagePreview('clessidra', 'clessidra-img');
 setupImagePreview('coppa', 'coppa-img');
 setupImagePreview('corona', 'corona-img');
+setupImagePreview('arma', 'modifica-img');
