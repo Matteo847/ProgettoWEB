@@ -78,7 +78,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     //console.log('Deserializzo ID:', id);
-    db.get('SELECT id, username, mail, ruolo FROM utenti WHERE id = ?', [id], (err, user) => {
+    db.get('SELECT id, username, mail, ruoloSito FROM utenti WHERE id = ?', [id], (err, user) => {
         //console.log('deserializzato:', user);
         done(err, user);
     });
@@ -118,7 +118,7 @@ function isNotLogged(req, res, next) {
 
 // Middleware per verificare se l'utente è amministratore
 function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.ruolo === 'admin') {
+    if (req.isAuthenticated() && req.user.ruoloSito === 'admin') {
         return next();
     }
     req.flash('error', 'Accesso non autorizzato');
@@ -172,7 +172,7 @@ app.post('/registrati', isNotLogged, async (req, res) => {
 
             console.log('Utente inserito con ID:', this.lastID);
             // Login automatico dopo registrazione
-            const newUser = { id: this.lastID, username, mail: email, ruolo: 'utente' };
+            const newUser = { id: this.lastID, username, mail: email, ruoloSito: 'utente' };
             req.login(newUser, (err) => {
                 if (err) {
                     req.flash('error', 'errore durante il login automatico');
@@ -310,9 +310,13 @@ app.get('/profilo', isLogged, (req, res) => {
 });
 app.get('/gilda', (req, res) => {
 
-    let sql = 'SELECT * FROM gilda';
+    let sql = `SELECT * FROM gilda g`;    
     let filtro = [];
 
+    if(req.user != null){
+        sql += ' INNER JOIN utentiGilda ug ON g.id != ug.id_gilda WHERE ug.id_utente = ?';
+        filtro.push(req.user.id);
+    }
     if (req.query.lingua) {
         sql += ' WHERE lingua = ?';
         filtro.push(req.query.lingua);
@@ -347,7 +351,7 @@ app.get('/gilda', (req, res) => {
                 });
             });
         }else{
-            res.render('gilda', { gilda: rows });
+            res.render('gilda', { gilda: rows, mieGilde: [], Membro: [] });
         }
     });
 });
@@ -355,6 +359,7 @@ app.get('/gilda', (req, res) => {
 app.get('/creaGilda',isLogged, (req, res) => {
     res.render('creaGilda');
 });
+
 app.post('/creaGilda',isLogged, (req, res) => {
 
     const nome_gilda = req.body.nome_gilda;
@@ -414,6 +419,47 @@ app.post('/creaGilda',isLogged, (req, res) => {
 app.get('/mostraGilda', isLogged, (req, res) => {
     const gildaId = req.query.id;
 
+    const sqlBuild = `SELECT p.nome AS nome_personaggio,
+            p.immagine AS immagine_personaggio,
+
+            ar.nome_arma AS nome_arma,
+            ar.immagine AS immagine_arma,
+
+            sa.nome_set AS nome_set,
+
+            a1.nome AS nome_artefatto1,
+            a1.immagine AS immagine_artefatto1,
+
+            a2.nome AS nome_artefatto2,
+            a2.immagine AS immagine_artefatto2,
+
+            sa.descrizione AS descrizione_set,
+
+            a3.nome AS nome_artefatto3,
+            a3.immagine AS immagine_artefatto3,
+
+            a4.nome AS nome_artefatto4,
+            a4.immagine AS immagine_artefatto4,
+
+            b.pubblico AS pubblico,
+            b.id AS id_build,
+            u.username AS username_utente,
+
+            a5.nome AS nome_artefatto5,
+            a5.immagine AS immagine_artefatto5
+
+        FROM build b
+        INNER JOIN set_artefatti sa ON b.id_set = sa.id
+        INNER JOIN artefatti a1 ON sa.fiore = a1.id
+        INNER JOIN artefatti a2 ON sa.piuma = a2.id
+        INNER JOIN artefatti a3 ON sa.clessidra = a3.id
+        INNER JOIN artefatti a4 ON sa.coppa = a4.id
+        INNER JOIN artefatti a5 ON sa.corona = a5.id
+        INNER JOIN personaggi p ON b.personaggio = p.id
+        INNER JOIN armi ar ON b.arma = ar.id
+        INNER JOIN utenti u ON b.id_utente = u.id
+        WHERE xGilda = ? AND b.pubblico = 1`;
+
     if (!gildaId) {
         req.flash('error', 'ID gilda mancante');
         return res.status(400).redirect('/gilda');
@@ -434,7 +480,7 @@ app.get('/mostraGilda', isLogged, (req, res) => {
                 console.error(err);
                 return res.status(500).send('Errore del server');
             }
-            const membri = row ? row.totale : 0;
+            const nmembri = row ? row.totale : 0;
 
             const isLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
             db.get(isLeader, [gildaId, req.user.id], (err, row) => {
@@ -452,12 +498,61 @@ app.get('/mostraGilda', isLogged, (req, res) => {
                     }
                     const membro = row ? true : false; //se esiste la riga, l'utente è membro
 
-                    res.render('mostraGilda', { gilda , membri, isLeader: leader, isMembro: membro });
+                    const listaMembri= 'SELECT * FROM utentiGilda g join utenti u on g.id_utente = u.id WHERE id_gilda = ?';
+
+                    db.all(listaMembri, [gildaId], (err, membri) => {
+                        if (err) {
+                            console.error(err);
+                            return res.status(500).send('Errore del server');
+                        }
+                        db.all(sqlBuild, [gildaId], (err, build) => {
+                            if (err) {
+                                console.error(err);
+                                return res.status(500).send('Errore del server');
+                            }
+                            res.render('mostraGilda', { gilda , nmembri, membri, isLeader: leader, isMembro: membro, build });
+                        });
+                    });
                 });
             });
         });
     });
 });
+app.post('/gilda/rimuovimembro', isLogged, (req, res) => {
+    
+    const { id_gilda, id_utente } = req.body;
+    if (!id_gilda || !id_utente) {
+        req.flash('error', 'Dati mancanti');
+        return res.redirect('/gilda');
+    }
+    // Verifica che l'utente sia leader
+    const verificaLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+    db.get(verificaLeader, [id_gilda, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect('/gilda');
+        }
+        if (!row) {
+            req.flash('error', 'Permessi insufficienti per rimuovere un membro');
+            return res.redirect(`/mostraGilda?id=${id_gilda}`);
+        }
+
+        // Rimuove il membro
+        const deleteSql = 'DELETE FROM utentiGilda WHERE id_gilda = ? AND id_utente = ?';
+        db.run(deleteSql, [id_gilda, id_utente], function(err) {
+            if (err) {
+                console.error(err);
+                req.flash('error', 'Errore durante la rimozione del membro');
+                return res.redirect(`/mostraGilda?id=${id_gilda}`);
+            }
+            req.flash('success', 'Membro rimosso con successo');
+            res.redirect(`/mostraGilda?id=${id_gilda}`);
+        }
+        );
+    });
+});
+
 app.post('/gilda/unisciti', isLogged, (req, res) => {
     const { gildaId } = req.body;
 
@@ -666,19 +761,49 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
             corona: artefatti.filter(a => a.categoria === 'Circlet of Logos')
         };
 
-        res.render('modificaBuild', { 
-            build, 
-            armi, 
-            categorie_artefatti, 
-            personaggi,
-            currentUser: req.user
-        });
+        const gilda = 'SELECT * FROM gilda where id IN (select id_gilda from utentiGilda where id_utente = ?)';
+            db.all(gilda, [req.user.id], (err, gilde) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Errore nel recupero delle gilde');
+                }
+                res.render('modificaBuild', { build, armi, categorie_artefatti, personaggi,currentUser: req.user, gilde : gilde });
+            });
 
     } catch (err) {
         console.error('Errore in /profilo/modificaBuild:', err);
         req.flash('error', 'Errore del server durante il recupero dei dati');
         res.status(500).redirect('/profilo');
     }
+});
+app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
+
+    const { id_gilda, id_build } = req.body;
+
+    // Verifica che l'utente sia leader
+    const verificaLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+    db.get(verificaLeader, [id_gilda, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect('/gilda');
+        }
+        if (row) {
+            const deleteSql = 'DELETE FROM build WHERE id = ?  AND xGilda = ?';
+            db.run(deleteSql, [id_build, id_gilda], function(err) {
+                if (err) {
+                    console.error(err);
+                    req.flash('error', 'Errore durante la rimozione della build');
+                    return res.redirect(`/mostraGilda?id=${id_gilda}`);
+                }
+                req.flash('success', 'Build rimossa con successo');
+                res.redirect(`/mostraGilda?id=${id_gilda}`);
+            });
+        } else {
+         req.flash('error', 'Permessi insufficienti per rimuovere un membro');
+            return res.redirect(`/mostraGilda?id=${id_gilda}`);
+        }
+    });
 });
 
 app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
@@ -818,15 +943,21 @@ app.get('/creaBuild', isLogged, (req, res) => {
                     lancia: queryarmi.filter(a => a.tipo_arma === 'lancia'),
                     arco: queryarmi.filter(a => a.tipo_arma === 'arco'),
                 };
-                res.render('creaSetArtefatti', { categorie, personaggi, armi });
-
+                const gilda = 'SELECT * FROM gilda where id IN (select id_gilda from utentiGilda where id_utente = ?)';
+                db.all(gilda, [req.user.id], (err, gilde) => {
+                    if (err) {
+                        console.error(err);
+                        return res.status(500).send('Errore nel recupero delle gilde');
+                    }
+                    res.render('creaSetArtefatti', { categorie, personaggi, armi, gilde });
+                });
             });
         });
     });
 });
 
 app.post('/creaBuild', isLogged, (req, res) => {
-    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggio, arma, pubblico } = req.body;
+    const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggio, arma, pubblico, gilda } = req.body;
     const id_utente = req.user?.id;
     console.log(req.body);
 
@@ -837,8 +968,8 @@ app.post('/creaBuild', isLogged, (req, res) => {
     `;
 
     const sqlBuild = `
-        INSERT INTO build (id_utente, arma, personaggio, id_set, pubblico)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO build (id_utente, arma, personaggio, id_set, pubblico, xGilda)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
@@ -851,7 +982,7 @@ app.post('/creaBuild', isLogged, (req, res) => {
 
         // this.lastID = id del set appena inserito
         const id_set = this.lastID;
-        const valuesBuild = [id_utente, arma, personaggio, id_set, pubblico];
+        const valuesBuild = [id_utente, arma, personaggio, id_set, pubblico, gilda];
 
         db.run(sqlBuild, valuesBuild, function (err) {
             if (err) {

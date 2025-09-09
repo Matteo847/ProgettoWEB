@@ -22,7 +22,7 @@ db.serialize(() => {
             mail TEXT UNIQUE,
             username TEXT UNIQUE,
             password TEXT NOT NULL,
-            ruolo TEXT DEFAULT 'utente',
+            ruoloSito TEXT DEFAULT 'utente',
             avatar INTEGER DEFAULT 1
         );
     `, (err) => {
@@ -91,17 +91,19 @@ db.serialize(() => {
 
     db.run(`
         CREATE TABLE IF NOT EXISTS build (
-
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_utente INTEGER,
             arma INTEGER NOT NULL,
             personaggio INTEGER NOT NULL,
             id_set INTEGER NOT NULL,
             pubblico INTEGER DEFAULT 0,
+            xGilda INTEGER DEFAULT -1,
             FOREIGN KEY(personaggio) REFERENCES personaggi(id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY(id_set) REFERENCES set_artefatti(id) ON DELETE CASCADE ON UPDATE CASCADE,
             FOREIGN KEY(arma) REFERENCES armi(id) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY(id_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY(id_utente) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE,
+            foreign KEY(xGilda) REFERENCES gilda(id) ON DELETE SET NULL ON UPDATE CASCADE
+
         );
     `, (err) => {
         if (err) console.error("Errore durante la creazione della tabella build:", err.message);
@@ -768,7 +770,6 @@ db.serialize(() => {
     db.run(`
 
             CREATE TABLE IF NOT EXISTS gilda (
-
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome_gilda TEXT NOT NULL,
                 limite_partecipanti INTEGER NOT NULL,
@@ -811,11 +812,7 @@ db.serialize(() => {
             (2, 2, 'leader'),           
             (3, 1, 'membro'),
             (4, 1, 'membro'),
-            (5, 2, 'membro'),
-            
-            foreign key (id_utente) references utenti(id) on delete cascade on update cascade,
-            foreign key (id_gilda) references gilda(id) on delete cascade on update cascade
-
+            (5, 2, 'membro')
     `, (err) => {
         if (err) console.error("Errore durante l'inserimento degli utenti nella gilda:", err.message);
     });

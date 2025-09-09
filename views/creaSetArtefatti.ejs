@@ -185,8 +185,26 @@
 							</div>
 						</div>
 					</div>
+					<div class="container-small mt-3">
+						<div class="white-box">
+							<div class="form-group">
+								<label for="gilda" class="form-label">Gilda:</label>
+								<div class="select-with-img">
+									<div class="select-container">
+										<select id="gilda" name="gilda" class="form-select">
+											<option value="-1">Nessuna Gilda</option>
+											<% gilde.forEach(g => { %>
+											<option value="<%= g.id %>">
+												<%= g.nome_gilda %>
+											</option>
+											<% }) %>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-
 				<div class="col-lg-4 col-md-6">
 					<div class="container-small">
 						<h1 class="page-title">Scegli un'Arma</h1>

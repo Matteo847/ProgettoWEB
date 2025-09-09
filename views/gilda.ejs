@@ -19,9 +19,9 @@
 	<%- include('navbar-ric.ejs', {ricerca: 4}) %>
 
     <% if(mieGilde.length > 0){ %>
-        <div class="mie_build d-flex justify-content-center align-items-center">
-            <h1>le mie gilde</h1>
-        </div>
+        <header>
+           🏰 Le mie gilde 🏰
+        </header>
         <hr class="separatore">
         <div class="container">
             <div class="row ">
@@ -39,9 +39,9 @@
     <% } %>
 
     <% if(Membro.length > 0){ %>
-    <div class="mie_build d-flex justify-content-center align-items-center">
-		<h1>Gilde a cui sono iscritto</h1>
-	</div>
+    <header>
+        👥✨ Gilde a cui sono iscritto
+    </header>
     <hr class="separatore">
     <div class="container">
         <div class="row ">
@@ -75,6 +75,7 @@
     <header>
         ⚔️ Scegli la tua Gilda in Genshin Impact ⚔️
     </header>
+    <hr class="separatore">
     <div class="container">
         <div class="row ">
             <% gilda.forEach((g) => { %>
