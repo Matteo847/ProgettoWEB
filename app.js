@@ -1066,8 +1066,7 @@ app.get('/personaggi', (req, res) => {
 });
 
 app.get('/build', (req, res) => {
-    let sql = `
-
+    let queryBuild = `
         SELECT 
             p.nome AS nome_personaggio,
             p.immagine AS immagine_personaggio,
@@ -1115,11 +1114,16 @@ app.get('/build', (req, res) => {
 
     // Se c'è un filtro per nome build
     if (req.query.nome_build) {
-        sql += ' AND p.nome LIKE ?';
+        queryBuild += ' AND p.nome LIKE ?';
         filtro.push('%' + req.query.nome_build + '%');
     }
+    
+    if(req.user){ //se l'utente è loggato non mostriamo le sue build
+        queryBuild += ' AND b.id_utente != ?';
+        filtro.push(req.user.id);
+    }
 
-    db.all(sql, filtro, (err, rows) => {
+    db.all(queryBuild, filtro, (err, rows) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore del server');
@@ -1135,6 +1139,7 @@ app.get('/build', (req, res) => {
         } else {
             res.render('build', { build: rows, mipiace: [] });
         }
+
     });
 });
 
