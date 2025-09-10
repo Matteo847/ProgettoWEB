@@ -143,6 +143,30 @@ select.form-select {
     font-weight: 600;
     color: #212529;
 }
+.select-with-img {
+
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.select-with-img img {
+    width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 4px;
+	display: none;
+			
+}
+
+.select-container {
+	flex-grow: 1;
+}
+
+.form-group {
+	margin-bottom: 1rem;
+}
 
 @media (max-width: 600px) {
     .artifact-selection {

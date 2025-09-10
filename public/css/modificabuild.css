@@ -6,17 +6,144 @@
 		border-left: 4px solid #6c757d;
 }
 
-	.current-selection h5 {
-		color: #495057;
-		font-weight: 600;
-	}
+.current-selection h5 {
+	color: #495057;
+	font-weight: 600;
+}
 
-	.current-selection img {
-		max-width: 50px;
-		margin-right: 10px;
-	}
+.current-selection img {
+	max-width: 50px;
+	margin-right: 10px;
+}
 
-	.artifact-current {
-		font-weight: 600;
-		color: #212529;
+.artifact-current {
+	font-weight: 600;
+	color: #212529;
+}
+/* modificaArma.css */
+
+/* Contenitore arma */
+.container-small .white-box {
+  padding: 15px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Titolo sezione */
+.page-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* Sezione arma corrente */
+.current-selection h5 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    background-color: white !important;
+}
+
+.current-selection img {
+  border-radius: 8px;
+  max-width: 80px;
+  height: auto;
+}
+
+.current-selection .artifact-current {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.current-selection small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* Select arma */
+.artifact-selection {
+  margin-top: 15px;
+}
+
+.artifact-selection label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.select-with-img {
+  display: flex;
+  align-items: center;
+}
+
+.select-with-img img {
+  width: 70px;
+  margin-right: 10px;
+  border-radius: 6px;
+  display: none; /* verrà mostrata via JS */
+}
+
+.select-container {
+  flex-grow: 1;
+}
+
+.form-select {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+}
+
+/* Hover effetti */
+.form-select:hover {
+  border-color: #888;
+  cursor: pointer;
+}
+/* Box arma corrente */
+.current-weapon-box {
+  padding: 10px;
+  border-radius: 10px;
+  background: #fafafa;
+  border: 1px solid #ddd;
+}
+
+.current-weapon-box .section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* Immagine arma */
+.current-weapon-img {
+  width: 50px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Nome arma */
+.artifact-current {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Tipo arma */
+.current-weapon-box small {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.2rem;
+  }
+
+  .current-selection img {
+    max-width: 60px;
+  }
 }

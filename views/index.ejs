@@ -1,43 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title >Build Genshin</title>
-<link rel="icon" href="images/icona.webp"/>
-<meta charset="utf-8">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/footer.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<title>Build Genshin</title>
+	<link rel="icon" href="images/icona.webp" />
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/footer.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body class="colore-sfondo">
 	<%- include('navbar-noRIc.ejs') %>
 
-	<div class="row riga-titolo">
+	<div class="row m-0 riga-titolo">
 		<h1 class="titolo">GENSHIN IMPACT</h1>
 	</div>
+
+	<hr class="separatore">
+
 	<div>
-		<p class="testo-paragrafo">in questo sito potrai consultare le guide sulle build dei prersonaggi basta registrarti</p>
+		<p class="descrizione-sito">
+			Build Genshin è una community dedicata a <strong>Genshin Impact</strong>, dove potrai trovare
+			guide dettagliate su armi, artefatti e personaggi.
+			Registrandoti potrai unirti alle gilde e<strong>creare le tue build personalizzate</strong>e condividerle con gli altri utenti.
+		</p>
 	</div>
+
+	<hr class="separatore">
+
 	<div>
-		<p class="personaggi-uscita">PERSONAGGI IN USCITA A BREVE</p>
+		<p class="personaggi-uscita">NOVITA</p>
 	</div>
-	<div class="container">
-		<div class="row justify-content-center">
-		<div class="col-md-6 d-flex justify-content-center">
-			<img class="immagine-personaggio" src="/images/personaggi/varesa.jpg">
-		</div>
-		<div class="col-md-6 d-flex justify-content-center">
-			<img class="immagine-personaggio" src="/images/personaggi/iansan.jpg">
-		</div>
+
+	<div class="container descrizione-personaggi">
+		<p>
+			Con l arrivo della nuova regione <strong>Luna I</strong> in Genshin Impact (Versione 6.0), sono attesi diversi
+			personaggi che arricchiranno le squadre dei viaggiatori. Tra i più attesi spicca
+			<strong>Lauma</strong>, un potente utilizzatore di Dendro con catalizzatore, capace di manipolare la natura
+			per infliggere danni ad area e fornire supporto.
+		</p>
+		<p>
+			Al suo fianco arriverà <strong>Flins</strong>, un guerriero Elettro con lancia, noto per la sua velocità e
+			per la capacità di infliggere danni rapidi e continui. La lineup sarà completata da <strong>Aino</strong>,
+			un personaggio Hydro con claymore, che unisce forza bruta e abilità di supporto grazie al suo kit incentrato
+			sulla protezione degli alleati.
+		</p>
+	</div>
+	
+	<div class="container"> 
+		<div class="row justify-content-center"> 
+			<div class="col-md-6 d-flex justify-content-center"> 
+				<img class="immagine-personaggio" src="/images/index/flins.png"> 
+			</div> 
+			<div class="col-md-6 d-flex justify-content-center"> 
+				<img class="immagine-personaggio" src="/images/index/lauma.png"> 
+			</div>
 		</div>
 	</div>
-	<p class="artefatti">tabella degli artefatti principali</p><!--tabella rappresentante alcuni artefatti di esempio-->
+	<hr class="separatore">
+	<p class="artefatti">TABELLA DEGLI ARTEFATTI PRINCIPALI</p>
+	<!--tabella rappresentante alcuni artefatti di esempio-->
 	<table>
 		<tr>
-		<th>IMMAGINE</th>
-		<th>NOME SET ARTEFATTI</th>
-		<th>PERSONAGGI CONSIGLIATI</th>
+			<th>IMMAGINE</th>
+			<th>NOME SET ARTEFATTI</th>
+			<th>PERSONAGGI CONSIGLIATI</th>
 		</tr>
 		<tr>
 			<td><img src="/images/veridesent.png" width="50" height="50"></td>
@@ -45,7 +74,8 @@
 			<td>
 				<a href="kazuha.html" class="btn btn-primary btn-sm bottone-personaggi">Kazuha</a>
 				<a href="venti.html" class="btn btn-primary btn-sm bottone-personaggi">Venti</a>
-				<a href="linette.html" class="btn btn-primary btn-sm bottone-personaggi">Linette</a></td>
+				<a href="linette.html" class="btn btn-primary btn-sm bottone-personaggi">Linette</a>
+			</td>
 		</tr>
 		<tr>
 			<td><img src="/images/crimson.webp" alt="Mario" class="im-tab"></td>
@@ -53,7 +83,8 @@
 			<td>
 				<a href="diluc.html" class="btn btn-primary btn-sm bottone-personaggi">Diluc</a>
 				<a href="Klee.html" class="btn btn-primary btn-sm bottone-personaggi">Klee</a>
-				<a href="Yanfei.html" class="btn btn-primary btn-sm bottone-personaggi">Yanfei</a></td>
+				<a href="Yanfei.html" class="btn btn-primary btn-sm bottone-personaggi">Yanfei</a>
+			</td>
 		</tr>
 		<tr>
 			<td><img src="/images/fracment.webp" class="im-tab"></td>
@@ -68,33 +99,37 @@
 			<td>
 				<a href="raiden.html" class="btn btn-primary btn-sm bottone-personaggi">Raiden Shogun</a>
 				<a href="xianling.html" class="btn btn-primary btn-sm bottone-personaggi">Xianling</a>
-				<a href="xingqiu.html" class="btn btn-primary btn-sm bottone-personaggi">Xingqiu</a></td>
+				<a href="xingqiu.html" class="btn btn-primary btn-sm bottone-personaggi">Xingqiu</a>
+			</td>
 		</tr>
-	</tr>
-	<tr>
-		<td><img src="/images/Blizzard-Strayer.png" class="im-tab"></td>
-		<td>Blizzard Strayer</td>
-		<td>
-			<a href="ayaka.html" class="btn btn-primary btn-sm bottone-personaggi">Ayaka</a>
-			<a href="kaeya.html" class="btn btn-primary btn-sm bottone-personaggi">Kaeya</a>
-			<a href="ganyu.html" class="btn btn-primary btn-sm bottone-personaggi">Ganyu</a></td>
-	</tr>
-	<tr>
-		<td><img src="/images/ocean-hued-clam.png" class="im-tab"></td>
-		<td>Ocean Clam</td>
-		<td>
-			<a href="kokomi.html" class="btn btn-primary btn-sm bottone-personaggi">Kokomi</a>
-			<a href="baizhu.html" class="btn btn-primary btn-sm bottone-personaggi">Baizhu</a>
-			<a href="barbara.html" class="btn btn-primary btn-sm bottone-personaggi">Barbara</a></td>
-	</tr>
-	<tr>
-		<td><img src="/images/dreams-flower.png" class="im-tab"></td>
-		<td>Dreams Flower</td>
-		<td>
-			<a href="alhaitam.html" class="btn btn-primary btn-sm bottone-personaggi">Alhaitam</a>
-			<a href="nilou.html" class="btn btn-primary btn-sm bottone-personaggi">Nilou</a>
-			<a href="tighnari.html" class="btn btn-primary btn-sm bottone-personaggi">Tighnari</a></td>
-	</tr>
+		</tr>
+		<tr>
+			<td><img src="/images/Blizzard-Strayer.png" class="im-tab"></td>
+			<td>Blizzard Strayer</td>
+			<td>
+				<a href="ayaka.html" class="btn btn-primary btn-sm bottone-personaggi">Ayaka</a>
+				<a href="kaeya.html" class="btn btn-primary btn-sm bottone-personaggi">Kaeya</a>
+				<a href="ganyu.html" class="btn btn-primary btn-sm bottone-personaggi">Ganyu</a>
+			</td>
+		</tr>
+		<tr>
+			<td><img src="/images/ocean-hued-clam.png" class="im-tab"></td>
+			<td>Ocean Clam</td>
+			<td>
+				<a href="kokomi.html" class="btn btn-primary btn-sm bottone-personaggi">Kokomi</a>
+				<a href="baizhu.html" class="btn btn-primary btn-sm bottone-personaggi">Baizhu</a>
+				<a href="barbara.html" class="btn btn-primary btn-sm bottone-personaggi">Barbara</a>
+			</td>
+		</tr>
+		<tr>
+			<td><img src="/images/dreams-flower.png" class="im-tab"></td>
+			<td>Dreams Flower</td>
+			<td>
+				<a href="alhaitam.html" class="btn btn-primary btn-sm bottone-personaggi">Alhaitam</a>
+				<a href="nilou.html" class="btn btn-primary btn-sm bottone-personaggi">Nilou</a>
+				<a href="tighnari.html" class="btn btn-primary btn-sm bottone-personaggi">Tighnari</a>
+			</td>
+		</tr>
 	</table>
 
 	<footer class="footer navbar-sfondo">
@@ -118,5 +153,5 @@
 	</footer>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-</html>
 
+</html>

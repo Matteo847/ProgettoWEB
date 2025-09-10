@@ -1143,7 +1143,7 @@ app.get('/build', (req, res) => {
     });
 });
 
-app.get('/armi', isNotLogged, (req, res) => {
+app.get('/armi', (req, res) => {
 
     let sql = 'SELECT * FROM armi';
     let filtro = [];
