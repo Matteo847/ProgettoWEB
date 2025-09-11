@@ -12,7 +12,7 @@
 </head>
 <body class="colore-sfondo">
     
-    <div class="background-images-container"> <!-- Container con immagini di alcuni personaggi nello sfondo -->
+    <div class="background-images-container">
         <img src="/images/emotes/nilou_icon.png" class="background-image img-1" alt="">
         <img src="/images/emotes/navia_icon.png" class="background-image img-2" alt="">
         <img src="/images/emotes/ayaka_icon.png" class="background-image img-3" alt="">
@@ -43,7 +43,8 @@
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
-                            <% if (typeof error !== 'undefined' && error.length > 0) { %><!--determina se un errore in caso ci fosse mette un contenitore per mostrarlo -->
+                            <!-- contenitore presente in ogni pagina che permette di visualizzare un messaggio (invaiato da app.js)-->
+                            <% if (typeof error !== 'undefined' && error.length > 0) { %>
                                 <div class="alert alert-danger mt-3">
                                   <%= error %>
                                 </div>

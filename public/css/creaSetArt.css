@@ -94,7 +94,6 @@ select.form-select {
     color: #333;
 }
 
-/* Stile aggiuntivo per la tendina Sì/No */
 #pubblico {
     
     width: 50%;
@@ -113,7 +112,6 @@ select.form-select {
     padding: 20px;
 }
 
-/* Margine superiore per il container */
 .mt-3 {
     margin-top: 10px !important;
 }
@@ -170,6 +168,11 @@ select.form-select {
 .select-with-img img {
 
     display:none;
+    width:80px; 
+    margin-top:8px;
+}
+.imgspadone {
+    display:none; 
     width:80px; 
     margin-top:8px;
 }

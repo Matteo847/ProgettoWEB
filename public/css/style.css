@@ -71,9 +71,7 @@ body {
 
 table {
     width: calc(100% - 100px);
-    /* Sottrai i margini laterali */
     margin: 0 auto;
-    /* Centra la tabella */
     margin-left: 50px;
 }
 
@@ -109,9 +107,6 @@ td {
     object-fit: cover;
 }
 
-/* ======== Responsive.css ======== */
-
-/* --- Tablet orizzontale: max 1024px --- */
 @media (max-width: 1024px) {
     .titolo {
         font-size: 2rem;
@@ -131,7 +126,6 @@ td {
     }
 }
 
-/* --- Tablet verticale / Smartphone grande: max 768px --- */
 @media (max-width: 768px) {
     .titolo {
         font-size: 1.5rem;
@@ -168,19 +162,16 @@ td {
         width: calc(100% - 20px);
         margin-left: 10px;
         font-size: 0.8rem;
-        /* Riduci leggermente la dimensione del font */
     }
 
     .artefatti {
         margin-left: 10px;
         font-size: 1.5rem;
-        /* Riduci la dimensione del font */
         text-align: center;
     }
 
     .testo-paragrafo {
         margin: 50px 20px;
-        /* Riduci i margini */
     }
 
 }
@@ -227,13 +218,11 @@ td {
         font-size: 0.8rem;
     }
     
-    /* Assicurati che le immagini nella tabella si adattino */
     .im-tab {
         width: 30px;
         height: 30px;
     }
     
-    /* Migliora i bottoni per schermi piccoli */
     .bottone-personaggi {
         padding: 3px 6px;
         font-size: 0.7rem;

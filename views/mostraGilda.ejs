@@ -27,8 +27,6 @@
 	<% } %>
 
 	<div class="container my-5">
-
-		<!-- Pulsante indietro in alto -->
 		<div class="mb-3">
 			<a class="btn btn-secondary" href="/gilda">
 				⬅ Torna indietro
@@ -44,26 +42,26 @@
 
 				<div class="ms-3">
 					<% if (membri >= gilda.limite_partecipanti) { %>
-					  	<span class="text-danger">La gilda ha raggiunto il limite massimo</span>
+					<span class="text-danger">La gilda ha raggiunto il limite massimo</span>
 					<% } else { %>
-						<% if (isLeader) { %>
-							<form action="/gilda/sciogli" method="POST" onsubmit="return confirm('Sei sicuro di voler sciogliere la gilda?');">
-								<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
-								<button type="submit" class="btn btn-success">Sciogli gilda</button>
-							</form>
-						<% } else { %>
-							<% if (isMembro) { %>
-								<form action="/gilda/esci" method="POST" style="display:inline;">
-									<input type="hidden" name="gildaId" value="<%= gilda.id %>">
-									<button type="submit" class="btn btn-danger">Esci dalla gilda</button>
-								</form>
-							<% } else { %>
-								<form action="/gilda/unisciti" method="POST" style="display:inline;">
-									<input type="hidden" name="gildaId" value="<%= gilda.id %>">
-									<button type="submit" class="btn btn-success">Unisciti alla gilda</button>
-								</form>
-							<% } %>
-						<% } %>
+					<% if (isLeader) { %>
+					<form action="/gilda/sciogli" method="POST" onsubmit="return confirm('Sei sicuro di voler sciogliere la gilda?');">
+						<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
+						<button type="submit" class="btn btn-success">Sciogli gilda</button>
+					</form>
+					<% } else { %>
+					<% if (isMembro) { %>
+					<form action="/gilda/esci" method="POST" style="display:inline;">
+						<input type="hidden" name="gildaId" value="<%= gilda.id %>">
+						<button type="submit" class="btn btn-danger">Esci dalla gilda</button>
+					</form>
+					<% } else { %>
+					<form action="/gilda/unisciti" method="POST" style="display:inline;">
+						<input type="hidden" name="gildaId" value="<%= gilda.id %>">
+						<button type="submit" class="btn btn-success">Unisciti alla gilda</button>
+					</form>
+					<% } %>
+					<% } %>
 					<% } %>
 				</div>
 			</div>
@@ -77,42 +75,46 @@
 			<h3 class="mt-4">👥 Membri della gilda</h3>
 			<ul>
 				<% membri.forEach((m)=> { %>
-					<li class="d-flex justify-content-between align-items-center">
-						<%= m.username %> (<%= m.ruolo %>)
-						<% if (isLeader && m.ruolo !== 'leader') { %>
-							<form action="/gilda/rimuovimembro" method="POST" onsubmit="return confirm('Sei sicuro di voler rimuovere questo membro?');" style="display:inline;">
-								<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
-								<input type="hidden" name="id_utente" value="<%= m.id_utente %>">
-								<button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
-							</form>
-						<% } %>
-					</li>
+				<li class="d-flex align-items-center mb-2">
+					<%= m.username %> (<%= m.ruolo %>)
+					<% if (isLeader && m.ruolo !== 'leader') { %>
+					<form class="ms-2" action="/gilda/rimuovimembro" method="POST" onsubmit="return confirm('Sei sicuro di voler rimuovere questo membro?');" style="display:inline;">
+						<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
+						<input type="hidden" name="id_utente" value="<%= m.id_utente %>">
+						<button type="submit" class="btn btn-danger btn-sm">Espelli</button>
+					</form>
+					<% } %>
+				</li>
 				<% }); %>
 			</ul>
 			<hr>
 			<h3 class="mt-4">🛡️ Build dei membri</h3>
-				<%if (build.length === 0) { %>
-					<div class="nessuna-build">
-						<strong>NESSUNA BUILD DISPONIBILE</strong>
+			<%if (build.length === 0) { %>
+			<div class="nessuna-build">
+				<strong>NESSUNA BUILD DISPONIBILE</strong>
+			</div>
+			<% } else { %>
+			<div class="row">
+				<% build.forEach((b)=> { %>
+				<div class="col-md-11">
+
+					<div>
+						<%- include('partials/build_card', { b: b, mipiace: [] }) %>
 					</div>
-				<% } else { %>
-					<ul>
-						<% build.forEach((b)=> { %>
-							<li class="d-flex justify-content-between align-items-center">
-								<div>
-									<%- include('partials/build_card', { b: b, mipiace: [] }) %>
-							</div>
-							<% if (isLeader) { %>
-								<form action="/gilda/rimuoviBuild" method="POST" onsubmit="return confirm('Sei sicuro di voler rimuovere questo build?');" style="display:inline;">
-									<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
-									<input type="hidden" name="id_build" value="<%= b.id_build %>">
-									<button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
-								</form>
-							<% }; %>
-						</li>
-					<% }); %>
-				</ul>
-				<% } %>
+
+				</div>
+				<div class="col-md-1 d-flex align-items-center">
+					<% if (isLeader) { %>
+					<form action="/gilda/rimuoviBuild" method="POST" onsubmit="return confirm('Sei sicuro di voler rimuovere questo build?');" style="display:inline;">
+						<input type="hidden" name="id_gilda" value="<%= gilda.id %>">
+						<input type="hidden" name="id_build" value="<%= b.id_build %>">
+						<button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
+					</form>
+					<% }; %>
+				</div>
+			</div>
+			<% }); %>
+			<% } %>
 		</div>
 	</div>
 	<footer class="footer navbar-sfondo">
@@ -135,4 +137,5 @@
 		</div>
 	</footer>
 </body>
+
 </html>

@@ -18,7 +18,7 @@
 <body class="colore-sfondo">
 	<%- include('navbar-ric.ejs', {ricerca: 4}) %>
 
-    <% if(mieGilde.length > 0){ %>
+    <% if(mieGilde.length > 0){ %><!--se l'utente ha delle gilde le mostra in questa sezione-->
         <header>
            🏰 Le mie gilde 🏰
         </header>
@@ -57,7 +57,7 @@
         </div>
     </div>
     <% } %>
-    
+    <hr class="separatore">
     <div class="text-center">
         <div class="container">
             <form id="filtro-elemento" method="get" action="/gilda">
@@ -72,8 +72,9 @@
             </form>
         </div>
     </div>
+
     <header>
-        ⚔️ Scegli la tua Gilda in Genshin Impact ⚔️
+        ⚔️ Sfoglia e scegli la tua Gilda in Genshin Impact ⚔️
     </header>
     <hr class="separatore">
     <div class="container">

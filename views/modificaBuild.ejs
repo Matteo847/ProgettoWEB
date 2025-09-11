@@ -19,7 +19,6 @@
 	<div class="container">
 		<form action="/profilo/modificaBuild/<%= build.id_build %>" method="POST">
 			<div class="row">
-				<!-- Colonna sinistra: Artefatti -->
 				<div class="col-lg-4 col-md-12">
 					<div class="container-small">
 						<h1 class="page-title">Modifica Set Artefatti</h1>
@@ -35,7 +34,6 @@
 							</div>
 
 							<div class="artifact-selection">
-								<!-- Fiore -->
 								<div class="form-group">
 									<label for="fiore" class="form-label">Fiore:</label>
 									<div class="select-with-img">
@@ -52,8 +50,6 @@
 										</div>
 									</div>
 								</div>
-
-								<!-- Piuma -->
 								<div class="form-group">
 									<label for="piuma" class="form-label">Piuma:</label>
 									<div class="select-with-img">
@@ -70,8 +66,6 @@
 										</div>
 									</div>
 								</div>
-
-								<!-- Clessidra -->
 								<div class="form-group">
 									<label for="clessidra" class="form-label">Clessidra:</label>
 									<div class="select-with-img">
@@ -88,8 +82,6 @@
 										</div>
 									</div>
 								</div>
-
-								<!-- Coppa -->
 								<div class="form-group">
 									<label for="coppa" class="form-label">Coppa:</label>
 									<div class="select-with-img">
@@ -107,7 +99,6 @@
 									</div>
 								</div>
 
-								<!-- Corona -->
 								<div class="form-group">
 									<label for="corona" class="form-label">Corona:</label>
 									<div class="select-with-img">
@@ -118,7 +109,7 @@
 													<%= build.corona_nome %> (attuale)
 												</option>
 												<% categorie_artefatti.corona.forEach(a => { %>
-												<option value="<%= a.id %>" data-img="<%= a.immagine %>"><%= a.nome %></option>
+												<option value="<%= a.id %>" data-img="<%= a.immagine %>"><%= a.nome %></option><!--opzioni per selezionare gli artefatti-->
 												<% }) %>
 											</select>
 										</div>
@@ -129,7 +120,6 @@
 					</div>
 				</div>
 
-				<!-- Colonna centrale: visibilità e gilda -->
 				<div class="col-lg-4 col-md-6">
 
 					<div class="container-small">
@@ -167,13 +157,10 @@
 					</div>
 				</div>
 
-				<!-- Colonna destra: Armi -->
 				<div class="col-lg-4 col-md-6">
 					<div class="container-small">
 						<h1 class="page-title">Cambia Arma</h1>
 						<div class="white-box">
-
-							<!-- Arma attuale -->
 							<div class="mb-3 current-weapon-box">
 								<h5 class="section-title">Arma corrente:</h5>
 								<div class="d-flex align-items-center">
@@ -186,9 +173,6 @@
 									</div>
 								</div>
 							</div>
-
-
-							<!-- Selezione nuova arma -->
 							<div class="artifact-selection">
 								<div class="form-group">
 									<label for="arma" class="form-label">Scegli una nuova arma:</label>

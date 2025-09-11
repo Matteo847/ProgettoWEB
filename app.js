@@ -11,7 +11,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
 
 
-const port = 8000;
+const port = 8000; //definisci la porta
 const app = express();
 
 // Configurazione session
@@ -32,6 +32,7 @@ const db = new sqlite3.Database('./genshin.db', (err) => {//assegna alla variabi
         console.log('Connesso al database');
     }
 });
+
 // Funzione per trovare un utente tramite username
 function trovaUtenteNelDB(username) {
     return new Promise((resolve, reject) => {
@@ -52,7 +53,7 @@ function trovaUtenteDaEmailNelDB(mail) {
     });
 }
 
-
+// strategia di passport
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, done) => {
@@ -91,7 +92,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 
-// Middleware per passare l'utente autenticato ai template
+// Middleware per passare l'utente autenticato e i vari errori a tutte le pagine
 app.use((req, res, next) => {
     res.locals.user = req.user;
     res.locals.error = req.flash('error');
@@ -108,6 +109,7 @@ function isLogged(req, res, next) {
     res.redirect('/accedi');
 }
 
+// Middleware per verificare se l'utente NON è autenticato
 function isNotLogged(req, res, next) {
     if (!req.isAuthenticated()) {
         return next();
@@ -116,16 +118,7 @@ function isNotLogged(req, res, next) {
     res.redirect('/');
 }
 
-// Middleware per verificare se l'utente è amministratore
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.ruoloSito === 'admin') {
-        return next();
-    }
-    req.flash('error', 'Accesso non autorizzato');
-    res.redirect('/');
-}
-
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { //route per la homepage
     res.render('index');
 });
 
@@ -135,20 +128,20 @@ app.get('/registrati', isNotLogged, (req, res) => {
 
 app.post('/registrati', isNotLogged, async (req, res) => {
     try {
-        console.log('Tentativo di registrazione:', req.body);
-        const { username, email, password } = req.body;
+        //console.log('Tentativo di registrazione:', req.body);
+        const { username, email, password } = req.body; //recupero i dati dal form di registrazione
 
         // Verifica che i campi vengano inseriti 
         if (!username || !email || !password) {
             console.log('Dati mancanti nel form');
-            req.flash('error', 'Tutti i campi sono obbligatori');
+            req.flash('error', 'Tutti i campi sono obbligatori'); //invio l'errore alla pagina
             return res.redirect('/registrati');
         }
 
         // Verifica username già esistente
         const userByUsername = await trovaUtenteNelDB(username);
         if (userByUsername) {
-            req.flash('error', 'Username già in uso');
+            req.flash('error', 'Username già in uso'); 
             return res.redirect('/registrati');
         }
 
@@ -159,11 +152,11 @@ app.post('/registrati', isNotLogged, async (req, res) => {
             return res.redirect('/registrati');
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10); //applico l'hash alla password
 
         // Salva nuovo utente
-        console.log('Inserisco nuovo utente nel database');
-        db.run('INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)', [username, email, hashedPassword], function (err) {
+        const queryInserimento = 'INSERT INTO utenti (username, mail, password) VALUES (?, ?, ?)';
+        db.run(queryInserimento, [username, email, hashedPassword], function (err) {
             if (err) {
                 console.error('Errore inserimento:', err.message);
                 req.flash('error', 'Errore durante la registrazione: ' + err.message);
@@ -172,29 +165,30 @@ app.post('/registrati', isNotLogged, async (req, res) => {
 
             console.log('Utente inserito con ID:', this.lastID);
             // Login automatico dopo registrazione
-            const newUser = { id: this.lastID, username, mail: email, ruoloSito: 'utente' };
+            const newUser = { id: this.lastID, username, mail: email, ruoloSito: 'utente' }; //creo un nuovo utente
             req.login(newUser, (err) => {
                 if (err) {
                     req.flash('error', 'errore durante il login automatico');
                     return res.redirect('/accedi');
                 }
-                req.flash('success', 'Registrazione completata con successo!');
+                req.flash('success', 'Registrazione completata con successo!');//messaggio di successo
                 res.redirect('/');
             });
 
         }
         );
     } catch (err) {
-        console.error('Eccezione durante la registrazione:', err);
+        console.error('Eccezione durante la registrazione:', err);//visualizzo l'errore
         req.flash('error', 'Errore del server: ' + err.message);
         res.redirect('/registrati');
     }
 });
 
 app.get('/logout', (req, res) => {
+    // Effettua il logout e distrugge la sessione
     req.logout(err => {
         if (err) return next(err);
-        req.session.destroy(() => {
+        req.session.destroy(() => { //elimino la sessione
             res.redirect('/');
         });
     });
@@ -205,6 +199,7 @@ app.get('/accedi', isNotLogged, (req, res) => {
 });
 
 app.post('/accedi', isNotLogged, (req, res, next) => {
+    //console.log('Tentativo di login:', req.body);
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/accedi',
@@ -214,8 +209,11 @@ app.post('/accedi', isNotLogged, (req, res, next) => {
 });
 
 app.get('/profilo', isLogged, (req, res) => {
+    // Gestione aggiornamento avatar
+    //se é presente il parametro avatar nella get allora faccio l'update, altrimenti mostro la pagina
     if (req.query.avatarSelezionato) {
         let avatarSelezionato = req.query.avatarSelezionato;
+        //faccio l'update della colonna avatar
         db.run('UPDATE utenti SET avatar = ? WHERE id = ?', [avatarSelezionato, req.user.id], function (err) {
             if (err) {
                 req.flash('error', 'Errore durante l\'aggiornamento dell\'avatar: ' + err.message);
@@ -228,9 +226,10 @@ app.get('/profilo', isLogged, (req, res) => {
         db.all('SELECT * FROM avatar', [], (err, avatars) => {
             if (err) throw err;
 
-            db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {
+            db.get('SELECT * FROM utenti u LEFT JOIN avatar a ON u.avatar = a.id WHERE u.id = ?', [req.user.id], (err, utente) => {// collego la tabella avatar per mostrare l'avatar selezionato   
                 if (err) throw err;
 
+                // Query di base per ottenere le build
                 const sqlBuildBase = `
                     SELECT 
                         p.nome AS nome_personaggio,
@@ -269,31 +268,30 @@ app.get('/profilo', isLogged, (req, res) => {
                     INNER JOIN personaggi p ON b.personaggio = p.id
                     INNER JOIN armi ar ON b.arma = ar.id
                 `;
-                const sqlNostreBuild = sqlBuildBase + ' WHERE b.id_utente = ?';
-
+                const sqlNostreBuild = sqlBuildBase + ' WHERE b.id_utente = ?';// Query per ottenere le build dell'utente
+                
                 db.all(sqlNostreBuild, [req.user.id], (err, build) => {
                     if (err) {
                         console.error(err);
                         return res.status(500).send('Errore del server');
                     }
-
+                    // Ottengo le build preferite dell'utente
                     const sqlPreferite = sqlBuildBase + `
                         INNER JOIN preferiti pref ON pref.like_build = b.id
                         WHERE pref.like_utente = ?
                     `;
-
                     db.all(sqlPreferite, [req.user.id], (err, buildPreferite) => {
                         if (err) {
                             console.error(err);
                             return res.status(500).send('Errore del server');
                         }
-
+                        // Ottengo le build dove l'utente ha messo "Mi piace"
                         db.all('SELECT * FROM preferiti WHERE like_utente = ?', [req.user.id], (err, liked) => {
                             if (err) {
                                 console.error(err);
                                 return res.status(500).send('Errore del server');
                             }
-
+                            // Mostro la pagina del profilo con i dati ottenuti
                             res.render('profilo', {
                                 utente,
                                 avatar: avatars,
@@ -309,22 +307,27 @@ app.get('/profilo', isLogged, (req, res) => {
     }
 });
 app.get('/gilda', (req, res) => {
-
-    let sql = `SELECT * FROM gilda g`;    
+    let sql = `SELECT g.* FROM gilda g`;
+    let condizioni = [];
     let filtro = [];
-
-    if(req.user != null){
-        sql += ' INNER JOIN utentiGilda ug ON g.id != ug.id_gilda WHERE ug.id_utente = ?';
+    // Se l'utente è loggato, escludo le gilde di cui è già membro
+    if (req.user) {
+        condizioni.push(`g.id NOT IN (SELECT id_gilda FROM utentiGilda WHERE id_utente = ?)`);
         filtro.push(req.user.id);
     }
+    // Filtri di ricerca
     if (req.query.lingua) {
-        sql += ' WHERE lingua = ?';
+        condizioni.push(`g.lingua = ?`);
         filtro.push(req.query.lingua);
     }
-
+    // Ricerca per nome gilda
     if (req.query.nome_gilda) {
-        sql += ' WHERE nome_gilda like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%' + req.query.nome_gilda + '%'); //aggiungo al filtro il nome da cerare (% nome %)
+        condizioni.push(`g.nome_gilda LIKE ?`);
+        filtro.push('%' + req.query.nome_gilda + '%');
+    }
+    // Aggiungo le condizioni alla query se ce ne sono
+    if (condizioni.length > 0) {
+        sql += " WHERE " + condizioni.join(" AND ");
     }
 
     db.all(sql, filtro, (err, rows) => {
@@ -332,29 +335,23 @@ app.get('/gilda', (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-
-        if(req.user != null){ //se l'utente è loggato visualiziamo le sue gilde o quelle in cui é membro
-            const sqlMieGilde = `select * from gilda g where g.id IN (select id_gilda from utentiGilda where id_utente = ? and ruolo like 'leader')`;
+        // Se l'utente è loggato, ottengo le sue gilde
+        if (req.user) {
+            const sqlMieGilde = `SELECT * FROM gilda g WHERE g.id IN (SELECT id_gilda FROM utentiGilda WHERE id_utente = ? AND ruolo = 'leader')`; //gilde dove l'utente è leader
             db.all(sqlMieGilde, [req.user.id], (err, mieGilde) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).send('Errore del server');
-                }
-                const sqlMembro = `select * from gilda g where g.id IN (select id_gilda from utentiGilda where id_utente = ? and ruolo like 'membro')`;
-                db.all(sqlMembro, [req.user.id], (err, Membro) => {
-                    if (err) {
-                        console.error(err);
-                        return res.status(500).send('Errore del server');
-                    }
-
-                    res.render('gilda', { gilda: rows, mieGilde, Membro });
+                if (err) return res.status(500).send('Errore del server');
+                const sqlMembro = `SELECT * FROM gilda g WHERE g.id IN (SELECT id_gilda FROM utentiGilda WHERE id_utente = ? AND ruolo = 'membro')`; //gilde dove l'utente è membro
+                db.all(sqlMembro, [req.user.id], (err, membroGilda) => {
+                    if (err) return res.status(500).send('Errore del server');
+                    res.render('gilda', { gilda: rows, mieGilde, Membro: membroGilda });
                 });
             });
-        }else{
-            res.render('gilda', { gilda: rows, mieGilde: [], Membro: [] });
+        } else {
+            res.render('gilda', { gilda: rows, mieGilde: [], Membro: [] });//se non é loggato non ha gilde
         }
     });
 });
+
 
 app.get('/creaGilda',isLogged, (req, res) => {
     res.render('creaGilda');
@@ -366,15 +363,10 @@ app.post('/creaGilda',isLogged, (req, res) => {
     const descrizione_gilda = req.body.descrizione_gilda;
     const lingua = req.body.lingua;
     const limite_partecipanti = req.body.limite_partecipanti;
-
-    console.log('Dati ricevuti per la creazione della gilda:', {
-        nome_gilda,
-        descrizione_gilda,
-        lingua,
-        limite_partecipanti
-    });
-
-    if (!nome_gilda || !descrizione_gilda || !lingua || !limite_partecipanti) {
+    // Log dei dati ricevuti
+    //console.log('Dati ricevuti per la creazione della gilda:', {nome_gilda,descrizione_gilda,lingua,limite_partecipanti});
+    // Validazione dei dati
+    if (!nome_gilda || !descrizione_gilda || !lingua || !limite_partecipanti) {//controllo che tutti i campi siano stati inseriti
         req.flash('error', 'Tutti i campi sono obbligatori');
         return res.redirect('/creaGilda');
     }
@@ -398,12 +390,13 @@ app.post('/creaGilda',isLogged, (req, res) => {
         INSERT INTO gilda (nome_gilda, descrizione_gilda, lingua, limite_partecipanti)
         VALUES ( ?, ?, ?, ?)
     `;
-
+    // Inserimento della gilda nel database
     db.run(sql, [nome_gilda, descrizione_gilda, lingua, limite_partecipanti], function (err) {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
+        // Aggiunta dell'utente creatore come leader della gilda
         const sql2 = `INSERT INTO utentiGilda (id_utente, id_gilda, ruolo) VALUES (?, ?, 'leader')`;
         db.run(sql2, [req.user.id, this.lastID], function (err) {
             if (err) {
@@ -418,7 +411,7 @@ app.post('/creaGilda',isLogged, (req, res) => {
 
 app.get('/mostraGilda', isLogged, (req, res) => {
     const gildaId = req.query.id;
-
+    // Query per ottenere le build della gilda
     const sqlBuild = `SELECT p.nome AS nome_personaggio,
             p.immagine AS immagine_personaggio,
 
@@ -460,11 +453,12 @@ app.get('/mostraGilda', isLogged, (req, res) => {
         INNER JOIN utenti u ON b.id_utente = u.id
         WHERE xGilda = ? AND b.pubblico = 1`;
 
+    // Controllo che l'ID della gilda sia fornito
     if (!gildaId) {
         req.flash('error', 'ID gilda mancante');
         return res.status(400).redirect('/gilda');
     }
-    
+    // Ottengo i dettagli della gilda
     const sql = 'SELECT * FROM gilda WHERE id = ?';
     db.get(sql, [gildaId], (err, gilda) => {
     
@@ -472,16 +466,16 @@ app.get('/mostraGilda', isLogged, (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
-
-        const utentiGildaSql = 'SELECT count(*) AS totale FROM utentiGilda WHERE id_gilda = ?';
+        // Controlla se la gilda esiste
+        const utentiGildaSql = 'SELECT count(*) AS totale FROM utentiGilda WHERE id_gilda = ?';//conta il numero di membri della gilda
         db.get(utentiGildaSql, [gildaId], (err, row) => {
         
             if (err) {
                 console.error(err);
                 return res.status(500).send('Errore del server');
             }
-            const nmembri = row ? row.totale : 0;
-
+            const nmembri = row ? row.totale : 0;//se esiste la riga, prendo il totale, altrimenti 0
+            // Controlla se l'utente è leader o membro della gilda
             const isLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
             db.get(isLeader, [gildaId, req.user.id], (err, row) => {
                 if (err) {
@@ -489,7 +483,7 @@ app.get('/mostraGilda', isLogged, (req, res) => {
                     return res.status(500).send('Errore del server');
                 }
                 const leader = row ? true : false; //se esiste la riga, l'utente è leader
-
+                // Controlla se l'utente è membro della gilda
                 const isMember = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "membro"';
                 db.get(isMember, [gildaId, req.user.id], (err, row) => {
                     if (err) {
@@ -498,8 +492,7 @@ app.get('/mostraGilda', isLogged, (req, res) => {
                     }
                     const membro = row ? true : false; //se esiste la riga, l'utente è membro
 
-                    const listaMembri= 'SELECT * FROM utentiGilda g join utenti u on g.id_utente = u.id WHERE id_gilda = ?';
-
+                    const listaMembri= 'SELECT * FROM utentiGilda g join utenti u on g.id_utente = u.id WHERE id_gilda = ?';//query per ottenere la lista dei membri della gilda
                     db.all(listaMembri, [gildaId], (err, membri) => {
                         if (err) {
                             console.error(err);
@@ -518,9 +511,9 @@ app.get('/mostraGilda', isLogged, (req, res) => {
         });
     });
 });
-app.post('/gilda/rimuovimembro', isLogged, (req, res) => {
-    
-    const { id_gilda, id_utente } = req.body;
+
+app.post('/gilda/rimuovimembro', isLogged, (req, res) => {    
+    const { id_gilda, id_utente } = req.body;//prendo l'id della gilda e dell'utente da rimuovere
     if (!id_gilda || !id_utente) {
         req.flash('error', 'Dati mancanti');
         return res.redirect('/gilda');
@@ -535,7 +528,7 @@ app.post('/gilda/rimuovimembro', isLogged, (req, res) => {
         }
         if (!row) {
             req.flash('error', 'Permessi insufficienti per rimuovere un membro');
-            return res.redirect(`/mostraGilda?id=${id_gilda}`);
+            return res.redirect(`/mostraGilda?id=${id_gilda}`);//se non é leader non puó rimuovere membri
         }
 
         // Rimuove il membro
@@ -544,12 +537,11 @@ app.post('/gilda/rimuovimembro', isLogged, (req, res) => {
             if (err) {
                 console.error(err);
                 req.flash('error', 'Errore durante la rimozione del membro');
-                return res.redirect(`/mostraGilda?id=${id_gilda}`);
+                return res.redirect(`/mostraGilda?id=${id_gilda}`);//se non riesce a rimuovere il membro rimanda alla pagina della gilda
             }
             req.flash('success', 'Membro rimosso con successo');
-            res.redirect(`/mostraGilda?id=${id_gilda}`);
-        }
-        );
+            res.redirect(`/mostraGilda?id=${id_gilda}`);//rimanda alla pagina della gilda
+        });
     });
 });
 
@@ -569,15 +561,15 @@ app.post('/gilda/unisciti', isLogged, (req, res) => {
             req.flash('error', 'Errore del server');
             return res.redirect('/gilda');
         }
-
+        // Se l'utente è già membro, mostra un messaggio
         if (row) {
             req.flash('info', 'Sei già membro di questa gilda');
-            return res.redirect(`/mostraGilda?id=${gildaId}`);
+            return res.redirect(`/mostraGilda?id=${gildaId}`);//rimanda alla pagina della gilda
         }
 
         // Inserimento nella gilda
-        const insertSql = 'INSERT INTO utentiGilda (id_utente, id_gilda, ruolo) VALUES (?, ?, ?)';
-        db.run(insertSql, [req.user.id, gildaId, 'membro'], function(err) {
+        const insertSql = 'INSERT INTO utentiGilda (id_utente, id_gilda, ruolo) VALUES (?, ?, ?)';//ruolo di default "membro"
+        db.run(insertSql, [req.user.id, gildaId, 'membro'], function(err) {//inserisce l'utente nella gilda
             if (err) {
                 console.error(err);
                 req.flash('error', 'Errore nell\'unirsi alla gilda');
@@ -606,12 +598,12 @@ app.post('/gilda/sciogli', isLogged, (req, res) => {
             req.flash('error', 'Errore del server');
             return res.redirect('/gilda');
         }
-
+        // Se non è leader, mostra un messaggio di errore
         if (!row) {
             req.flash('error', 'Permessi insufficienti a sciogliere la gilda');
             return res.redirect('/gilda');
         }
-
+        // Rimuove la gilda e di conseguenza tutti i dati (dato che é cascade)
         const deleteGilda = 'DELETE FROM gilda WHERE id = ?';
         db.run(deleteGilda, [id_gilda], function(err) {
             if (err) {
@@ -625,10 +617,11 @@ app.post('/gilda/sciogli', isLogged, (req, res) => {
         });
     });
 });
+
 app.post('/gilda/esci', isLogged, (req, res) => {
     const { gildaId } = req.body;
 
-    if (!gildaId) {
+    if (!gildaId) {//controllo che l'id della gilda sia stato passato
         req.flash('error', 'ID gilda mancante');
         return res.redirect('/gilda');
     }
@@ -641,7 +634,7 @@ app.post('/gilda/esci', isLogged, (req, res) => {
             req.flash('error', 'Errore del server');
             return res.redirect(`/mostraGilda?id=${gildaId}`);
         }
-
+        // Se l'utente è leader, non può uscire
         if (row) {
             req.flash('error', 'Il leader non può uscire dalla gilda');
             return res.redirect(`/mostraGilda?id=${gildaId}`);
@@ -670,7 +663,9 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
             req.flash('error', 'ID della build mancante');
             return res.status(400).redirect('/profilo');
         }
-
+        // Query per ottenere i dettagli della build
+        // Otteniamo anche i dettagli degli artefatti e dell'arma
+        // Necessario per mostrare le informazioni nella pagina di modifica
         const sqlBuild = `
             SELECT 
                 b.id AS id_build,
@@ -719,7 +714,7 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
             INNER JOIN artefatti corona ON sa.corona = corona.id
             WHERE b.id = ? AND b.id_utente = ?
         `;
-
+        // Verifichiamo che la build appartenga all'utente
         const build = await new Promise((resolve, reject) => {
             db.get(sqlBuild, [buildId, req.user.id], (err, row) => {
                 if (err) reject(err);
@@ -731,20 +726,25 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
             req.flash('error', 'Build non trovata o non autorizzato');
             return res.status(404).redirect('/profilo');
         }
-
+        // Otteniamo le armi, artefatti e personaggi per i menu a tendina
+        // Le armi vengono filtrate per tipo in base all'arma della build
+        // In questo modo l'utente può cambiare l'arma ma solo con altre dello stesso tipo
         const [armi, artefatti, personaggi] = await Promise.all([
+            // recuperiamo le armi dello stesso tipo dell'arma della build
             new Promise((resolve, reject) => {
-                db.all('SELECT * FROM armi WHERE tipo_arma = ? ORDER BY nome_arma ASC ', [build.arma_tipo], (err, rows) => {
+                db.all('SELECT * FROM armi WHERE tipo_arma = ? ORDER BY nome_arma ASC ', [build.arma_tipo], (err, rows) => {//filtriamo le armi per tipo
                     if (err) reject(err);
                     else resolve(rows);
                 });
             }),
+            // Otteniamo tutti gli artefatti
             new Promise((resolve, reject) => {
                 db.all('SELECT * FROM artefatti ORDER BY nome ASC', [], (err, rows) => {
                     if (err) reject(err);
                     else resolve(rows);
                 });
             }),
+            // Otteniamo tutti i personaggi
             new Promise((resolve, reject) => {
                 db.all('SELECT * FROM personaggi ORDER BY nome ASC', [], (err, rows) => {
                     if (err) reject(err);
@@ -752,7 +752,7 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
                 });
             })
         ]);
-
+        // Raggruppiamo gli artefatti per categoria
         const categorie_artefatti = {
             fiore: artefatti.filter(a => a.categoria === 'Flower of Life'),
             piuma: artefatti.filter(a => a.categoria === 'Plume of Death'),
@@ -760,15 +760,16 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
             coppa: artefatti.filter(a => a.categoria === 'Goblet of Eonothem'),
             corona: artefatti.filter(a => a.categoria === 'Circlet of Logos')
         };
-
+        // Otteniamo le gilde dell'utente per far si che possa assegnare la build a una gilda
+        // Se non é iscritto a nessuna gilda, la build rimane personale o pubblica
         const gilda = 'SELECT * FROM gilda where id IN (select id_gilda from utentiGilda where id_utente = ?)';
-            db.all(gilda, [req.user.id], (err, gilde) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).send('Errore nel recupero delle gilde');
-                }
-                res.render('modificaBuild', { build, armi, categorie_artefatti, personaggi,currentUser: req.user, gilde : gilde });
-            });
+        db.all(gilda, [req.user.id], (err, gilde) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Errore nel recupero delle gilde');
+            }
+            res.render('modificaBuild', { build, armi, categorie_artefatti, personaggi,currentUser: req.user, gilde : gilde });
+        });
 
     } catch (err) {
         console.error('Errore in /profilo/modificaBuild:', err);
@@ -776,8 +777,9 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
         res.status(500).redirect('/profilo');
     }
 });
-app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
 
+// Rimuovi la build di un utente (solo se sei leader della gilda a cui appartiene la build)
+app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
     const { id_gilda, id_build } = req.body;
 
     // Verifica che l'utente sia leader
@@ -788,8 +790,9 @@ app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
             req.flash('error', 'Errore del server');
             return res.redirect('/gilda');
         }
+        // Se l'utente non è leader, mostra un messaggio di errore
         if (row) {
-            const deleteSql = 'DELETE FROM build WHERE id = ?  AND xGilda = ?';
+            const deleteSql = 'DELETE FROM build WHERE id = ?  AND xGilda = ?';//rimuove la build solo se appartiene alla gilda
             db.run(deleteSql, [id_build, id_gilda], function(err) {
                 if (err) {
                     console.error(err);
@@ -808,20 +811,11 @@ app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
 
 app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
     const buildId = req.params.id;
-    const { 
-        arma, 
-        personaggio,
-        id_set, 
-        pubblico,
-        fiore, 
-        piuma, 
-        clessidra, 
-        coppa, 
-        corona 
-    } = req.body;
+    // Prendiamo i dati dal form
+    const { arma, id_set, pubblico, fiore, piuma, clessidra, coppa, corona } = req.body;
 
     console.log(req.body);
-
+    
     if (!buildId) {
         req.flash('error', 'ID della build mancante');
         return res.redirect('/profilo');
@@ -852,7 +846,7 @@ app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
                 corona = ?
             WHERE id = ?
         `;
-
+        // Eseguiamo l'aggiornamento del set artefatti
         db.run(sqlUpdateSet, [fiore, piuma, clessidra, coppa, corona, id_set], function(err) {
             if (err) {
                 console.error(err);
@@ -861,14 +855,7 @@ app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
             }
 
             // Poi aggiorniamo la build
-            const sqlUpdateBuild = `
-                UPDATE build 
-                SET 
-                    arma = ?,
-                    pubblico = ?
-                WHERE id = ?
-            `;
-
+            const sqlUpdateBuild = `UPDATE build SET arma = ?,pubblico = ? WHERE id = ?`;
             db.run(sqlUpdateBuild, [arma, pubblico, buildId], function(err) {
                 if (err) {
                     console.error(err);
@@ -884,11 +871,11 @@ app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
 });
 
 app.get('/artefatti', (req, res) => {
-
     let sql = 'SELECT * FROM artefatti';
     let filtro = [];
 
-    if (req.query.classe) {
+    //se sono presenti filtri nella query, li aggiungo alla query SQL
+    if (req.query.classe) { //filtro per categoria
         sql += ' WHERE categoria = ?';
         filtro.push(req.query.classe); //aggiungo il filtro per categoria alla query
     }
@@ -909,40 +896,43 @@ app.get('/artefatti', (req, res) => {
 app.get('/creaBuild', isLogged, (req, res) => {
     const sql = `SELECT id, nome, categoria FROM artefatti`;
     const sqlArmi = `SELECT * FROM armi`;
-
+    // Ottieni tutti gli artefatti
     db.all(sql, [], (err, artefatti) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore nel recupero degli artefatti');
         }
-
+        // Raggruppa gli artefatti per categoria
         const categorie = {
+            // per ogni categoria di artefatto, filtro gli artefatti corrispondenti in array diversi
             fiore: artefatti.filter(a => a.categoria === 'Flower of Life'),
             piuma: artefatti.filter(a => a.categoria === 'Plume of Death'),
             clessidra: artefatti.filter(a => a.categoria === 'Sands of Eon'),
             coppa: artefatti.filter(a => a.categoria === 'Goblet of Eonothem'),
             corona: artefatti.filter(a => a.categoria === 'Circlet of Logos')
         };
-
+        // Ottieni tutti i personaggi
         db.all('SELECT * FROM personaggi', [], (err, personaggi) => {
             if (err) {
                 console.error(err);
                 return res.status(500).send('Errore nel recupero dei personaggi');
             }
 
-            db.all(sqlArmi, [], (err, queryarmi) => {
+            db.all(sqlArmi, [], (err, queryarmi) => {// Ottieni tutte le armi
                 if (err) {
                     console.error(err);
                     return res.status(500).send('Errore nel recupero delle armi');
                 }
-
+                // Raggruppa le armi per tipo
                 const armi = {
+                    // per ogni tipo di arma, filtro le armi corrispondenti in array diversi
                     spada: queryarmi.filter(a => a.tipo_arma === 'spada'),
                     spadone: queryarmi.filter(a => a.tipo_arma === 'spadone'),
                     catalizzatore: queryarmi.filter(a => a.tipo_arma === 'catalizzatore'),
                     lancia: queryarmi.filter(a => a.tipo_arma === 'lancia'),
                     arco: queryarmi.filter(a => a.tipo_arma === 'arco'),
                 };
+                // Ottieni le gilde in cui l'utente è iscritto (per poter assegnare la build a una gilda)
                 const gilda = 'SELECT * FROM gilda where id IN (select id_gilda from utentiGilda where id_utente = ?)';
                 db.all(gilda, [req.user.id], (err, gilde) => {
                     if (err) {
@@ -960,7 +950,7 @@ app.post('/creaBuild', isLogged, (req, res) => {
     const { nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, personaggio, arma, pubblico, gilda } = req.body;
     const id_utente = req.user?.id;
     console.log(req.body);
-
+    // Validazione dei dati di input di base (set artefatti e build)
     const sqlSet = `
         INSERT INTO set_artefatti 
         (nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente)
@@ -973,17 +963,17 @@ app.post('/creaBuild', isLogged, (req, res) => {
     `;
 
     const valuesSet = [nome_set, descrizione, fiore, piuma, clessidra, coppa, corona, id_utente];
-
+    // Inserisco prima il set di artefatti
     db.run(sqlSet, valuesSet, function (err) {
         if (err) {
             console.error(err);
             return res.status(500).send('Errore nel salvataggio del set di artefatti');
         }
 
-        // this.lastID = id del set appena inserito
+        // this.lastID = id é l'id del set appena inserito
         const id_set = this.lastID;
         const valuesBuild = [id_utente, arma, personaggio, id_set, pubblico, gilda];
-
+        // Inserisco la build
         db.run(sqlBuild, valuesBuild, function (err) {
             if (err) {
                 console.error(err);
@@ -996,42 +986,37 @@ app.post('/creaBuild', isLogged, (req, res) => {
 });
 
 app.get('/delete-build/:id', async (req, res) => {
-    try {
-        const buildId = req.params.id;
-        const sql = 'DELETE FROM build WHERE id = ?';
-        db.run(sql, buildId, function (err) {
-            if (err) {
-                console.error(err);
-                return res.status(500);
-            }
-            if (this.changes === 0) {
-                return res.status(404);
-            }
-        });
-        res.status(200).json();
-    } catch (error) {
-        console.error(error);
-        res.status(500);
-    }
+    const buildId = req.params.id;
+    const sql = 'DELETE FROM build WHERE id = ?';//elimina la build con l'id specificato
+    // Verifichiamo che la build appartenga all'utente
+    db.run(sql, buildId, function (err) {
+        if (err) {
+            console.error(err);
+            res.flash('error', 'Errore del server durante l\'eliminazione della build');
+            return res.render('profilo');
+        }
+        res.render('/profilo');
+    });
+    res.status(200).json();
 });
 
+//route usata per la fetch quando facciamo il toggle del like
 app.post('/preferiti/toggle', (req, res) => {
-
     const userId = req.user?.id;
     const buildId = req.body.buildId;
-
-    const checkSql = `SELECT * FROM preferiti WHERE like_utente = ? AND like_build = ?`;
-    db.get(checkSql, [userId, buildId], (err, row) => {
+    // Verifica che l'utente sia loggato
+    const controlloLike = `SELECT * FROM preferiti WHERE like_utente = ? AND like_build = ?`;
+    db.get(controlloLike, [userId, buildId], (err, row) => {
         if (err) return res.status(500).json({ error: 'Errore DB' });
 
         if (row) {
-            // Esiste già, quindi lo rimuoviamo (unlike)
+            // se c'è il mi piace lo rimuoviamo
             db.run(`DELETE FROM preferiti WHERE like_utente = ? AND like_build = ?`, [userId, buildId], (err) => {
                 if (err) return res.status(500).json({ error: 'Errore rimozione' });
                 res.json({ liked: false });
             });
         } else {
-            // Non esiste, quindi lo aggiungiamo (like)
+            //altrimenti lo mettiamo
             db.run(`INSERT INTO preferiti (like_utente, like_build) VALUES (?, ?)`, [userId, buildId], (err) => {
                 if (err) return res.status(500).json({ error: 'Errore inserimento' });
                 res.json({ liked: true });
@@ -1041,20 +1026,18 @@ app.post('/preferiti/toggle', (req, res) => {
 });
 
 app.get('/personaggi', (req, res) => {
-
     let sql = 'SELECT * FROM personaggi';
     let filtro = [];
-
+    //se c'è un filtro per elemento lo aggiungimao allq uery
     if (req.query.elemento) {
         sql += ' WHERE elemento = ?';
         filtro.push(req.query.elemento);
     }
-
     if (req.query.nome) {
         sql += ' WHERE nome like ?';  //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%' + req.query.nome + '%'); //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome + '%'); //aggiungo al filtro il nome del personaggio da cercare
     }
-
+    
     db.all(sql, filtro, (err, rows) => {
         if (err) {
             console.error(err);
@@ -1066,6 +1049,7 @@ app.get('/personaggi', (req, res) => {
 });
 
 app.get('/build', (req, res) => {
+    // Query  per ottenere le build pubbliche con i dettagli necessari
     let queryBuild = `
         SELECT 
             p.nome AS nome_personaggio,
@@ -1109,12 +1093,11 @@ app.get('/build', (req, res) => {
         INNER JOIN utenti u ON b.id_utente = u.id
         WHERE b.pubblico = 1
     `;
-
     let filtro = [];
 
     // Se c'è un filtro per nome build
     if (req.query.nome_build) {
-        queryBuild += ' AND p.nome LIKE ?';
+        queryBuild += ' AND p.nome LIKE ?';//aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
         filtro.push('%' + req.query.nome_build + '%');
     }
     
@@ -1128,6 +1111,7 @@ app.get('/build', (req, res) => {
             console.error(err);
             return res.status(500).send('Errore del server');
         }
+        // Se l'utente è loggato recuperiamo anche i mipiace
         if (req.user) {
             db.all('SELECT * FROM preferiti WHERE like_utente = ?', [req.user.id], (err, liked) => {
                 if (err) {
@@ -1155,7 +1139,7 @@ app.get('/armi', (req, res) => {
 
     if (req.query.nome_arma) {
         sql += ' WHERE nome_arma like ?'; //aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
-        filtro.push('%' + req.query.nome_arma + '%'); //aggiungo al filtro il nome da cerare (% nome %)
+        filtro.push('%' + req.query.nome_arma + '%'); //aggiungo al filtro il nome da cerare
     }
 
     db.all(sql, filtro, (err, tabella) => { //cambiare rows in tabella per evitare confusione con la variabile di sopra
@@ -1166,6 +1150,6 @@ app.get('/armi', (req, res) => {
     });
 });
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, '127.0.0.1', () => { //indirizzo del sito
     console.log(`http://localhost:${port}`);
 });

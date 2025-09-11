@@ -90,7 +90,6 @@
     flex-grow: 1;
 }
 
-/* Contenitore principale */
 .artifact-main-stats-container {
     background: rgba(20, 20, 40, 0.6);
     border-radius: 10px;
@@ -175,7 +174,6 @@
 
 .container-tutto {
 
-    margin-top: 100px !important;
     background: rgba(30, 30, 40, 0.8);
     border-radius: 15px;
     padding: 20px;
