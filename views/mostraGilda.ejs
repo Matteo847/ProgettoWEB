@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/mostraGilda.css">
 	<link rel="stylesheet" href="css/build.css">
+	<link rel="stylesheet" href="css/mostraGilda.css">
 	<link rel="stylesheet" href="css/footer.css">
 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -32,12 +33,6 @@
 			<a class="btn btn-secondary" href="/gilda">
 				⬅ Torna indietro
 			</a>
-		</div>
-
-		<div class="row">
-			<div class="col">
-				<p>ID Gilda: <%= gilda.id %></p>
-			</div>
 		</div>
 
 		<div class="container my-5">
@@ -96,11 +91,16 @@
 			</ul>
 			<hr>
 			<h3 class="mt-4">🛡️ Build dei membri</h3>
-				<ul>
-					<% build.forEach((b)=> { %>
-						<li class="d-flex justify-content-between align-items-center">
-							<div>
-								<%- include('partials/build_card', { b: b, mipiace: [] }) %>
+				<%if (build.length === 0) { %>
+					<div class="nessuna-build">
+						<strong>NESSUNA BUILD DISPONIBILE</strong>
+					</div>
+				<% } else { %>
+					<ul>
+						<% build.forEach((b)=> { %>
+							<li class="d-flex justify-content-between align-items-center">
+								<div>
+									<%- include('partials/build_card', { b: b, mipiace: [] }) %>
 							</div>
 							<% if (isLeader) { %>
 								<form action="/gilda/rimuoviBuild" method="POST" onsubmit="return confirm('Sei sicuro di voler rimuovere questo build?');" style="display:inline;">
@@ -112,6 +112,7 @@
 						</li>
 					<% }); %>
 				</ul>
+				<% } %>
 		</div>
 	</div>
 	<footer class="footer navbar-sfondo">

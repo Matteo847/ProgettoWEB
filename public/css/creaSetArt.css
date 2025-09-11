@@ -167,7 +167,12 @@ select.form-select {
 .form-group {
 	margin-bottom: 1rem;
 }
+.select-with-img img {
 
+    display:none;
+    width:80px; 
+    margin-top:8px;
+}
 @media (max-width: 600px) {
     .artifact-selection {
         grid-template-columns: 1fr;

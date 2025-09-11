@@ -132,7 +132,8 @@
 				<!-- Colonna centrale: visibilità e gilda -->
 				<div class="col-lg-4 col-md-6">
 
-					<div class="container-small mt-3">
+					<div class="container-small">
+						<h1 class="page-title">Modifica Visibilità</h1>
 						<div class="white-box">
 							<div class="form-group">
 								<label for="pubblico" class="form-label">Cambia visibilità:</label>
@@ -144,7 +145,8 @@
 						</div>
 					</div>
 
-					<div class="container-small mt-3">
+					<div class="container-small">
+						<h1 class="page-title">Modifica Gilda</h1>
 						<div class="white-box">
 							<div class="form-group">
 								<label for="gilda" class="form-label">Gilda:</label>
@@ -164,7 +166,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- Colonna destra: Armi -->
 				<div class="col-lg-4 col-md-6">
 					<div class="container-small">
@@ -208,20 +210,22 @@
 									</div>
 								</div>
 							</div>
-							
-				</div>
-				<div class="form-actions">
-						<button type="submit" class="submit-button">Salva Modifiche</button>
-						<a href="/profilo" class="btn btn-secondary">Annulla</a>
+
+						</div>
+						<div class="form-actions">
+							<button type="submit" class="submit-button">Salva Modifiche</button>
+							<a href="/profilo" class="submit-button">Annulla</a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<footer class="footer navbar-sfondo">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3 align-items-center">
-					<img src="images/icona.webp" class="footer-img">
+					<img src="/images/icona.webp" class="footer-img">
 				</div>
 				<div class="col-md-3 align-items-center">
 					<p class="footer-text">Build Genshin</p>
@@ -236,5 +240,5 @@
 			</div>
 		</div>
 	</footer>
-</div>
-<input type="hidden" name="id_set" value="<%= build.id_set %>">
+	</div>
+	<input type="hidden" name="id_set" value="<%= build.id_set %>">

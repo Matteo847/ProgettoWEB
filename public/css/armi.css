@@ -6,13 +6,13 @@
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
-.weapon-container {
 
+.weapon-container {
+    position: relative;
     margin-top: 20px;
-    width: 70%;
+    width: 100%;
     height: auto;
     position: relative;
-    cursor: pointer;
     transition: transform 0.3s ease;
     border-radius: 8px;
     overflow: hidden;
