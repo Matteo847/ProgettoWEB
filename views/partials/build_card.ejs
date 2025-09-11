@@ -1,13 +1,12 @@
 <div class="container-tutto">
   <div class="row ">
     <div class="col-lg-2">
-      <div class="character-mini-profile">
-        <p>build di <%= b.username_utente %>
+      <div class="character-col-sx">
+        <p class="build_nome"><%= b.nome_set %>
+        <p>Creata da: <%= b.username_utente %>
         </p>
-        <div class="character-face-frame">
-          <div class="character-face-mask">
+        <div class="character-img">
             <img src="<%= b.immagine_personaggio %>" alt="Albedo" class="character-face">
-          </div>
         </div>
         <div class="character-name">
           <%= b.nome_personaggio %>

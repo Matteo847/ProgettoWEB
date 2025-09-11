@@ -655,6 +655,38 @@ app.post('/gilda/esci', isLogged, (req, res) => {
     });
 });
 
+
+// Rimuovi la build di un utente (solo se sei leader della gilda a cui appartiene la build)
+app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
+    const { id_gilda, id_build } = req.body;
+
+    // Verifica che l'utente sia leader
+    const verificaLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
+    db.get(verificaLeader, [id_gilda, req.user.id], (err, row) => {
+        if (err) {
+            console.error(err);
+            req.flash('error', 'Errore del server');
+            return res.redirect('/gilda');
+        }
+        // Se l'utente non è leader, mostra un messaggio di errore
+        if (row) {
+            const deleteSql = 'DELETE FROM build WHERE id = ?  AND xGilda = ?';//rimuove la build solo se appartiene alla gilda
+            db.run(deleteSql, [id_build, id_gilda], function(err) {
+                if (err) {
+                    console.error(err);
+                    req.flash('error', 'Errore durante la rimozione della build');
+                    return res.redirect(`/mostraGilda?id=${id_gilda}`);
+                }
+                req.flash('success', 'Build rimossa con successo');
+                res.redirect(`/mostraGilda?id=${id_gilda}`);
+            });
+        } else {
+         req.flash('error', 'Permessi insufficienti per rimuovere un membro');
+            return res.redirect(`/mostraGilda?id=${id_gilda}`);
+        }
+    });
+});
+
 app.get('/modificaBuild/:id', isLogged, async (req, res) => {
     try {
         const buildId = req.params.id;
@@ -778,41 +810,10 @@ app.get('/modificaBuild/:id', isLogged, async (req, res) => {
     }
 });
 
-// Rimuovi la build di un utente (solo se sei leader della gilda a cui appartiene la build)
-app.post('/gilda/rimuoviBuild', isLogged, (req, res) => {
-    const { id_gilda, id_build } = req.body;
-
-    // Verifica che l'utente sia leader
-    const verificaLeader = 'SELECT * FROM utentiGilda WHERE id_gilda = ? AND id_utente = ? AND ruolo = "leader"';
-    db.get(verificaLeader, [id_gilda, req.user.id], (err, row) => {
-        if (err) {
-            console.error(err);
-            req.flash('error', 'Errore del server');
-            return res.redirect('/gilda');
-        }
-        // Se l'utente non è leader, mostra un messaggio di errore
-        if (row) {
-            const deleteSql = 'DELETE FROM build WHERE id = ?  AND xGilda = ?';//rimuove la build solo se appartiene alla gilda
-            db.run(deleteSql, [id_build, id_gilda], function(err) {
-                if (err) {
-                    console.error(err);
-                    req.flash('error', 'Errore durante la rimozione della build');
-                    return res.redirect(`/mostraGilda?id=${id_gilda}`);
-                }
-                req.flash('success', 'Build rimossa con successo');
-                res.redirect(`/mostraGilda?id=${id_gilda}`);
-            });
-        } else {
-         req.flash('error', 'Permessi insufficienti per rimuovere un membro');
-            return res.redirect(`/mostraGilda?id=${id_gilda}`);
-        }
-    });
-});
-
 app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
     const buildId = req.params.id;
     // Prendiamo i dati dal form
-    const { arma, id_set, pubblico, fiore, piuma, clessidra, coppa, corona } = req.body;
+    const { arma, id_set, pubblico, fiore, piuma, clessidra, coppa, corona, gilda } = req.body;
 
     console.log(req.body);
     
@@ -855,8 +856,8 @@ app.post('/profilo/modificaBuild/:id', isLogged, (req, res) => {
             }
 
             // Poi aggiorniamo la build
-            const sqlUpdateBuild = `UPDATE build SET arma = ?,pubblico = ? WHERE id = ?`;
-            db.run(sqlUpdateBuild, [arma, pubblico, buildId], function(err) {
+            const sqlUpdateBuild = `UPDATE build SET arma = ?, pubblico = ?, xGilda = ? WHERE id = ?`;
+            db.run(sqlUpdateBuild, [arma, pubblico, gilda,  buildId], function(err) {
                 if (err) {
                     console.error(err);
                     req.flash('error', 'Errore durante l\'aggiornamento della build');
@@ -1097,7 +1098,7 @@ app.get('/build', (req, res) => {
 
     // Se c'è un filtro per nome build
     if (req.query.nome_build) {
-        queryBuild += ' AND p.nome LIKE ?';//aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
+        queryBuild += ' AND nome_set LIKE ?';//aggiungo alla query la ricerca per il nome inserito nel campo di ricerca
         filtro.push('%' + req.query.nome_build + '%');
     }
     

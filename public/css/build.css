@@ -1,4 +1,15 @@
-.character-mini-profile {
+.build_nome{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    margin: 5px 0;
+}
+
+.riempi{
+    height: 300px;
+}
+.character-col-sx {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -7,22 +18,14 @@
     flex-wrap: nowrap;
 }
 
-.character-face-frame {
+.character-img {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    position: relative;
     overflow: hidden;
+    border-radius: 50%;
     border: 3px solid #e0c79b;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
-}
-
-.character-face-mask {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    border-radius: 50%;
 }
 
 .character-face {
@@ -33,7 +36,6 @@
     height: 180px;
     object-fit: cover;
     object-position: 25% 20%;
-    /* Regola questi valori per centrare il viso */
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -60,8 +62,6 @@
     border-radius: 6px;
     transition: all 0.3s ease;
 }
-
-
 
 .item-icon {
     width: 40px;
